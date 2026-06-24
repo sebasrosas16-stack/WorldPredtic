@@ -11,12 +11,26 @@
     <section class="hero glass">
       <p class="eyebrow">IA Football Lab</p>
       <h1>MatchIQ</h1>
-      <p class="subtitle">Picks, riesgo y seguimiento de predicciones.</p>
+      <p class="subtitle">Picks, riesgo, value y seguimiento de predicciones.</p>
+    </section>
+
+    <section id="dailySuggestion" class="glass panel">
+      <h2>Sugerencia del día</h2>
+      <p class="note">Cargando modelo...</p>
     </section>
 
     <section class="glass panel">
-      <label for="matchSelect">Selecciona partido</label>
-      <select id="matchSelect"></select>
+      <div class="select-grid">
+        <div>
+          <label for="dateSelect">Fecha</label>
+          <select id="dateSelect"></select>
+        </div>
+
+        <div>
+          <label for="matchSelect">Partido</label>
+          <select id="matchSelect"></select>
+        </div>
+      </div>
     </section>
 
     <section id="matchCard" class="glass card"></section>

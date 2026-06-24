@@ -379,21 +379,36 @@ function getMatchesByDate(date) {
 
 function renderDailySuggestion() {
   const selectedDate = dateSelect.value;
-  const matches = getMatchesByDate(selectedDate);
+  const candidates = getCandidatesForDate(selectedDate);
 
-  const candidates = [];
+  const solid = candidates
+    .filter(item => ["safe", "corners"].includes(item.pick.type))
+    .sort((a, b) => b.pick.probability - a.pick.probability)[0];
 
-  matches.forEach(match => {
-    const prediction = predictMatch(resultsData, match.home, match.away);
-    const picks = getFullPicks(prediction);
+  const value = candidates
+    .filter(item => ["safe", "balanced", "aggressive"].includes(item.pick.type))
+    .filter(item => item.pick.probability >= 0.42)
+    .sort((a, b) => a.pick.valueOdds - b.pick.valueOdds)[0];
 
-    picks.forEach(pick => {
-      candidates.push({
-        match,
-        prediction,
-        pick
-      });
-    });
+  const risky = candidates
+    .filter(item => ["aggressive", "score"].includes(item.pick.type))
+    .filter(item => item.pick.probability >= 0.07 && item.pick.probability <= 0.40)
+    .sort((a, b) => b.pick.probability - a.pick.probability)[0];
+
+  dailySuggestion.innerHTML = `
+    <h2>Sugerencia del día</h2>
+    <p class="note">Fecha: <strong>${DATE_LABELS[selectedDate] || selectedDate}</strong>. La app revisa todos los partidos de ese día.</p>
+
+    <div class="daily-grid">
+      ${renderDailyCard("🟢 Más sólido", solid, "Probabilidad alta")}
+      ${renderDailyCard("🔥 Caza-value", value, `Buscar momio arriba de @${formatOdds(value.pick.valueOdds)}`)}
+      ${renderDailyCard("🧨 Arriesgado interesante", risky, "Pago potencial alto")}
+    </div>
+
+    <h3 class="mini-title">Top picks de la fecha</h3>
+    ${renderTopPicksList(selectedDate)}
+  `;
+}
   });
 
   const solid = candidates
@@ -542,7 +557,7 @@ function renderMatch(match) {
   const prediction = predictMatch(resultsData, match.home, match.away);
   const picks = getFullPicks(prediction);
   const players = getPlayerSuggestions(prediction.favorite);
-  const bestPick = picks.sort((a, b) => b.probability - a.probability)[0];
+  const bestPick = [...picks].sort((a, b) => b.probability - a.probability)[0];
 
   card.innerHTML = `
     <h2 class="match-title">${matchName(match)}</h2>
@@ -580,6 +595,8 @@ function renderMatch(match) {
         <strong>${players.join(" · ")}</strong>
       </div>
     </div>
+
+    ${renderHeatmap(prediction)}
 
     <div class="why-box">
       <span>🧠 ¿Por qué?</span>
@@ -622,6 +639,7 @@ function renderMatch(match) {
       Córners y jugadores siguen siendo proxy hasta conectar API en vivo.
     </p>
   `;
+}
 }
 
 function analyzeValue() {

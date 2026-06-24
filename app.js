@@ -62,7 +62,7 @@ const lossesEl = document.getElementById("losses");
 const hitRateEl = document.getElementById("hitRate");
 const resetBtn = document.getElementById("resetBtn");
 
-const STORAGE_KEY = "matchiq_pick_record_v4";
+const STORAGE_KEY = "matchiq_pick_record_v5";
 
 let resultsData = [];
 let currentMatches = [];
@@ -81,7 +81,8 @@ function createMatchId(match) {
   return `${match.date}-${match.home}-${match.away}`
     .toLowerCase()
     .replaceAll(" ", "-")
-    .replaceAll(".", "");
+    .replaceAll(".", "")
+    .replaceAll("'", "");
 }
 
 function createEmptyRecord() {
@@ -125,6 +126,7 @@ function formatPct(value) {
 }
 
 function formatOdds(value) {
+  if (!Number.isFinite(value)) return "—";
   return Number(value).toFixed(2);
 }
 
@@ -290,7 +292,7 @@ function riskLabel(probability) {
 
 function decoratePicks(picks, prediction) {
   return picks.map(pick => {
-    const probability = getPickProbability(pick, prediction);
+    const probability = Math.max(0.01, Math.min(0.99, getPickProbability(pick, prediction)));
     const fairOdds = 1 / probability;
     const valueOdds = 1.08 / probability;
 
@@ -351,7 +353,7 @@ function makeWhy(prediction, pick) {
   }
 
   if (pick.type === "balanced") {
-    return `${pick.text} tiene valor medio porque el modelo le da a ${fav} la mayor probabilidad de resultado. La forma reciente pondera ataque/defensa: ${displayName(prediction.home)} GF ${homeGF}, GA ${homeGA}; ${displayName(prediction.away)} GF ${awayGF}, GA ${awayGA}.`;
+    return `${pick.text} tiene valor medio porque el modelo le da a ${fav} la mayor probabilidad de resultado. Forma reciente: ${displayName(prediction.home)} GF ${homeGF}, GA ${homeGA}; ${displayName(prediction.away)} GF ${awayGF}, GA ${awayGA}.`;
   }
 
   if (pick.type === "aggressive") {
@@ -367,7 +369,7 @@ function makeWhy(prediction, pick) {
   }
 
   if (pick.type === "player") {
-    return `El pick de jugador es una sugerencia proxy basada en el equipo favorito y roles ofensivos conocidos. Para hacerlo exacto necesitaremos alinear datos en vivo de titulares, tiros y props.`;
+    return `El pick de jugador es una sugerencia proxy basada en el equipo favorito y roles ofensivos conocidos. Para hacerlo exacto necesitaremos datos en vivo de titulares, tiros y props.`;
   }
 
   return "El modelo combina forma reciente, goles esperados y distribución de marcadores.";
@@ -375,6 +377,74 @@ function makeWhy(prediction, pick) {
 
 function getMatchesByDate(date) {
   return currentMatches.filter(match => match.date === date);
+}
+
+function getCandidatesForDate(date) {
+  const matches = getMatchesByDate(date);
+  const candidates = [];
+
+  matches.forEach(match => {
+    const prediction = predictMatch(resultsData, match.home, match.away);
+    const picks = getFullPicks(prediction);
+
+    picks.forEach(pick => {
+      candidates.push({
+        match,
+        prediction,
+        pick
+      });
+    });
+  });
+
+  return candidates;
+}
+
+function renderDailyCard(title, item, subtitle) {
+  if (!item) {
+    return `
+      <div class="daily-card">
+        <span>${title}</span>
+        <strong>Sin datos suficientes</strong>
+        <small>Selecciona otra fecha</small>
+        <em>—</em>
+      </div>
+    `;
+  }
+
+  return `
+    <button class="daily-card" onclick="selectMatchById('${item.match.id}')">
+      <span>${title}</span>
+      <strong>${item.pick.text}</strong>
+      <small>${matchName(item.match)}</small>
+      <em>${subtitle} · IA ${formatPct(item.pick.probability)}</em>
+    </button>
+  `;
+}
+
+function renderTopPicksList(date) {
+  const ranked = getCandidatesForDate(date)
+    .filter(item => item.pick.type !== "score")
+    .sort((a, b) => b.pick.probability - a.pick.probability)
+    .slice(0, 8);
+
+  if (!ranked.length) {
+    return `<p class="note">No hay picks disponibles para esta fecha.</p>`;
+  }
+
+  return `
+    <div class="top-picks-list">
+      ${ranked.map((item, index) => `
+        <button class="top-pick-row" onclick="selectMatchById('${item.match.id}')">
+          <div class="rank">${index + 1}</div>
+          <div>
+            <strong>${item.pick.emoji} ${item.pick.text}</strong>
+            <span>${matchName(item.match)} · IA ${formatPct(item.pick.probability)} · Riesgo ${item.pick.risk}</span>
+          </div>
+          <em>@${formatOdds(item.pick.fairOdds)}</em>
+        </button>
+      `).join("")}
+    </div>
+  `;
 }
 
 function renderDailySuggestion() {
@@ -401,80 +471,12 @@ function renderDailySuggestion() {
 
     <div class="daily-grid">
       ${renderDailyCard("🟢 Más sólido", solid, "Probabilidad alta")}
-      ${renderDailyCard("🔥 Caza-value", value, `Buscar momio arriba de @${formatOdds(value.pick.valueOdds)}`)}
+      ${renderDailyCard("🔥 Caza-value", value, value ? `Buscar momio arriba de @${formatOdds(value.pick.valueOdds)}` : "—")}
       ${renderDailyCard("🧨 Arriesgado interesante", risky, "Pago potencial alto")}
     </div>
 
     <h3 class="mini-title">Top picks de la fecha</h3>
     ${renderTopPicksList(selectedDate)}
-  `;
-}
-  });
-
-  const solid = candidates
-    .filter(item => ["safe", "corners"].includes(item.pick.type))
-    .sort((a, b) => b.pick.probability - a.pick.probability)[0];
-
-  const value = candidates
-    .filter(item => ["safe", "balanced", "aggressive"].includes(item.pick.type))
-    .filter(item => item.pick.probability >= 0.42)
-    .sort((a, b) => a.pick.valueOdds - b.pick.valueOdds)[0];
-
-  const risky = candidates
-    .filter(item => ["aggressive", "score"].includes(item.pick.type))
-    .filter(item => item.pick.probability >= 0.07 && item.pick.probability <= 0.40)
-    .sort((a, b) => b.pick.probability - a.pick.probability)[0];
-
-  dailySuggestion.innerHTML = `
-    <h2>Sugerencia del día</h2>
-    <p class="note">Fecha: <strong>${DATE_LABELS[selectedDate] || selectedDate}</strong>. La app analiza todos los partidos de ese día y selecciona automáticamente.</p>
-
-    <div class="daily-grid">
-      ${renderDailyCard("🟢 Más sólido", solid, "Probabilidad alta")}
-      ${renderDailyCard("🔥 Caza-value", value, `Buscar momio arriba de @${formatOdds(value.pick.valueOdds)}`)}
-      ${renderDailyCard("🧨 Arriesgado interesante", risky, "Pago potencial alto")}
-    </div>
-  `;
-}
-function getCandidatesForDate(date) {
-  const matches = getMatchesByDate(date);
-  const candidates = [];
-
-  matches.forEach(match => {
-    const prediction = predictMatch(resultsData, match.home, match.away);
-    const picks = getFullPicks(prediction);
-
-    picks.forEach(pick => {
-      candidates.push({
-        match,
-        prediction,
-        pick
-      });
-    });
-  });
-
-  return candidates;
-}
-
-function renderTopPicksList(date) {
-  const ranked = getCandidatesForDate(date)
-    .filter(item => item.pick.type !== "score")
-    .sort((a, b) => b.pick.probability - a.pick.probability)
-    .slice(0, 8);
-
-  return `
-    <div class="top-picks-list">
-      ${ranked.map((item, index) => `
-        <button class="top-pick-row" onclick="selectMatchById('${item.match.id}')">
-          <div class="rank">${index + 1}</div>
-          <div>
-            <strong>${item.pick.emoji} ${item.pick.text}</strong>
-            <span>${matchName(item.match)} · IA ${formatPct(item.pick.probability)} · Riesgo ${item.pick.risk}</span>
-          </div>
-          <em>@${formatOdds(item.pick.fairOdds)}</em>
-        </button>
-      `).join("")}
-    </div>
   `;
 }
 
@@ -516,7 +518,7 @@ function renderHeatmap(prediction) {
           <div class="row-label">${h}</div>
           ${[0, 1, 2, 3, 4].map(a => {
             const cell = cells.find(item => item.h === h && item.a === a);
-            const heat = Math.max(0.12, cell.probability / maxProb).toFixed(2);
+            const heat = maxProb ? Math.max(0.12, cell.probability / maxProb).toFixed(2) : 0.12;
 
             return `
               <div class="heat-cell" style="--heat:${heat}">
@@ -534,23 +536,6 @@ function renderHeatmap(prediction) {
       </div>
     </div>
   `;
-}
-function renderDailyCard(title, item, subtitle) {
-  return `
-    <button class="daily-card" onclick="selectMatchById('${item.match.id}')">
-      <span>${title}</span>
-      <strong>${item.pick.text}</strong>
-      <small>${matchName(item.match)}</small>
-      <em>${subtitle} · IA ${formatPct(item.pick.probability)}</em>
-    </button>
-  `;
-}
-
-function selectMatchById(id) {
-  select.value = id;
-  const match = currentMatches.find(item => item.id === id);
-  renderMatch(match);
-  window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 function renderMatch(match) {
@@ -606,8 +591,9 @@ function renderMatch(match) {
 
     <div class="value-box">
       <span>💰 Detector de value</span>
+
       <label for="valuePickSelect">Mercado</label>
-      <select id="valuePickSelect">
+      <select id="valuePickSelect" onchange="analyzeValue()">
         ${picks.map(pick => `
           <option value="${pick.type}">${pick.emoji} ${pick.text} · IA ${formatPct(pick.probability)}</option>
         `).join("")}
@@ -640,18 +626,25 @@ function renderMatch(match) {
     </p>
   `;
 }
-}
 
 function analyzeValue() {
   const match = currentMatches.find(m => m.id === select.value);
+  if (!match) return;
+
   const prediction = predictMatch(resultsData, match.home, match.away);
   const picks = getFullPicks(prediction);
 
-  const selectedType = document.getElementById("valuePickSelect").value;
-  const odds = Number(document.getElementById("oddsInput").value);
+  const valuePickSelect = document.getElementById("valuePickSelect");
+  const oddsInput = document.getElementById("oddsInput");
   const result = document.getElementById("valueResult");
 
+  if (!valuePickSelect || !oddsInput || !result) return;
+
+  const selectedType = valuePickSelect.value;
+  const odds = Number(oddsInput.value);
   const pick = picks.find(item => item.type === selectedType);
+
+  if (!pick) return;
 
   if (!odds || odds <= 1) {
     result.innerHTML = "Escribe un momio decimal válido.";
@@ -683,9 +676,13 @@ function analyzeValue() {
 
 function markPick(matchId, pickType, ok) {
   const match = currentMatches.find(m => m.id === matchId);
+  if (!match) return;
+
   const prediction = predictMatch(resultsData, match.home, match.away);
   const picks = getFullPicks(prediction);
   const pick = picks.find(p => p.type === pickType);
+
+  if (!pick) return;
 
   if (ok) {
     record.wins++;
@@ -724,10 +721,28 @@ function buildMatchOptions() {
   `).join("");
 }
 
+function selectMatchById(id) {
+  const match = currentMatches.find(item => item.id === id);
+  if (!match) return;
+
+  dateSelect.value = match.date;
+  buildMatchOptions();
+  select.value = id;
+  renderDailySuggestion();
+  renderMatch(match);
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
 async function init() {
   card.innerHTML = `
     <h2 class="match-title">Cargando datos...</h2>
     <p class="note">Conectando con el repositorio original y calculando modelo.</p>
+  `;
+
+  dailySuggestion.innerHTML = `
+    <h2>Sugerencia del día</h2>
+    <p class="note">Cargando modelo...</p>
   `;
 
   try {
@@ -750,6 +765,12 @@ async function init() {
       <h2 class="match-title">Error al cargar datos</h2>
       <p class="note">No se pudo conectar al CSV original. Revisa conexión o vuelve a intentar.</p>
     `;
+
+    dailySuggestion.innerHTML = `
+      <h2>Sugerencia del día</h2>
+      <p class="note">No se pudo cargar el modelo.</p>
+    `;
+
     console.error(error);
   }
 }

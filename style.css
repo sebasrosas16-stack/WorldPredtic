@@ -259,3 +259,130 @@ button {
 .score { border-left: 5px solid #60a5fa; }
 .player { border-left: 5px solid #c084fc; }
 .corners { border-left: 5px solid #38bdf8; }
+.select-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+.daily-grid {
+  display: grid;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.daily-card {
+  width: 100%;
+  text-align: left;
+  padding: 15px;
+  border-radius: 22px;
+  background: rgba(255,255,255,.12);
+  color: white;
+  border: 1px solid rgba(255,255,255,.16);
+}
+
+.daily-card span {
+  display: block;
+  font-size: 12px;
+  color: rgba(255,255,255,.62);
+  margin-bottom: 5px;
+}
+
+.daily-card strong {
+  display: block;
+  font-size: 15px;
+}
+
+.daily-card small {
+  display: block;
+  margin-top: 5px;
+  color: rgba(255,255,255,.66);
+}
+
+.daily-card em {
+  display: block;
+  margin-top: 7px;
+  font-style: normal;
+  color: #c7d2fe;
+  font-size: 12px;
+}
+
+.why-box,
+.value-box {
+  margin: 16px 0;
+  padding: 16px;
+  border-radius: 22px;
+  background: rgba(0,0,0,.22);
+  border: 1px solid rgba(255,255,255,.12);
+}
+
+.why-box span,
+.value-box span {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 12px;
+  color: rgba(255,255,255,.62);
+}
+
+.why-box strong {
+  display: block;
+  font-size: 18px;
+  margin-bottom: 6px;
+}
+
+.why-box p {
+  margin: 0;
+  color: rgba(255,255,255,.72);
+  line-height: 1.45;
+  font-size: 14px;
+}
+
+.value-box label {
+  margin-top: 12px;
+}
+
+.value-box input {
+  width: 100%;
+  padding: 14px;
+  border-radius: 18px;
+  border: none;
+  font-size: 16px;
+  color: white;
+  background: rgba(0,0,0,.35);
+}
+
+.value-result {
+  margin-top: 12px;
+  padding: 13px;
+  border-radius: 18px;
+  background: rgba(255,255,255,.10);
+  color: rgba(255,255,255,.78);
+  font-size: 14px;
+}
+
+.value-result strong {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.value-result span {
+  color: rgba(255,255,255,.72);
+}
+
+.value-result.good {
+  border-left: 5px solid #22c55e;
+}
+
+.value-result.mid {
+  border-left: 5px solid #facc15;
+}
+
+.value-result.bad {
+  border-left: 5px solid #ef4444;
+}
+
+.pick-meta {
+  margin: 8px 0 0;
+  color: rgba(255,255,255,.62);
+  font-size: 12px;
+}

@@ -421,7 +421,105 @@ function renderDailySuggestion() {
     </div>
   `;
 }
+function getCandidatesForDate(date) {
+  const matches = getMatchesByDate(date);
+  const candidates = [];
 
+  matches.forEach(match => {
+    const prediction = predictMatch(resultsData, match.home, match.away);
+    const picks = getFullPicks(prediction);
+
+    picks.forEach(pick => {
+      candidates.push({
+        match,
+        prediction,
+        pick
+      });
+    });
+  });
+
+  return candidates;
+}
+
+function renderTopPicksList(date) {
+  const ranked = getCandidatesForDate(date)
+    .filter(item => item.pick.type !== "score")
+    .sort((a, b) => b.pick.probability - a.pick.probability)
+    .slice(0, 8);
+
+  return `
+    <div class="top-picks-list">
+      ${ranked.map((item, index) => `
+        <button class="top-pick-row" onclick="selectMatchById('${item.match.id}')">
+          <div class="rank">${index + 1}</div>
+          <div>
+            <strong>${item.pick.emoji} ${item.pick.text}</strong>
+            <span>${matchName(item.match)} · IA ${formatPct(item.pick.probability)} · Riesgo ${item.pick.risk}</span>
+          </div>
+          <em>@${formatOdds(item.pick.fairOdds)}</em>
+        </button>
+      `).join("")}
+    </div>
+  `;
+}
+
+function renderHeatmap(prediction) {
+  const maxGoals = 4;
+  const cells = [];
+
+  for (let h = 0; h <= maxGoals; h++) {
+    for (let a = 0; a <= maxGoals; a++) {
+      const probability = poisson(h, prediction.homeLambda) * poisson(a, prediction.awayLambda);
+
+      cells.push({
+        h,
+        a,
+        probability,
+        score: `${h}-${a}`
+      });
+    }
+  }
+
+  const maxProb = Math.max(...cells.map(cell => cell.probability));
+
+  return `
+    <div class="heatmap-box">
+      <span>🔥 Heatmap de marcador</span>
+      <p class="note">Más brillante = marcador más probable según el modelo.</p>
+
+      <div class="heatmap-labels">
+        <div></div>
+        <small>0</small>
+        <small>1</small>
+        <small>2</small>
+        <small>3</small>
+        <small>4</small>
+      </div>
+
+      <div class="heatmap-grid">
+        ${[0, 1, 2, 3, 4].map(h => `
+          <div class="row-label">${h}</div>
+          ${[0, 1, 2, 3, 4].map(a => {
+            const cell = cells.find(item => item.h === h && item.a === a);
+            const heat = Math.max(0.12, cell.probability / maxProb).toFixed(2);
+
+            return `
+              <div class="heat-cell" style="--heat:${heat}">
+                <strong>${cell.score}</strong>
+                <small>${Math.round(cell.probability * 100)}%</small>
+              </div>
+            `;
+          }).join("")}
+        `).join("")}
+      </div>
+
+      <div class="heatmap-teams">
+        <small>${displayName(prediction.home)} = filas</small>
+        <small>${displayName(prediction.away)} = columnas</small>
+      </div>
+    </div>
+  `;
+}
 function renderDailyCard(title, item, subtitle) {
   return `
     <button class="daily-card" onclick="selectMatchById('${item.match.id}')">

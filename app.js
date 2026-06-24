@@ -4,30 +4,36 @@ const matches = [
     name: "Marruecos vs Haití",
     probs: [78, 15, 7],
     score: "2-0",
-    safe: "Marruecos anota 1+ gol",
-    balanced: "Marruecos gana",
-    aggressive: "Marruecos gana y Haití no anota",
-    note: "Modelo: ventaja ofensiva clara de Marruecos, baja producción ofensiva de Haití y mayor control territorial esperado."
+    note: "Modelo: ventaja ofensiva clara de Marruecos, baja producción ofensiva de Haití y mayor control territorial esperado.",
+    picks: [
+      { type: "safe", label: "Conservador", emoji: "🟢", text: "Marruecos anota 1+ gol" },
+      { type: "balanced", label: "Equilibrado", emoji: "🟡", text: "Marruecos gana" },
+      { type: "aggressive", label: "Agresivo", emoji: "🔴", text: "Marruecos gana y Haití no anota" }
+    ]
   },
   {
     id: "sco-bra",
     name: "Escocia vs Brasil",
     probs: [11, 18, 71],
     score: "0-2",
-    safe: "Brasil anota 1+ gol",
-    balanced: "Brasil gana",
-    aggressive: "Brasil gana a cero",
-    note: "Modelo: Brasil domina posesión y volumen ofensivo; Escocia tiende a partidos cerrados."
+    note: "Modelo: Brasil domina posesión y volumen ofensivo; Escocia tiende a partidos cerrados.",
+    picks: [
+      { type: "safe", label: "Conservador", emoji: "🟢", text: "Brasil anota 1+ gol" },
+      { type: "balanced", label: "Equilibrado", emoji: "🟡", text: "Brasil gana" },
+      { type: "aggressive", label: "Agresivo", emoji: "🔴", text: "Brasil gana a cero" }
+    ]
   },
   {
     id: "cze-mex",
     name: "Chequia vs México",
     probs: [21, 25, 54],
     score: "1-2",
-    safe: "México o empate",
-    balanced: "México gana",
-    aggressive: "México gana y ambos anotan",
-    note: "Modelo: México tiene mejor momento y factor local, pero Chequia conserva riesgo por juego aéreo."
+    note: "Modelo: México tiene mejor momento y factor local, pero Chequia conserva riesgo por juego aéreo.",
+    picks: [
+      { type: "safe", label: "Conservador", emoji: "🟢", text: "México o empate" },
+      { type: "balanced", label: "Equilibrado", emoji: "🟡", text: "México gana" },
+      { type: "aggressive", label: "Agresivo", emoji: "🔴", text: "México gana y ambos anotan" }
+    ]
   }
 ];
 
@@ -39,21 +45,110 @@ const lossesEl = document.getElementById("losses");
 const hitRateEl = document.getElementById("hitRate");
 const resetBtn = document.getElementById("resetBtn");
 
-let record = JSON.parse(localStorage.getItem("matchiq_record")) || {
+const STORAGE_KEY = "matchiq_pick_record_v2";
+
+let record = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
   wins: 0,
-  losses: 0
+  losses: 0,
+  byType: {
+    safe: { wins: 0, losses: 0 },
+    balanced: { wins: 0, losses: 0 },
+    aggressive: { wins: 0, losses: 0 }
+  },
+  history: []
 };
 
 function saveRecord() {
-  localStorage.setItem("matchiq_record", JSON.stringify(record));
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(record));
   renderRecord();
+}
+
+function rate(wins, losses) {
+  const total = wins + losses;
+  return total ? Math.round((wins / total) * 100) : 0;
 }
 
 function renderRecord() {
   const total = record.wins + record.losses;
+
   winsEl.textContent = record.wins;
   lossesEl.textContent = record.losses;
-  hitRateEl.textContent = total ? `${Math.round((record.wins / total) * 100)}%` : "0%";
+  hitRateEl.textContent = total ? `${rate(record.wins, record.losses)}%` : "0%";
+
+  renderTypeStats();
+  renderHistory();
+}
+
+function ensureRecordBlocks() {
+  const panel = resetBtn.parentElement;
+
+  if (!document.getElementById("typeStats")) {
+    resetBtn.insertAdjacentHTML(
+      "beforebegin",
+      `<div id="typeStats" class="type-stats"></div>`
+    );
+  }
+
+  if (!document.getElementById("historyList")) {
+    resetBtn.insertAdjacentHTML(
+      "beforebegin",
+      `
+      <h3 class="mini-title">Últimos resultados</h3>
+      <div id="historyList" class="history-list"></div>
+      `
+    );
+  }
+}
+
+function renderTypeStats() {
+  ensureRecordBlocks();
+
+  const typeStats = document.getElementById("typeStats");
+
+  const types = [
+    { key: "safe", name: "Conservadores", emoji: "🟢" },
+    { key: "balanced", name: "Equilibrados", emoji: "🟡" },
+    { key: "aggressive", name: "Agresivos", emoji: "🔴" }
+  ];
+
+  typeStats.innerHTML = types.map(type => {
+    const item = record.byType[type.key];
+    const total = item.wins + item.losses;
+
+    return `
+      <div class="type-row">
+        <div>
+          <strong>${type.emoji} ${type.name}</strong>
+          <span>${item.wins} buenas / ${item.losses} malas</span>
+        </div>
+        <div class="mini-rate">${total ? rate(item.wins, item.losses) : 0}%</div>
+      </div>
+    `;
+  }).join("");
+}
+
+function renderHistory() {
+  ensureRecordBlocks();
+
+  const historyList = document.getElementById("historyList");
+
+  if (!record.history.length) {
+    historyList.innerHTML = `<p class="note">Todavía no has marcado ningún pick.</p>`;
+    return;
+  }
+
+  historyList.innerHTML = record.history
+    .slice(-6)
+    .reverse()
+    .map(item => `
+      <div class="history-item">
+        <div>
+          <strong>${item.ok ? "✅" : "❌"} ${item.pick}</strong>
+          <span>${item.match} · ${item.typeLabel}</span>
+        </div>
+      </div>
+    `)
+    .join("");
 }
 
 function renderMatch(match) {
@@ -67,33 +162,43 @@ function renderMatch(match) {
       <div class="prob"><strong>${match.probs[2]}%</strong><span>Visita</span></div>
     </div>
 
-    <div class="pick safe">
-      <div class="pick-title">🟢 Conservador</div>
-      <strong>${match.safe}</strong>
-    </div>
+    ${match.picks.map(pick => `
+      <div class="pick ${pick.type}">
+        <div class="pick-title">${pick.emoji} ${pick.label}</div>
+        <strong>${pick.text}</strong>
 
-    <div class="pick balanced">
-      <div class="pick-title">🟡 Equilibrado</div>
-      <strong>${match.balanced}</strong>
-    </div>
-
-    <div class="pick aggressive">
-      <div class="pick-title">🔴 Agresivo</div>
-      <strong>${match.aggressive}</strong>
-    </div>
+        <div class="actions">
+          <button class="win" onclick="markPick('${match.id}', '${pick.type}', true)">✅ Se cumplió</button>
+          <button class="lose" onclick="markPick('${match.id}', '${pick.type}', false)">❌ Falló</button>
+        </div>
+      </div>
+    `).join("")}
 
     <p class="note">${match.note}</p>
-
-    <div class="actions">
-      <button class="win" onclick="markResult(true)">✅ Se cumplió</button>
-      <button class="lose" onclick="markResult(false)">❌ Falló</button>
-    </div>
   `;
 }
 
-function markResult(ok) {
-  if (ok) record.wins++;
-  else record.losses++;
+function markPick(matchId, pickType, ok) {
+  const match = matches.find(m => m.id === matchId);
+  const pick = match.picks.find(p => p.type === pickType);
+
+  if (ok) {
+    record.wins++;
+    record.byType[pickType].wins++;
+  } else {
+    record.losses++;
+    record.byType[pickType].losses++;
+  }
+
+  record.history.push({
+    match: match.name,
+    pick: pick.text,
+    type: pickType,
+    typeLabel: pick.label,
+    ok,
+    date: new Date().toISOString()
+  });
+
   saveRecord();
 }
 
@@ -110,7 +215,20 @@ select.addEventListener("change", () => {
 });
 
 resetBtn.addEventListener("click", () => {
-  record = { wins: 0, losses: 0 };
+  const confirmReset = confirm("¿Seguro que quieres borrar todo tu historial?");
+  if (!confirmReset) return;
+
+  record = {
+    wins: 0,
+    losses: 0,
+    byType: {
+      safe: { wins: 0, losses: 0 },
+      balanced: { wins: 0, losses: 0 },
+      aggressive: { wins: 0, losses: 0 }
+    },
+    history: []
+  };
+
   saveRecord();
 });
 

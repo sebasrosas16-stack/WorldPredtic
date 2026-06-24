@@ -7,89 +7,40 @@ const PICK_TYPES = [
   { key: "corners", name: "Córners", emoji: "🚩" }
 ];
 
-const matches = [
-  {
-    id: "mar-hai",
-    name: "Marruecos vs Haití",
-    teams: ["Marruecos", "Haití"],
-    probs: [78, 15, 7],
-    score: "2-0",
-    topScores: ["2-0", "1-0", "3-0"],
-    corners: {
-      home: 6.1,
-      away: 2.8,
-      pick: "Marruecos más de 4.5 córners"
-    },
-    players: [
-      "Hakimi 1+ tiro",
-      "En-Nesyri 1+ tiro a puerta",
-      "Ziyech participa en gol"
-    ],
-    note: "Modelo: ventaja ofensiva clara de Marruecos, baja producción ofensiva de Haití y mayor control territorial esperado.",
-    picks: [
-      { type: "safe", label: "Conservador", emoji: "🟢", text: "Marruecos anota 1+ gol" },
-      { type: "balanced", label: "Equilibrado", emoji: "🟡", text: "Marruecos gana" },
-      { type: "aggressive", label: "Agresivo", emoji: "🔴", text: "Marruecos gana y Haití no anota" },
-      { type: "score", label: "Marcador", emoji: "🎯", text: "Marcador exacto 2-0" },
-      { type: "player", label: "Jugador", emoji: "⚽", text: "En-Nesyri 1+ tiro a puerta" },
-      { type: "corners", label: "Córners", emoji: "🚩", text: "Marruecos más de 4.5 córners" }
-    ]
-  },
-  {
-    id: "sco-bra",
-    name: "Escocia vs Brasil",
-    teams: ["Escocia", "Brasil"],
-    probs: [11, 18, 71],
-    score: "0-2",
-    topScores: ["0-2", "0-1", "1-2"],
-    corners: {
-      home: 3.1,
-      away: 6.4,
-      pick: "Brasil más de 3.5 córners"
-    },
-    players: [
-      "Vinícius Jr. 1+ tiro a puerta",
-      "Rodrygo 1+ tiro",
-      "Neymar participa en gol"
-    ],
-    note: "Modelo: Brasil domina posesión y volumen ofensivo; Escocia tiende a partidos cerrados.",
-    picks: [
-      { type: "safe", label: "Conservador", emoji: "🟢", text: "Brasil anota 1+ gol" },
-      { type: "balanced", label: "Equilibrado", emoji: "🟡", text: "Brasil gana" },
-      { type: "aggressive", label: "Agresivo", emoji: "🔴", text: "Brasil gana a cero" },
-      { type: "score", label: "Marcador", emoji: "🎯", text: "Marcador exacto 0-2" },
-      { type: "player", label: "Jugador", emoji: "⚽", text: "Vinícius Jr. 1+ tiro a puerta" },
-      { type: "corners", label: "Córners", emoji: "🚩", text: "Brasil más de 3.5 córners" }
-    ]
-  },
-  {
-    id: "cze-mex",
-    name: "Chequia vs México",
-    teams: ["Chequia", "México"],
-    probs: [21, 25, 54],
-    score: "1-2",
-    topScores: ["1-2", "1-1", "0-1"],
-    corners: {
-      home: 4.2,
-      away: 5.3,
-      pick: "Más de 8.5 córners totales"
-    },
-    players: [
-      "Santiago Giménez 1+ tiro a puerta",
-      "Lozano 1+ tiro",
-      "Alexis Vega 1+ tiro"
-    ],
-    note: "Modelo: México tiene mejor momento y factor local, pero Chequia conserva riesgo por juego aéreo.",
-    picks: [
-      { type: "safe", label: "Conservador", emoji: "🟢", text: "México o empate" },
-      { type: "balanced", label: "Equilibrado", emoji: "🟡", text: "México gana" },
-      { type: "aggressive", label: "Agresivo", emoji: "🔴", text: "México gana y ambos anotan" },
-      { type: "score", label: "Marcador", emoji: "🎯", text: "Marcador exacto 1-2" },
-      { type: "player", label: "Jugador", emoji: "⚽", text: "Santiago Giménez 1+ tiro a puerta" },
-      { type: "corners", label: "Córners", emoji: "🚩", text: "Más de 8.5 córners totales" }
-    ]
-  }
+const UPCOMING_MATCHES = [
+  ["Switzerland", "Canada"],
+  ["Bosnia and Herzegovina", "Qatar"],
+  ["Scotland", "Brazil"],
+  ["Morocco", "Haiti"],
+  ["Czech Republic", "Mexico"],
+  ["South Africa", "South Korea"],
+  ["Ecuador", "Germany"],
+  ["Tunisia", "Netherlands"],
+  ["Japan", "Sweden"],
+  ["Turkey", "United States"],
+  ["Paraguay", "Australia"],
+  ["Norway", "France"],
+  ["Senegal", "Iraq"],
+  ["Uruguay", "Spain"],
+  ["Cape Verde", "Saudi Arabia"],
+  ["New Zealand", "Belgium"],
+  ["Egypt", "Iran"],
+  ["Panama", "England"],
+  ["Croatia", "Ghana"],
+  ["Colombia", "Portugal"],
+  ["DR Congo", "Uzbekistan"],
+  ["Jordan", "Argentina"],
+  ["Algeria", "Austria"]
 ];
+
+const DISPLAY_NAMES = {
+  "Czech Republic": "Chequia",
+  "United States": "Estados Unidos",
+  "Bosnia and Herzegovina": "Bosnia y Herzegovina",
+  "South Korea": "Corea del Sur",
+  "Cape Verde": "Cabo Verde",
+  "DR Congo": "RD Congo"
+};
 
 const select = document.getElementById("matchSelect");
 const card = document.getElementById("matchCard");
@@ -99,9 +50,16 @@ const lossesEl = document.getElementById("losses");
 const hitRateEl = document.getElementById("hitRate");
 const resetBtn = document.getElementById("resetBtn");
 
-const STORAGE_KEY = "matchiq_pick_record_v3";
+const STORAGE_KEY = "matchiq_pick_record_v4";
+
+let resultsData = [];
+let currentMatches = [];
 
 let record = JSON.parse(localStorage.getItem(STORAGE_KEY)) || createEmptyRecord();
+
+function displayName(team) {
+  return DISPLAY_NAMES[team] || team;
+}
 
 function createEmptyRecord() {
   const byType = {};
@@ -119,13 +77,11 @@ function createEmptyRecord() {
 
 function normalizeRecord() {
   if (!record.byType) record.byType = {};
-
   PICK_TYPES.forEach(type => {
     if (!record.byType[type.key]) {
       record.byType[type.key] = { wins: 0, losses: 0 };
     }
   });
-
   if (!record.history) record.history = [];
 }
 
@@ -139,25 +95,9 @@ function rate(wins, losses) {
   return total ? Math.round((wins / total) * 100) : 0;
 }
 
-function renderRecord() {
-  normalizeRecord();
-
-  const total = record.wins + record.losses;
-
-  winsEl.textContent = record.wins;
-  lossesEl.textContent = record.losses;
-  hitRateEl.textContent = total ? `${rate(record.wins, record.losses)}%` : "0%";
-
-  renderTypeStats();
-  renderHistory();
-}
-
 function ensureRecordBlocks() {
   if (!document.getElementById("typeStats")) {
-    resetBtn.insertAdjacentHTML(
-      "beforebegin",
-      `<div id="typeStats" class="type-stats"></div>`
-    );
+    resetBtn.insertAdjacentHTML("beforebegin", `<div id="typeStats" class="type-stats"></div>`);
   }
 
   if (!document.getElementById("historyList")) {
@@ -169,6 +109,19 @@ function ensureRecordBlocks() {
       `
     );
   }
+}
+
+function renderRecord() {
+  normalizeRecord();
+
+  const total = record.wins + record.losses;
+
+  winsEl.textContent = record.wins;
+  lossesEl.textContent = record.losses;
+  hitRateEl.textContent = total ? `${rate(record.wins, record.losses)}%` : "0%";
+
+  renderTypeStats();
+  renderHistory();
 }
 
 function renderTypeStats() {
@@ -216,35 +169,78 @@ function renderHistory() {
     .join("");
 }
 
+function getPlayerSuggestions(home, away, favorite) {
+  const players = {
+    "Brazil": ["Vinícius Jr. 1+ tiro a puerta", "Rodrygo 1+ tiro", "Neymar participa en gol"],
+    "Mexico": ["Santiago Giménez 1+ tiro a puerta", "Lozano 1+ tiro", "Alexis Vega 1+ tiro"],
+    "France": ["Mbappé 1+ tiro a puerta", "Griezmann 1+ pase clave", "Dembélé 1+ tiro"],
+    "Argentina": ["Messi participa en gol", "Lautaro 1+ tiro a puerta", "Julián Álvarez 1+ tiro"],
+    "Portugal": ["Cristiano Ronaldo 1+ tiro a puerta", "Bruno Fernandes 1+ tiro", "Bernardo Silva 1+ pase clave"],
+    "Spain": ["Morata 1+ tiro a puerta", "Yamal 1+ tiro", "Pedri 1+ pase clave"],
+    "Germany": ["Musiala 1+ tiro", "Havertz 1+ tiro a puerta", "Wirtz 1+ pase clave"],
+    "Netherlands": ["Gakpo 1+ tiro", "Depay 1+ tiro a puerta", "Xavi Simons 1+ tiro"],
+    "Belgium": ["Lukaku 1+ tiro a puerta", "De Bruyne 1+ pase clave", "Doku 1+ tiro"]
+  };
+
+  return players[favorite.team] || [
+    `${displayName(favorite.team)} delantero 1+ tiro`,
+    `${displayName(favorite.team)} mediapunta 1+ tiro`,
+    `${displayName(favorite.team)} participa en gol`
+  ];
+}
+
 function renderMatch(match) {
+  const prediction = predictMatch(resultsData, match.home, match.away);
+  const picks = generatePicks(prediction);
+  const players = getPlayerSuggestions(match.home, match.away, prediction.favorite);
+
+  picks.push({
+    type: "player",
+    label: "Jugador",
+    emoji: "⚽",
+    text: players[0]
+  });
+
+  const matchName = `${displayName(match.home)} vs ${displayName(match.away)}`;
+
   card.innerHTML = `
-    <h2 class="match-title">${match.name}</h2>
-    <p class="note">Marcador IA probable: <strong>${match.score}</strong></p>
+    <h2 class="match-title">${matchName}</h2>
+    <p class="note">Datos históricos cargados desde el repo original. Marcador IA probable: <strong>${prediction.score}</strong></p>
 
     <div class="prob-grid">
-      <div class="prob"><strong>${match.probs[0]}%</strong><span>${match.teams[0]}</span></div>
-      <div class="prob"><strong>${match.probs[1]}%</strong><span>Empate</span></div>
-      <div class="prob"><strong>${match.probs[2]}%</strong><span>${match.teams[1]}</span></div>
+      <div class="prob"><strong>${prediction.probs.home}%</strong><span>${displayName(match.home)}</span></div>
+      <div class="prob"><strong>${prediction.probs.draw}%</strong><span>Empate</span></div>
+      <div class="prob"><strong>${prediction.probs.away}%</strong><span>${displayName(match.away)}</span></div>
     </div>
 
     <div class="insight-grid">
       <div class="insight-card">
         <span>🎯 Top marcadores</span>
-        <strong>${match.topScores.join(" · ")}</strong>
+        <strong>${prediction.topScores.join(" · ")}</strong>
       </div>
 
       <div class="insight-card">
         <span>🚩 Córners esperados</span>
-        <strong>${match.teams[0]} ${match.corners.home} / ${match.teams[1]} ${match.corners.away}</strong>
+        <strong>${displayName(match.home)} ${prediction.corners.home} / ${displayName(match.away)} ${prediction.corners.away}</strong>
+      </div>
+
+      <div class="insight-card">
+        <span>📉 Menos de 4.5 goles</span>
+        <strong>${prediction.under45}%</strong>
+      </div>
+
+      <div class="insight-card">
+        <span>⚽ Ambos anotan</span>
+        <strong>${prediction.bothScore}%</strong>
       </div>
 
       <div class="insight-card full">
         <span>⚽ Jugadores sugeridos</span>
-        <strong>${match.players.join(" · ")}</strong>
+        <strong>${players.join(" · ")}</strong>
       </div>
     </div>
 
-    ${match.picks.map(pick => `
+    ${picks.map(pick => `
       <div class="pick ${pick.type}">
         <div class="pick-title">${pick.emoji} ${pick.label}</div>
         <strong>${pick.text}</strong>
@@ -256,13 +252,27 @@ function renderMatch(match) {
       </div>
     `).join("")}
 
-    <p class="note">${match.note}</p>
+    <p class="note">
+      Modelo actual: forma reciente ponderada + goles esperados + distribución Poisson. 
+      Córners y jugadores siguen siendo proxy hasta conectar API en vivo.
+    </p>
   `;
 }
 
 function markPick(matchId, pickType, ok) {
-  const match = matches.find(m => m.id === matchId);
-  const pick = match.picks.find(p => p.type === pickType);
+  const match = currentMatches.find(m => m.id === matchId);
+  const prediction = predictMatch(resultsData, match.home, match.away);
+  const picks = generatePicks(prediction);
+  const players = getPlayerSuggestions(match.home, match.away, prediction.favorite);
+
+  picks.push({
+    type: "player",
+    label: "Jugador",
+    emoji: "⚽",
+    text: players[0]
+  });
+
+  const pick = picks.find(p => p.type === pickType);
 
   if (ok) {
     record.wins++;
@@ -273,7 +283,7 @@ function markPick(matchId, pickType, ok) {
   }
 
   record.history.push({
-    match: match.name,
+    match: `${displayName(match.home)} vs ${displayName(match.away)}`,
     pick: pick.text,
     type: pickType,
     typeLabel: pick.label,
@@ -284,15 +294,45 @@ function markPick(matchId, pickType, ok) {
   saveRecord();
 }
 
-matches.forEach(match => {
-  const option = document.createElement("option");
-  option.value = match.id;
-  option.textContent = match.name;
-  select.appendChild(option);
-});
+function buildMatches() {
+  currentMatches = UPCOMING_MATCHES.map(([home, away]) => ({
+    id: `${home}-${away}`.toLowerCase().replaceAll(" ", "-"),
+    home,
+    away
+  }));
+
+  select.innerHTML = "";
+
+  currentMatches.forEach(match => {
+    const option = document.createElement("option");
+    option.value = match.id;
+    option.textContent = `${displayName(match.home)} vs ${displayName(match.away)}`;
+    select.appendChild(option);
+  });
+}
+
+async function init() {
+  card.innerHTML = `
+    <h2 class="match-title">Cargando datos...</h2>
+    <p class="note">Conectando con el repositorio original y calculando modelo.</p>
+  `;
+
+  try {
+    resultsData = await loadResults();
+    buildMatches();
+    renderRecord();
+    renderMatch(currentMatches[0]);
+  } catch (error) {
+    card.innerHTML = `
+      <h2 class="match-title">Error al cargar datos</h2>
+      <p class="note">No se pudo conectar al CSV original. Revisa conexión o vuelve a intentar.</p>
+    `;
+    console.error(error);
+  }
+}
 
 select.addEventListener("change", () => {
-  const match = matches.find(m => m.id === select.value);
+  const match = currentMatches.find(m => m.id === select.value);
   renderMatch(match);
 });
 
@@ -305,5 +345,4 @@ resetBtn.addEventListener("click", () => {
 });
 
 normalizeRecord();
-renderRecord();
-renderMatch(matches[0]);
+init();

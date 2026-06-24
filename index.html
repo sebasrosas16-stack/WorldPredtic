@@ -1,18 +1,182 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Predicciones Mundial</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Picks Mundial</title>
+<style>
+body{font-family:-apple-system,BlinkMacSystemFont,Arial;background:#0b0b0f;color:white;margin:0;padding:20px}
+.card{background:#17171f;border-radius:20px;padding:18px;margin-top:18px;box-shadow:0 8px 20px #0005}
+select,button{width:100%;padding:14px;border-radius:14px;border:none;font-size:16px;margin-top:10px}
+button{background:#00c46a;color:white;font-weight:bold}
+.pick{background:#222432;border-radius:14px;padding:14px;margin-top:12px}
+.safe{border-left:5px solid #00c46a}
+.medium{border-left:5px solid #ffd43b}
+.risky{border-left:5px solid #ff5c5c}
+.small{color:#aaa;font-size:14px}
+h1{font-size:28px}
+h2{margin-bottom:5px}
+</style>
 </head>
 <body>
-<h1>Predicciones Mundial 2026</h1>
 
-<h2>Brasil vs Escocia</h2>
-<p>Marcador probable: 0-2</p>
-<p>Conservador: Brasil anota 1+ gol</p>
-<p>Equilibrado: Brasil gana</p>
-<p>Agresivo: Brasil gana a cero</p>
+<h1>⚽ Picks Mundial</h1>
+<p class="small">Selecciona un partido para ver picks recomendados.</p>
+
+<select id="matchSelect">
+  <option value="">Selecciona partido</option>
+</select>
+
+<div id="result"></div>
+
+<script>
+const matches = [
+  {
+    id:"mor-hai",
+    match:"Marruecos vs Haití",
+    probable:"2-0",
+    confidence:"Alta",
+    safe:"Marruecos anota 1+ gol",
+    balanced:"Marruecos gana",
+    aggressive:"Marruecos gana y Haití no anota",
+    corners:"Marruecos más de 3.5 córners",
+    cards:"Más de 1.5 tarjetas totales",
+    note:"Marruecos tiene más volumen ofensivo y Haití genera poco peligro."
+  },
+  {
+    id:"sco-bra",
+    match:"Escocia vs Brasil",
+    probable:"0-2",
+    confidence:"Alta",
+    safe:"Brasil anota 1+ gol",
+    balanced:"Brasil gana",
+    aggressive:"Brasil gana a cero",
+    corners:"Brasil más de 3.5 córners",
+    cards:"Más de 2.5 tarjetas totales",
+    note:"Brasil debe dominar posesión, tiros y córners."
+  },
+  {
+    id:"cze-mex",
+    match:"Chequia vs México",
+    probable:"1-2",
+    confidence:"Media-alta",
+    safe:"México o empate",
+    balanced:"México gana",
+    aggressive:"México gana y ambos anotan",
+    corners:"Más de 7.5 córners totales",
+    cards:"Más de 2.5 tarjetas",
+    note:"México tiene localía y mejor momento, pero Chequia puede complicar."
+  },
+  {
+    id:"sui-can",
+    match:"Suiza vs Canadá",
+    probable:"1-1",
+    confidence:"Media",
+    safe:"Suiza o empate",
+    balanced:"Menos de 3.5 goles",
+    aggressive:"Empate",
+    corners:"Más de 7.5 córners totales",
+    cards:"Más de 2.5 tarjetas",
+    note:"Partido cerrado; mejor protegerse con doble oportunidad o under."
+  },
+  {
+    id:"rsa-kor",
+    match:"Sudáfrica vs Corea del Sur",
+    probable:"1-1",
+    confidence:"Media",
+    safe:"Corea del Sur anota 1+ gol",
+    balanced:"Corea del Sur o empate",
+    aggressive:"Corea del Sur gana",
+    corners:"Corea más de 3.5 córners",
+    cards:"Más de 2.5 tarjetas",
+    note:"Corea tiene más estructura, pero no es pick ultra seguro."
+  },
+  {
+    id:"ecu-ger",
+    match:"Ecuador vs Alemania",
+    probable:"1-2",
+    confidence:"Media-alta",
+    safe:"Alemania anota 1+ gol",
+    balanced:"Alemania gana",
+    aggressive:"Alemania gana y más de 1.5 goles",
+    corners:"Alemania más de 4.5 córners",
+    cards:"Más de 2.5 tarjetas",
+    note:"Alemania tiene más pegada, Ecuador puede competir físicamente."
+  },
+  {
+    id:"tun-ned",
+    match:"Túnez vs Países Bajos",
+    probable:"0-2",
+    confidence:"Alta",
+    safe:"Países Bajos anota 1+ gol",
+    balanced:"Países Bajos gana",
+    aggressive:"Países Bajos gana a cero",
+    corners:"Países Bajos más de 4.5 córners",
+    cards:"Túnez más de 1.5 tarjetas",
+    note:"Países Bajos tiene ventaja clara en creación."
+  },
+  {
+    id:"nzl-bel",
+    match:"Nueva Zelanda vs Bélgica",
+    probable:"0-2",
+    confidence:"Alta",
+    safe:"Bélgica anota 1+ gol",
+    balanced:"Bélgica gana",
+    aggressive:"Bélgica gana a cero",
+    corners:"Bélgica más de 4.5 córners",
+    cards:"Más de 1.5 tarjetas totales",
+    note:"Bélgica debería dominar campo rival."
+  }
+];
+
+const select = document.getElementById("matchSelect");
+const result = document.getElementById("result");
+
+matches.forEach(m => {
+  const option = document.createElement("option");
+  option.value = m.id;
+  option.textContent = m.match;
+  select.appendChild(option);
+});
+
+select.addEventListener("change", () => {
+  const match = matches.find(m => m.id === select.value);
+  if (!match) {
+    result.innerHTML = "";
+    return;
+  }
+
+  result.innerHTML = `
+    <div class="card">
+      <h2>${match.match}</h2>
+      <p class="small">Marcador probable: <b>${match.probable}</b></p>
+      <p class="small">Confianza: <b>${match.confidence}</b></p>
+
+      <div class="pick safe">
+        <b>🟢 Conservador</b><br>${match.safe}
+      </div>
+
+      <div class="pick medium">
+        <b>🟡 Equilibrado</b><br>${match.balanced}
+      </div>
+
+      <div class="pick risky">
+        <b>🔴 Agresivo</b><br>${match.aggressive}
+      </div>
+
+      <div class="pick">
+        <b>🚩 Córners</b><br>${match.corners}
+      </div>
+
+      <div class="pick">
+        <b>🟨 Tarjetas</b><br>${match.cards}
+      </div>
+
+      <p class="small">${match.note}</p>
+    </div>
+  `;
+});
+</script>
 
 </body>
 </html>

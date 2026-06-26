@@ -11,40 +11,27 @@
     <section class="hero glass">
       <p class="eyebrow">IA Football Lab</p>
       <h1>MatchIQ</h1>
-      <p class="subtitle">Picks, riesgo, value y seguimiento de predicciones.</p>
+      <p class="subtitle">Picks, tickets, bankroll y análisis inteligente.</p>
     </section>
 
-    <section id="dailySuggestion" class="glass panel">
-      <h2>Sugerencia del día</h2>
-      <p class="note">Cargando modelo...</p>
-    </section>
+    <section id="screen-home" class="screen active-screen"></section>
 
-    <section class="glass panel">
-      <div class="select-grid">
-        <div>
-          <label for="dateSelect">Fecha</label>
-          <select id="dateSelect"></select>
-        </div>
+    <section id="screen-recommended" class="screen"></section>
 
-        <div>
-          <label for="matchSelect">Partido</label>
-          <select id="matchSelect"></select>
-        </div>
-      </div>
-    </section>
+    <section id="screen-ticket" class="screen"></section>
 
-    <section id="matchCard" class="glass card"></section>
+    <section id="screen-history" class="screen"></section>
 
-    <section class="glass panel">
-      <h2>Track Record</h2>
-      <div class="stats">
-        <div><strong id="wins">0</strong><span>Buenas</span></div>
-        <div><strong id="losses">0</strong><span>Malas</span></div>
-        <div><strong id="hitRate">0%</strong><span>Efectividad</span></div>
-      </div>
-      <button id="resetBtn" class="ghost">Reiniciar historial</button>
-    </section>
+    <section id="screen-profile" class="screen"></section>
   </main>
+
+  <nav class="bottom-nav glass">
+    <button class="nav-btn active" onclick="switchTab('home')">🏠<span>Inicio</span></button>
+    <button class="nav-btn" onclick="switchTab('recommended')">⭐<span>Picks</span></button>
+    <button class="nav-btn" onclick="switchTab('ticket')">🧾<span>Ticket</span></button>
+    <button class="nav-btn" onclick="switchTab('history')">📊<span>Historial</span></button>
+    <button class="nav-btn" onclick="switchTab('profile')">⚙️<span>Perfil</span></button>
+  </nav>
 
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
   <script src="data.js"></script>

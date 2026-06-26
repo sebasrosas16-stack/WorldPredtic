@@ -18,6 +18,14 @@ function sigmoid(x) {
   return 1 / (1 + Math.exp(-x));
 }
 
+function probabilityOver(expected, line, slope = 1.05) {
+  return clamp(sigmoid((expected - line) * slope), 0.05, 0.95);
+}
+
+function probabilityUnder(expected, line, slope = 1.05) {
+  return clamp(sigmoid((line - expected) * slope), 0.05, 0.95);
+}
+
 function hashString(text) {
   let hash = 2166136261;
   for (let i = 0; i < text.length; i++) {
@@ -198,6 +206,20 @@ function buildEloRatings(results) {
   return ratings;
 }
 
+function normalizeOutcome(probs) {
+  const total = probs.home + probs.draw + probs.away;
+
+  if (!total) {
+    return { home: 0.34, draw: 0.30, away: 0.36 };
+  }
+
+  return {
+    home: probs.home / total,
+    draw: probs.draw / total,
+    away: probs.away / total
+  };
+}
+
 function threeWayFromStrength(strengthDiff, expectedGoals) {
   const absDiff = Math.abs(strengthDiff);
 
@@ -213,20 +235,6 @@ function threeWayFromStrength(strengthDiff, expectedGoals) {
     draw,
     away: nonDraw * (1 - homeShare)
   });
-}
-
-function normalizeOutcome(probs) {
-  const total = probs.home + probs.draw + probs.away;
-
-  if (!total) {
-    return { home: 0.34, draw: 0.30, away: 0.36 };
-  }
-
-  return {
-    home: probs.home / total,
-    draw: probs.draw / total,
-    away: probs.away / total
-  };
 }
 
 function buildScoreMatrix(homeLambda, awayLambda, maxGoals = 8) {
@@ -317,7 +325,7 @@ function roundProbs(probs) {
   return { home, draw, away };
 }
 
-function applyContextToLambdas(homeLambda, awayLambda, homeStats, awayStats, context) {
+function applyContextToLambdas(homeLambda, awayLambda, context) {
   const model = context?.model || {};
 
   let h = homeLambda;
@@ -333,29 +341,12 @@ function applyContextToLambdas(homeLambda, awayLambda, homeStats, awayStats, con
     a *= 1 + model.openLateRisk * 0.35;
   }
 
-  if (model.motivationHome) {
-    h *= 1 + model.motivationHome;
-  }
-
-  if (model.motivationAway) {
-    a *= 1 + model.motivationAway;
-  }
-
-  if (model.rotationHome) {
-    h *= 1 - model.rotationHome;
-  }
-
-  if (model.rotationAway) {
-    a *= 1 - model.rotationAway;
-  }
-
-  if (model.defensiveHome) {
-    a *= 1 - model.defensiveHome;
-  }
-
-  if (model.defensiveAway) {
-    h *= 1 - model.defensiveAway;
-  }
+  if (model.motivationHome) h *= 1 + model.motivationHome;
+  if (model.motivationAway) a *= 1 + model.motivationAway;
+  if (model.rotationHome) h *= 1 - model.rotationHome;
+  if (model.rotationAway) a *= 1 - model.rotationAway;
+  if (model.defensiveHome) a *= 1 - model.defensiveHome;
+  if (model.defensiveAway) h *= 1 - model.defensiveAway;
 
   return {
     homeLambda: clamp(h, 0.25, 3.65),
@@ -402,48 +393,6 @@ function applyContextToOutcome(outcome, context) {
   });
 }
 
-function calculateMarketProbabilities(prediction, matrix) {
-  const favSide = prediction.favorite.side;
-  const favLambda = prediction.favorite.lambda;
-  const favWinProb = prediction.favorite.prob;
-  const drawProb = prediction.rawProbs.draw;
-
-  let winToNil = 0;
-  let winUnder45 = 0;
-  let under45 = 0;
-  let bothScore = 0;
-  let over05Match = 0;
-
-  matrix.cells.forEach(cell => {
-    const p = cell.probability / matrix.total;
-    const favWins = favSide === "home" ? cell.h > cell.a : cell.a > cell.h;
-    const favConcedesZero = favSide === "home" ? cell.a === 0 : cell.h === 0;
-
-    if (cell.h + cell.a <= 4) under45 += p;
-    if (cell.h > 0 && cell.a > 0) bothScore += p;
-    if (cell.h + cell.a >= 1) over05Match += p;
-    if (favWins && favConcedesZero) winToNil += p;
-    if (favWins && cell.h + cell.a <= 4) winUnder45 += p;
-  });
-
-  const favoriteOver05 = 1 - poisson(0, favLambda);
-  const favoriteCorners = favSide === "home" ? prediction.corners.home : prediction.corners.away;
-  const favoriteCorners35 = clamp(sigmoid((favoriteCorners - 3.45) * 1.05), 0.43, 0.74);
-
-  return {
-    favoriteWin: favWinProb,
-    favoriteDoubleChance: clamp(favWinProb + drawProb, 0.01, 0.97),
-    favoriteOver05: clamp(favoriteOver05, 0.01, 0.97),
-    under45: clamp(under45, 0.01, 0.98),
-    bothScore: clamp(bothScore, 0.01, 0.95),
-    matchOver05: clamp(over05Match, 0.01, 0.99),
-    favoriteWinToNil: clamp(winToNil, 0.01, 0.74),
-    favoriteWinUnder45: clamp(winUnder45, 0.01, 0.85),
-    favoriteCorners35,
-    topScore: clamp(prediction.topScores[0]?.probability || 0.05, 0.01, 0.22)
-  };
-}
-
 function modelDisagreement(models, ensemble) {
   const items = Object.values(models);
   if (!items.length) return 0;
@@ -477,6 +426,178 @@ function confidenceFromPrediction(models, ensemble) {
   return { score, label, disagreement };
 }
 
+function chooseBestLine(options) {
+  return options
+    .map(option => {
+      let score = option.probability * 100;
+
+      if (option.dataQuality === "proxy") score -= 8;
+      if (option.direction === "UNDER" && option.lineValue >= 11.5) score -= 4;
+      if (option.direction === "UNDER" && option.lineValue >= 6.5 && option.market === "Total tarjetas") score -= 4;
+      if (option.probability > 0.84) score -= 6;
+
+      return { ...option, score };
+    })
+    .sort((a, b) => b.score - a.score)[0];
+}
+
+function calculateMarketProbabilities(prediction, matrix, context) {
+  const favSide = prediction.favorite.side;
+  const favLambda = prediction.favorite.lambda;
+  const favWinProb = prediction.favorite.prob;
+  const drawProb = prediction.rawProbs.draw;
+
+  let winToNil = 0;
+  let winUnder45 = 0;
+  let under45 = 0;
+  let bothScore = 0;
+  let over05Match = 0;
+
+  matrix.cells.forEach(cell => {
+    const p = cell.probability / matrix.total;
+    const favWins = favSide === "home" ? cell.h > cell.a : cell.a > cell.h;
+    const favConcedesZero = favSide === "home" ? cell.a === 0 : cell.h === 0;
+
+    if (cell.h + cell.a <= 4) under45 += p;
+    if (cell.h > 0 && cell.a > 0) bothScore += p;
+    if (cell.h + cell.a >= 1) over05Match += p;
+    if (favWins && favConcedesZero) winToNil += p;
+    if (favWins && cell.h + cell.a <= 4) winUnder45 += p;
+  });
+
+  const favoriteOver05 = 1 - poisson(0, favLambda);
+  const totalCorners = prediction.expectedCorners.total;
+  const totalCards = prediction.expectedCards;
+
+  const cornerOptions = [
+    {
+      key: "cornersOver75",
+      market: "Total córners",
+      line: "+7.5",
+      lineValue: 7.5,
+      direction: "OVER",
+      text: "Total córners +7.5",
+      probability: probabilityOver(totalCorners, 7.5, 0.95),
+      dataQuality: "proxy"
+    },
+    {
+      key: "cornersOver85",
+      market: "Total córners",
+      line: "+8.5",
+      lineValue: 8.5,
+      direction: "OVER",
+      text: "Total córners +8.5",
+      probability: probabilityOver(totalCorners, 8.5, 0.95),
+      dataQuality: "proxy"
+    },
+    {
+      key: "cornersOver95",
+      market: "Total córners",
+      line: "+9.5",
+      lineValue: 9.5,
+      direction: "OVER",
+      text: "Total córners +9.5",
+      probability: probabilityOver(totalCorners, 9.5, 0.95),
+      dataQuality: "proxy"
+    },
+    {
+      key: "cornersUnder105",
+      market: "Total córners",
+      line: "-10.5",
+      lineValue: 10.5,
+      direction: "UNDER",
+      text: "Total córners -10.5",
+      probability: probabilityUnder(totalCorners, 10.5, 0.95),
+      dataQuality: "proxy"
+    },
+    {
+      key: "cornersUnder115",
+      market: "Total córners",
+      line: "-11.5",
+      lineValue: 11.5,
+      direction: "UNDER",
+      text: "Total córners -11.5",
+      probability: probabilityUnder(totalCorners, 11.5, 0.95),
+      dataQuality: "proxy"
+    }
+  ];
+
+  const cardOptions = [
+    {
+      key: "cardsOver35",
+      market: "Total tarjetas",
+      line: "+3.5",
+      lineValue: 3.5,
+      direction: "OVER",
+      text: "Total tarjetas +3.5",
+      probability: probabilityOver(totalCards, 3.5, 1.05),
+      dataQuality: "proxy"
+    },
+    {
+      key: "cardsOver45",
+      market: "Total tarjetas",
+      line: "+4.5",
+      lineValue: 4.5,
+      direction: "OVER",
+      text: "Total tarjetas +4.5",
+      probability: probabilityOver(totalCards, 4.5, 1.05),
+      dataQuality: "proxy"
+    },
+    {
+      key: "cardsUnder55",
+      market: "Total tarjetas",
+      line: "-5.5",
+      lineValue: 5.5,
+      direction: "UNDER",
+      text: "Total tarjetas -5.5",
+      probability: probabilityUnder(totalCards, 5.5, 1.05),
+      dataQuality: "proxy"
+    },
+    {
+      key: "cardsUnder65",
+      market: "Total tarjetas",
+      line: "-6.5",
+      lineValue: 6.5,
+      direction: "UNDER",
+      text: "Total tarjetas -6.5",
+      probability: probabilityUnder(totalCards, 6.5, 1.05),
+      dataQuality: "proxy"
+    }
+  ];
+
+  const bestCorners = chooseBestLine(cornerOptions);
+  const bestCards = chooseBestLine(cardOptions);
+
+  const markets = {
+    favoriteWin: favWinProb,
+    favoriteDoubleChance: clamp(favWinProb + drawProb, 0.01, 0.97),
+    favoriteOver05: clamp(favoriteOver05, 0.01, 0.97),
+    under45: clamp(under45, 0.01, 0.98),
+    bothScore: clamp(bothScore, 0.01, 0.95),
+    matchOver05: clamp(over05Match, 0.01, 0.99),
+    favoriteWinToNil: clamp(winToNil, 0.01, 0.74),
+    favoriteWinUnder45: clamp(winUnder45, 0.01, 0.85),
+    topScore: clamp(prediction.topScores[0]?.probability || 0.05, 0.01, 0.22)
+  };
+
+  cornerOptions.forEach(option => markets[option.key] = option.probability);
+  cardOptions.forEach(option => markets[option.key] = option.probability);
+
+  return {
+    markets,
+    marketLines: {
+      corners: {
+        best: bestCorners,
+        alternatives: cornerOptions.sort((a, b) => b.probability - a.probability)
+      },
+      cards: {
+        best: bestCards,
+        alternatives: cardOptions.sort((a, b) => b.probability - a.probability)
+      }
+    }
+  };
+}
+
 function predictMatch(results, home, away, context = {}) {
   const global = getGlobalAverages(results);
   const homeStats = getWeightedTeamStats(results, home);
@@ -502,7 +623,7 @@ function predictMatch(results, home, away, context = {}) {
   let homeLambda = global.goalsFor * homeAttack * awayDefenseLeak * eloHomeScale * formHomeScale;
   let awayLambda = global.goalsFor * awayAttack * homeDefenseLeak * eloAwayScale * formAwayScale;
 
-  const adjusted = applyContextToLambdas(homeLambda, awayLambda, homeStats, awayStats, context);
+  const adjusted = applyContextToLambdas(homeLambda, awayLambda, context);
   homeLambda = adjusted.homeLambda;
   awayLambda = adjusted.awayLambda;
 
@@ -557,13 +678,48 @@ function predictMatch(results, home, away, context = {}) {
     .sort((a, b) => b.probability - a.probability)
     .slice(0, 6);
 
-  const cornersHome = clamp(3.35 + homeLambda * 0.9 + (homeAttack - 1) * 0.55 + Math.max(0, homeStats.formScore) * 0.22, 2.2, 7.2);
-  const cornersAway = clamp(3.35 + awayLambda * 0.9 + (awayAttack - 1) * 0.55 + Math.max(0, awayStats.formScore) * 0.22, 2.2, 7.2);
+  const model = context?.model || {};
+  const urgency =
+    Math.abs(model.homeUrgency || 0) +
+    Math.abs(model.awayUrgency || 0) +
+    Math.abs(model.motivationHome || 0) +
+    Math.abs(model.motivationAway || 0);
+
+  const balance = 1 - Math.abs(ensemble.home - ensemble.away);
+
+  const cornersHome = clamp(
+    3.35 + homeLambda * 0.9 + (homeAttack - 1) * 0.55 + Math.max(0, homeStats.formScore) * 0.22,
+    2.2,
+    7.2
+  );
+
+  const cornersAway = clamp(
+    3.35 + awayLambda * 0.9 + (awayAttack - 1) * 0.55 + Math.max(0, awayStats.formScore) * 0.22,
+    2.2,
+    7.2
+  );
+
+  const expectedCornersTotal = clamp(
+    cornersHome + cornersAway + (model.openLateRisk || 0) * 2.6 + urgency * 2.8 - (model.underBias || 0) * 1.4,
+    5.5,
+    13.5
+  );
+
+  const expectedCards = clamp(
+    3.1 +
+      balance * 0.9 +
+      (context.volatilityBoost || 0) * 0.018 +
+      (model.openLateRisk || 0) * 4.5 +
+      urgency * 7.2 +
+      (model.drawBoost || 0) * 2.2,
+    2.4,
+    7.3
+  );
 
   const confidence = confidenceFromPrediction(modelsBeforeContext, ensemble);
 
   const prediction = {
-    modelLabel: "Ensemble ML v1.7.1",
+    modelLabel: "Ensemble ML v1.7.2",
     homeTeam: home,
     awayTeam: away,
     homeLambda,
@@ -587,15 +743,24 @@ function predictMatch(results, home, away, context = {}) {
     corners: {
       home: Number(cornersHome.toFixed(1)),
       away: Number(cornersAway.toFixed(1))
-    }
+    },
+    expectedCorners: {
+      total: Number(expectedCornersTotal.toFixed(1)),
+      home: Number(cornersHome.toFixed(1)),
+      away: Number(cornersAway.toFixed(1))
+    },
+    expectedCards: Number(expectedCards.toFixed(1))
   };
 
-  prediction.markets = calculateMarketProbabilities(prediction, matrix);
+  const marketPack = calculateMarketProbabilities(prediction, matrix, context);
+
+  prediction.markets = marketPack.markets;
+  prediction.marketLines = marketPack.marketLines;
   prediction.under45 = Math.round(prediction.markets.under45 * 100);
   prediction.bothScore = Math.round(prediction.markets.bothScore * 100);
 
   prediction.modelNotes = [
-    `Poisson + Elo + forma reciente + logística + Monte Carlo.`,
+    "Poisson + Elo + forma reciente + logística + Monte Carlo.",
     `Confianza del modelo: ${confidence.label} (${confidence.score}/100).`,
     context?.importance ? `Contexto: ${context.importance}.` : "Contexto estándar."
   ];
@@ -606,21 +771,33 @@ function predictMatch(results, home, away, context = {}) {
 function generatePicks(prediction) {
   const favorite = prediction.favorite.team;
   const score = prediction.score;
+  const cornerBest = prediction.marketLines.corners.best;
+  const cardBest = prediction.marketLines.cards.best;
 
   const safeMarket = prediction.markets.favoriteOver05 >= prediction.markets.under45
     ? {
         type: "safe",
         label: "Seguro",
         emoji: "🛡️",
-        text: `${favorite} anota 1+ gol`,
-        marketKey: "favoriteOver05"
+        market: `Goles ${favorite}`,
+        line: "+0.5",
+        direction: "OVER",
+        text: `Goles ${favorite} +0.5`,
+        marketKey: "favoriteOver05",
+        dataQuality: "strong",
+        rationale: "Mercado basado directamente en goles esperados y producción ofensiva."
       }
     : {
         type: "safe",
         label: "Seguro",
         emoji: "🛡️",
-        text: "Menos de 4.5 goles",
-        marketKey: "under45"
+        market: "Total goles",
+        line: "-4.5",
+        direction: "UNDER",
+        text: "Total goles -4.5",
+        marketKey: "under45",
+        dataQuality: "strong",
+        rationale: "Mercado basado directamente en distribución de goles del modelo."
       };
 
   return [
@@ -629,29 +806,61 @@ function generatePicks(prediction) {
       type: "balanced",
       label: "Balanceado",
       emoji: "⚖️",
-      text: `Doble oportunidad: ${favorite} o empate`,
-      marketKey: "favoriteDoubleChance"
+      market: `Handicap ${favorite}`,
+      line: "+0.5",
+      direction: "HANDICAP",
+      text: `${favorite} +0.5 handicap`,
+      marketKey: "favoriteDoubleChance",
+      dataQuality: "strong",
+      rationale: "Equivale a doble oportunidad: gana o empata."
     },
     {
       type: "aggressive",
       label: "Agresivo",
       emoji: "🔥",
-      text: `${favorite} gana y menos de 4.5 goles`,
-      marketKey: "favoriteWinUnder45"
-    },
-    {
-      type: "score",
-      label: "Marcador",
-      emoji: "🎯",
-      text: `Marcador probable ${score}`,
-      marketKey: "topScore"
+      market: "Combo",
+      line: "Gana + -4.5",
+      direction: "COMBO",
+      text: `${favorite} gana + total goles -4.5`,
+      marketKey: "favoriteWinUnder45",
+      dataQuality: "strong",
+      rationale: "Combina resultado y total de goles; más varianza que un pick simple."
     },
     {
       type: "corners",
       label: "Córners",
       emoji: "🚩",
-      text: `${favorite} +3.5 córners`,
-      marketKey: "favoriteCorners35"
+      market: cornerBest.market,
+      line: cornerBest.line,
+      direction: cornerBest.direction,
+      text: cornerBest.text,
+      marketKey: cornerBest.key,
+      dataQuality: "proxy",
+      rationale: "Estimación proxy: usa ritmo, goles esperados, urgencia y contexto; no usa datos reales de córners."
+    },
+    {
+      type: "cards",
+      label: "Tarjetas",
+      emoji: "🟨",
+      market: cardBest.market,
+      line: cardBest.line,
+      direction: cardBest.direction,
+      text: cardBest.text,
+      marketKey: cardBest.key,
+      dataQuality: "proxy",
+      rationale: "Estimación proxy: usa presión, paridad, urgencia y volatilidad; no usa árbitro ni tarjetas reales."
+    },
+    {
+      type: "score",
+      label: "Marcador",
+      emoji: "🎯",
+      market: "Marcador exacto",
+      line: score,
+      direction: "EXACTO",
+      text: `Marcador exacto ${score}`,
+      marketKey: "topScore",
+      dataQuality: "strong",
+      rationale: "Mercado de alta varianza aunque esté basado en el modelo de goles."
     }
   ];
 }

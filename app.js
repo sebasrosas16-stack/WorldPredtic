@@ -7,6 +7,8 @@ const PICK_TYPES = [
   { key: "corners", name: "Córners", emoji: "🚩" }
 ];
 
+const BOOKS = ["Draftea", "Caliente", "Codere", "Bet365", "Betcris", "Otra"];
+
 const UPCOMING_MATCHES = [
   { date: "2026-06-24", home: "Switzerland", away: "Canada" },
   { date: "2026-06-24", home: "Bosnia and Herzegovina", away: "Qatar" },
@@ -52,73 +54,68 @@ const DATE_LABELS = {
   "2026-06-27": "27 junio"
 };
 
-const DEFAULT_SETTINGS = {
-  profile: "safe",
-  maxParlay: 3,
-  hideHighVolatility: true,
-  showAggressive: true,
-  defaultHouse: "Draftea",
-  bankroll: 1000
-};
-
 const CONTEXT_FACTORS = {
   "2026-06-25-ecuador-germany": {
     volatilityBoost: 18,
     importance: "Partido de alta presión",
     notes: [
-      "Ecuador puede estar obligado a competir con máxima intensidad.",
-      "El contexto puede subir ritmo, tarjetas, córners y volatilidad.",
-      "Si Alemania depende de jugadores creativos condicionados físicamente, se reduce confianza en goleadas."
+      "Ecuador podía llegar con urgencia competitiva.",
+      "El contexto sube ritmo, tarjetas, córners y volatilidad.",
+      "Cuidado con picks de goleada o marcador exacto."
     ]
   },
   "2026-06-25-japan-sweden": {
     volatilityBoost: 10,
     importance: "Cruce parejo",
-    notes: [
-      "Partido con perfiles competitivos similares.",
-      "Resultado directo más volátil que mercados de goles/córners."
-    ]
+    notes: ["Partido con perfiles competitivos similares."]
   },
   "2026-06-25-paraguay-australia": {
     volatilityBoost: 12,
     importance: "Partido físico",
-    notes: [
-      "Puede ser un partido cerrado y de contacto.",
-      "Cuidado con picks de ganador directo si el modelo no marca diferencia clara."
-    ]
+    notes: ["Puede ser cerrado y de mucho contacto."]
   },
   "2026-06-25-turkey-united-states": {
     volatilityBoost: 10,
     importance: "Partido de ritmo alto",
-    notes: [
-      "Riesgo de transiciones y partido abierto.",
-      "Mejor evaluar goles/córners antes que marcador exacto."
-    ]
+    notes: ["Riesgo de transiciones y partido abierto."]
   }
 };
 
-const STORAGE_KEYS = {
-  settings: "matchiq_settings_v7",
-  cart: "matchiq_cart_v7",
-  tickets: "matchiq_tickets_v7",
-  pickStates: "matchiq_pick_states_v7"
+const DEFAULT_SETTINGS = {
+  profile: "safe",
+  maxParlay: 3,
+  hideHighVolatility: true,
+  showAggressive: true,
+  initialBankroll: 1000,
+  favoriteBook: "Draftea"
 };
+
+const SETTINGS_KEY = "matchiq_settings_v7";
+const CART_KEY = "matchiq_cart_v7";
+const TICKETS_KEY = "matchiq_tickets_v7";
+const DRAFT_KEY = "matchiq_ticket_draft_v7";
 
 let resultsData = [];
 let currentMatches = [];
+let selectedDate = "";
+let selectedMatchId = "";
 let activeTab = "home";
 
-let settings = loadJSON(STORAGE_KEYS.settings, DEFAULT_SETTINGS);
-let cart = loadJSON(STORAGE_KEYS.cart, []);
-let tickets = loadJSON(STORAGE_KEYS.tickets, []);
-let pickStates = loadJSON(STORAGE_KEYS.pickStates, {});
+let settings = loadJSON(SETTINGS_KEY, DEFAULT_SETTINGS);
+let cart = loadJSON(CART_KEY, []);
+let tickets = loadJSON(TICKETS_KEY, []);
+let ticketDraft = loadJSON(DRAFT_KEY, {
+  book: settings.favoriteBook || "Draftea",
+  odds: "",
+  stake: ""
+});
 
 const screens = {
-  home: document.getElementById("screen-home"),
-  recommended: document.getElementById("screen-recommended"),
-  ticket: document.getElementById("screen-ticket"),
-  history: document.getElementById("screen-history"),
-  profile: document.getElementById("screen-profile")
+  home: document.getElementById("homeScreen"),
+  recommended: document.getElementById("recommendedScreen"),
+  ticket: document.getElementById("ticketScreen"),
+  history: document.getElementById("historyScreen"),
+  profile: document.getElementById("profileScreen")
 };
 
 function loadJSON(key, fallback) {
@@ -150,19 +147,30 @@ function createMatchId(match) {
     .replaceAll("'", "");
 }
 
-function money(value) {
-  return new Intl.NumberFormat("es-MX", {
+function normalizeKey(text) {
+  return text
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
+function formatMoney(value) {
+  const amount = Number(value || 0);
+  return amount.toLocaleString("es-MX", {
     style: "currency",
-    currency: "MXN"
-  }).format(Number(value || 0));
+    currency: "MXN",
+    maximumFractionDigits: 0
+  });
 }
 
 function formatPct(value) {
-  return `${Math.round(value * 100)}%`;
+  return `${Math.round(Number(value || 0) * 100)}%`;
 }
 
 function formatOdds(value) {
-  if (!Number.isFinite(value)) return "—";
+  if (!Number.isFinite(Number(value))) return "—";
   return Number(value).toFixed(2);
 }
 
@@ -207,10 +215,10 @@ function getContextForMatch(match) {
 
 function getVolatility(prediction, match) {
   const context = getContextForMatch(match);
-
   let score = 40;
+
   const favProb = prediction.favorite.prob;
-  const goalTotal = prediction.homeLambda + prediction.awayLambda;
+  const totalGoals = prediction.homeLambda + prediction.awayLambda;
   const drawProb = prediction.probs.draw / 100;
   const bothScoreProb = prediction.bothScore / 100;
 
@@ -219,25 +227,16 @@ function getVolatility(prediction, match) {
   else if (favProb > 0.68) score -= 10;
 
   if (drawProb > 0.28) score += 8;
-  if (goalTotal > 3.1) score += 12;
+  if (totalGoals > 3.1) score += 12;
   if (bothScoreProb > 0.58) score += 10;
   if (prediction.under45 < 68) score += 8;
 
   score += context.volatilityBoost;
   score = clampNumber(score, 0, 100);
 
-  let label = "Baja";
-  let emoji = "🟢";
-
-  if (score >= 70) {
-    label = "Alta";
-    emoji = "🔴";
-  } else if (score >= 45) {
-    label = "Media";
-    emoji = "🟡";
-  }
-
-  return { score, label, emoji, context };
+  if (score >= 70) return { score, label: "Alta", emoji: "🔴", context };
+  if (score >= 45) return { score, label: "Media", emoji: "🟡", context };
+  return { score, label: "Baja", emoji: "🟢", context };
 }
 
 function scoreProbability(score, prediction) {
@@ -251,7 +250,6 @@ function winToNilProbability(prediction) {
   for (let h = 0; h <= 7; h++) {
     for (let a = 0; a <= 7; a++) {
       const p = poisson(h, prediction.homeLambda) * poisson(a, prediction.awayLambda);
-
       if (prediction.favorite.side === "home" && h > a && a === 0) total += p;
       if (prediction.favorite.side === "away" && a > h && h === 0) total += p;
     }
@@ -267,7 +265,6 @@ function winAndUnder45Probability(prediction) {
     for (let a = 0; a <= 7; a++) {
       const p = poisson(h, prediction.homeLambda) * poisson(a, prediction.awayLambda);
       const favWins = prediction.favorite.side === "home" ? h > a : a > h;
-
       if (favWins && h + a <= 4) total += p;
     }
   }
@@ -301,7 +298,9 @@ function getPickProbability(pick, prediction, match) {
       : winAndUnder45Probability(prediction);
   }
 
-  if (pick.type === "score") probability = scoreProbability(prediction.score, prediction);
+  if (pick.type === "score") {
+    probability = scoreProbability(prediction.score, prediction);
+  }
 
   if (pick.type === "corners") {
     const cornerFav = prediction.favorite.side === "home"
@@ -311,14 +310,12 @@ function getPickProbability(pick, prediction, match) {
     probability = cornerFav >= 5 ? 0.64 : 0.56;
   }
 
-  if (pick.type === "player") probability = 0.57;
+  if (pick.type === "player") {
+    probability = 0.57;
+  }
 
   if (volatility.label === "Alta" && ["balanced", "aggressive", "score", "player"].includes(pick.type)) {
     probability *= 0.88;
-  }
-
-  if (volatility.label === "Media" && ["aggressive", "score"].includes(pick.type)) {
-    probability *= 0.93;
   }
 
   return clampNumber(probability, 0.01, 0.99);
@@ -346,35 +343,7 @@ function safetyScore(item) {
     score: 42
   };
 
-  return (
-    item.pick.probability * 100
-    - item.volatility.score * 0.32
-    - (typePenalty[item.pick.type] || 20)
-  );
-}
-
-function decoratePicks(picks, prediction, match) {
-  const volatility = getVolatility(prediction, match);
-
-  return picks.map(pick => {
-    const probability = getPickProbability(pick, prediction, match);
-    const fairOdds = 1 / probability;
-    const valueOdds = 1.08 / probability;
-
-    const decorated = {
-      ...pick,
-      probability,
-      fairOdds,
-      valueOdds,
-      confidence: confidenceLabel(probability),
-      risk: riskLabel(probability),
-      volatility,
-      safetyScore: 0
-    };
-
-    decorated.safetyScore = safetyScore({ pick: decorated, volatility });
-    return decorated;
-  });
+  return item.pick.probability * 100 - item.volatility.score * 0.32 - (typePenalty[item.pick.type] || 20);
 }
 
 function getPlayerSuggestions(favorite) {
@@ -408,18 +377,42 @@ function getFullPicks(prediction, match) {
     text: players[0]
   });
 
-  return decoratePicks(basePicks, prediction, match);
+  const volatility = getVolatility(prediction, match);
+
+  return basePicks.map(pick => {
+    const probability = getPickProbability(pick, prediction, match);
+    const fairOdds = 1 / probability;
+    const valueOdds = 1.08 / probability;
+    const item = {
+      ...pick,
+      probability,
+      fairOdds,
+      valueOdds,
+      confidence: confidenceLabel(probability),
+      risk: riskLabel(probability),
+      volatility
+    };
+
+    return {
+      ...item,
+      safetyScore: safetyScore({ pick: item, volatility })
+    };
+  });
 }
 
 function getMatchesByDate(date) {
   return currentMatches.filter(match => match.date === date);
 }
 
+function getPredictionForMatch(match) {
+  return predictMatch(resultsData, match.home, match.away);
+}
+
 function getCandidatesForDate(date) {
   const candidates = [];
 
   getMatchesByDate(date).forEach(match => {
-    const prediction = predictMatch(resultsData, match.home, match.away);
+    const prediction = getPredictionForMatch(match);
     const volatility = getVolatility(prediction, match);
     const picks = getFullPicks(prediction, match);
 
@@ -444,69 +437,6 @@ function getFilteredCandidates(date) {
     .sort((a, b) => b.pick.safetyScore - a.pick.safetyScore);
 }
 
-function currentDateValue() {
-  const selector = document.getElementById("dateSelect");
-  return selector?.value || currentMatches[0]?.date || "2026-06-26";
-}
-
-function makeCartItem(item) {
-  return {
-    id: `${item.match.id}__${item.pick.type}`,
-    matchId: item.match.id,
-    match: matchName(item.match),
-    date: item.match.date,
-    pickType: item.pick.type,
-    typeLabel: item.pick.label,
-    pick: item.pick.text,
-    probability: item.pick.probability,
-    fairOdds: item.pick.fairOdds,
-    volatility: item.volatility.label,
-    createdAt: new Date().toISOString()
-  };
-}
-
-function addToCart(matchId, pickType) {
-  const match = currentMatches.find(item => item.id === matchId);
-  if (!match) return;
-
-  const prediction = predictMatch(resultsData, match.home, match.away);
-  const volatility = getVolatility(prediction, match);
-  const picks = getFullPicks(prediction, match);
-  const pick = picks.find(item => item.type === pickType);
-
-  if (!pick) return;
-
-  const candidate = { match, prediction, volatility, pick };
-  const cartItem = makeCartItem(candidate);
-
-  if (cart.some(item => item.id === cartItem.id)) {
-    showToast("Ese pick ya está en el ticket");
-    return;
-  }
-
-  cart.push(cartItem);
-  saveJSON(STORAGE_KEYS.cart, cart);
-  showToast("Agregado al ticket");
-  renderAll();
-}
-
-function removeFromCart(id) {
-  cart = cart.filter(item => item.id !== id);
-  saveJSON(STORAGE_KEYS.cart, cart);
-  renderAll();
-}
-
-function clearCart() {
-  cart = [];
-  saveJSON(STORAGE_KEYS.cart, cart);
-  renderAll();
-}
-
-function combinedProbability(items = cart) {
-  if (!items.length) return 0;
-  return items.reduce((acc, item) => acc * item.probability, 1);
-}
-
 function buildParlay(date) {
   const rules = getProfileRules();
   const usedMatches = new Set();
@@ -526,77 +456,228 @@ function buildParlay(date) {
     })
     .slice(0, Number(settings.maxParlay));
 
-  return legs;
+  const combinedProbability = legs.reduce((acc, item) => acc * item.pick.probability, 1);
+  const fairOdds = legs.length ? 1 / combinedProbability : 0;
+
+  let risk = "Alto";
+  if (combinedProbability >= 0.55) risk = "Bajo";
+  else if (combinedProbability >= 0.35) risk = "Medio";
+
+  return { legs, combinedProbability, fairOdds, risk };
 }
 
-function addRecommendedParlay() {
-  const legs = buildParlay(currentDateValue());
+function cartProbability() {
+  return cart.reduce((acc, item) => acc * Number(item.probability || 0), 1);
+}
 
-  legs.forEach(item => {
-    const cartItem = makeCartItem(item);
-    if (!cart.some(existing => existing.id === cartItem.id)) {
-      cart.push(cartItem);
-    }
-  });
+function cartFairOdds() {
+  const p = cartProbability();
+  return p ? 1 / p : 0;
+}
 
-  saveJSON(STORAGE_KEYS.cart, cart);
-  showToast("Parley agregado al ticket");
+function cartPotentialReturn() {
+  const odds = Number(ticketDraft.odds || 0);
+  const stake = Number(ticketDraft.stake || 0);
+  return odds * stake;
+}
+
+function cartProfit() {
+  const stake = Number(ticketDraft.stake || 0);
+  return cartPotentialReturn() - stake;
+}
+
+function saveSettings() {
+  saveJSON(SETTINGS_KEY, settings);
+}
+
+function saveCart() {
+  saveJSON(CART_KEY, cart);
+  updateCartBadge();
+}
+
+function saveTickets() {
+  saveJSON(TICKETS_KEY, tickets);
+}
+
+function saveDraft() {
+  saveJSON(DRAFT_KEY, ticketDraft);
+}
+
+function updateCartBadge() {
+  const badge = document.getElementById("cartBadge");
+  if (badge) badge.textContent = cart.length;
+}
+
+function makeCartItem(match, pick) {
+  return {
+    id: `${match.id}__${pick.type}__${normalizeKey(pick.text)}`,
+    matchId: match.id,
+    match: matchName(match),
+    date: match.date,
+    type: pick.type,
+    typeLabel: pick.label,
+    emoji: pick.emoji,
+    text: pick.text,
+    probability: pick.probability,
+    fairOdds: pick.fairOdds,
+    risk: pick.risk,
+    volatility: pick.volatility.label
+  };
+}
+
+function addToTicket(matchId, pickType) {
+  const match = currentMatches.find(item => item.id === matchId);
+  if (!match) return;
+
+  const prediction = getPredictionForMatch(match);
+  const picks = getFullPicks(prediction, match);
+  const pick = picks.find(item => item.type === pickType);
+  if (!pick) return;
+
+  const item = makeCartItem(match, pick);
+  const exists = cart.some(cartItem => cartItem.id === item.id);
+
+  if (!exists) {
+    cart.push(item);
+    saveCart();
+  }
+
   renderAll();
   switchTab("ticket");
 }
 
-function saveTicket() {
-  if (!cart.length) {
-    showToast("Agrega picks al ticket primero");
+function addParlayToTicket(date) {
+  const parlay = buildParlay(date);
+
+  parlay.legs.forEach(leg => {
+    const item = makeCartItem(leg.match, leg.pick);
+    const exists = cart.some(cartItem => cartItem.id === item.id);
+    if (!exists) cart.push(item);
+  });
+
+  saveCart();
+  renderAll();
+  switchTab("ticket");
+}
+
+function removeFromTicket(id) {
+  cart = cart.filter(item => item.id !== id);
+  saveCart();
+  renderAll();
+}
+
+function clearTicket() {
+  const ok = confirm("¿Quieres vaciar el ticket actual?");
+  if (!ok) return;
+
+  cart = [];
+  saveCart();
+  renderAll();
+}
+
+function updateDraft(key, value) {
+  ticketDraft[key] = value;
+  saveDraft();
+
+  if (key === "odds" || key === "stake") {
+    updateTicketLivePreview();
     return;
   }
 
-  const house = document.getElementById("ticketHouse")?.value || settings.defaultHouse;
-  const odds = Number(document.getElementById("ticketOdds")?.value);
-  const stake = Number(document.getElementById("ticketStake")?.value);
+  renderTicket();
+}
+
+function updateTicketLivePreview() {
+  const probability = cartProbability();
+  const fairOdds = cartFairOdds();
+  const odds = Number(ticketDraft.odds || 0);
+  const stake = Number(ticketDraft.stake || 0);
+
+  const potentialReturn = odds * stake;
+  const profit = potentialReturn - stake;
+  const implied = odds > 1 ? 1 / odds : 0;
+  const edge = odds > 1 ? probability - implied : 0;
+
+  const summary = document.getElementById("ticketLiveSummary");
+  const valueBox = document.getElementById("ticketLiveValue");
+
+  if (!summary || !valueBox) return;
+
+  summary.innerHTML = `
+    <div><strong>${formatPct(probability)}</strong><span>Prob. IA</span></div>
+    <div><strong>@${formatOdds(fairOdds)}</strong><span>Momio justo IA</span></div>
+    <div><strong>${formatMoney(potentialReturn)}</strong><span>Retorno potencial</span></div>
+    <div><strong>${formatMoney(profit)}</strong><span>Utilidad neta</span></div>
+  `;
+
+  valueBox.className = `value-result ${edge > 0 ? "good" : odds > 1 ? "bad" : ""}`;
+  valueBox.innerHTML = `
+    <strong>${odds > 1 && edge > 0 ? "🟢 Value positivo" : odds > 1 ? "🔴 Sin value" : "Escribe el momio"}</strong>
+    <span>${odds > 1 ? `Casa: ${formatPct(implied)} · IA: ${formatPct(probability)} · Edge: ${formatPct(edge)}` : "Ingresa el momio para calcular value."}</span>
+  `;
+}
+
+function saveCurrentTicket() {
+  if (!cart.length) {
+    alert("Agrega al menos un pick al ticket.");
+    return;
+  }
+
+  const odds = Number(ticketDraft.odds);
+  const stake = Number(ticketDraft.stake);
 
   if (!odds || odds <= 1) {
-    showToast("Escribe un momio válido");
+    alert("Ingresa un momio total válido.");
     return;
   }
 
   if (!stake || stake <= 0) {
-    showToast("Escribe un importe válido");
+    alert("Ingresa un importe válido.");
     return;
   }
 
-  const prob = combinedProbability(cart);
-  const fairOdds = prob ? 1 / prob : 0;
-  const payout = stake * odds;
-  const profit = payout - stake;
-  const implied = 1 / odds;
-  const edge = prob - implied;
-
   const ticket = {
-    id: `T-${Date.now()}`,
-    house,
+    id: `ticket_${Date.now()}`,
+    createdAt: new Date().toISOString(),
+    status: "pending",
+    book: ticketDraft.book || settings.favoriteBook || "Draftea",
     odds,
     stake,
-    payout,
-    profitIfWin: profit,
-    probability: prob,
-    fairOdds,
-    edge,
-    status: "pending",
-    picks: [...cart],
-    createdAt: new Date().toISOString()
+    selections: [...cart],
+    combinedProbability: cartProbability(),
+    fairOdds: cartFairOdds()
   };
 
   tickets.unshift(ticket);
-  saveJSON(STORAGE_KEYS.tickets, tickets);
-  clearCart();
-  showToast("Ticket guardado");
+  cart = [];
+  ticketDraft = {
+    book: settings.favoriteBook || "Draftea",
+    odds: "",
+    stake: ""
+  };
+
+  saveTickets();
+  saveCart();
+  saveDraft();
+
+  renderAll();
   switchTab("history");
 }
 
-function updateTicketStatus(ticketId, status) {
+function ticketProfit(ticket) {
+  if (ticket.status === "win") return ticket.stake * ticket.odds - ticket.stake;
+  if (ticket.status === "loss") return -ticket.stake;
+  return 0;
+}
+
+function isSettled(ticket) {
+  return ["win", "loss"].includes(ticket.status);
+}
+
+function settleTicket(id, status) {
   tickets = tickets.map(ticket => {
-    if (ticket.id !== ticketId) return ticket;
+    if (ticket.id !== id) return ticket;
+
     return {
       ...ticket,
       status,
@@ -604,94 +685,130 @@ function updateTicketStatus(ticketId, status) {
     };
   });
 
-  saveJSON(STORAGE_KEYS.tickets, tickets);
+  saveTickets();
   renderAll();
 }
 
-function ticketProfit(ticket) {
-  if (ticket.status === "won") return ticket.profitIfWin;
-  if (ticket.status === "lost") return -ticket.stake;
-  return 0;
+function deleteTicket(id) {
+  const ok = confirm("¿Eliminar este ticket?");
+  if (!ok) return;
+
+  tickets = tickets.filter(ticket => ticket.id !== id);
+  saveTickets();
+  renderAll();
 }
 
-function bankrollStats() {
-  const settled = tickets.filter(t => ["won", "lost"].includes(t.status));
-  const totalStaked = settled.reduce((sum, t) => sum + Number(t.stake || 0), 0);
-  const net = settled.reduce((sum, t) => sum + ticketProfit(t), 0);
-  const roi = totalStaked ? net / totalStaked : 0;
+function getBankrollStats() {
+  const settled = tickets.filter(isSettled);
+  const pending = tickets.filter(ticket => ticket.status === "pending");
 
-  const won = tickets.filter(t => t.status === "won").length;
-  const lost = tickets.filter(t => t.status === "lost").length;
-  const pending = tickets.filter(t => t.status === "pending").length;
+  const totalStaked = settled.reduce((sum, ticket) => sum + ticket.stake, 0);
+  const pendingStake = pending.reduce((sum, ticket) => sum + ticket.stake, 0);
+  const netProfit = settled.reduce((sum, ticket) => sum + ticketProfit(ticket), 0);
+  const bankroll = Number(settings.initialBankroll || 0) + netProfit;
+  const roi = totalStaked ? netProfit / totalStaked : 0;
+
+  const wins = tickets.filter(ticket => ticket.status === "win").length;
+  const losses = tickets.filter(ticket => ticket.status === "loss").length;
 
   return {
-    bankroll: Number(settings.bankroll || 0) + net,
     totalStaked,
-    net,
+    pendingStake,
+    netProfit,
+    bankroll,
     roi,
-    won,
-    lost,
-    pending,
+    wins,
+    losses,
+    pending: pending.length,
     total: tickets.length
   };
 }
 
-function pickStateKey(matchId, pickType) {
-  return `${matchId}__${pickType}`;
+function updateHero(tab) {
+  const hero = document.getElementById("appHero");
+  const title = document.getElementById("heroTitle");
+  const eyebrow = document.getElementById("heroEyebrow");
+  const subtitle = document.getElementById("heroSubtitle");
+
+  if (!hero || !title || !eyebrow || !subtitle) return;
+
+  const titles = {
+    home: {
+      eyebrow: "IA Football Lab",
+      title: "Hola, Sebas",
+      subtitle: "Tu panel de predicciones, tickets y bankroll."
+    },
+    recommended: {
+      eyebrow: "Recomendaciones",
+      title: "Picks",
+      subtitle: "Predicciones ordenadas por seguridad, contexto y volatilidad."
+    },
+    ticket: {
+      eyebrow: "Ticket Builder",
+      title: "Ticket",
+      subtitle: "Arma tus entradas y mide value antes de guardar."
+    },
+    history: {
+      eyebrow: "Bankroll",
+      title: "Historial",
+      subtitle: "Revisa tickets, utilidad, ROI y resultados."
+    },
+    profile: {
+      eyebrow: "Ajustes",
+      title: "Perfil",
+      subtitle: "Configura tu bankroll, riesgo y casa favorita."
+    }
+  };
+
+  const data = titles[tab] || titles.home;
+
+  eyebrow.textContent = data.eyebrow;
+  title.textContent = data.title;
+  subtitle.textContent = data.subtitle;
+
+  hero.classList.toggle("hero-compact", tab !== "home");
 }
 
-function getPickState(matchId, pickType) {
-  return pickStates[pickStateKey(matchId, pickType)]?.status || null;
-}
+function switchTab(tab) {
+  activeTab = tab;
+  updateHero(tab);
 
-function togglePick(matchId, pickType, status) {
-  const match = currentMatches.find(item => item.id === matchId);
-  if (!match) return;
+  Object.entries(screens).forEach(([key, element]) => {
+    element.classList.toggle("active", key === tab);
+  });
 
-  const prediction = predictMatch(resultsData, match.home, match.away);
-  const picks = getFullPicks(prediction, match);
-  const pick = picks.find(item => item.type === pickType);
-  if (!pick) return;
+  document.querySelectorAll(".nav-btn").forEach(button => {
+    button.classList.toggle("active", button.getAttribute("onclick")?.includes(`'${tab}'`));
+  });
 
-  const key = pickStateKey(matchId, pickType);
-  const current = pickStates[key];
-
-  if (current && current.status === status) {
-    delete pickStates[key];
-  } else {
-    pickStates[key] = {
-      matchId,
-      type: pickType,
-      typeLabel: pick.label,
-      pick: pick.text,
-      match: matchName(match),
-      status,
-      updatedAt: new Date().toISOString()
-    };
-  }
-
-  saveJSON(STORAGE_KEYS.pickStates, pickStates);
   renderAll();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function renderAll() {
+  updateCartBadge();
+  renderHome();
+  renderRecommended();
+  renderTicket();
+  renderHistory();
+  renderProfile();
 }
 
 function renderHome() {
-  const stats = bankrollStats();
-  const date = currentDateValue();
-  const candidates = getFilteredCandidates(date);
-
+  const stats = getBankrollStats();
+  const candidates = getFilteredCandidates(selectedDate);
   const solid = candidates[0];
-  const parlay = buildParlay(date);
-  const parlayProb = combinedProbability(parlay.map(item => makeCartItem(item)));
-  const parlayFairOdds = parlayProb ? 1 / parlayProb : 0;
+  const parlay = buildParlay(selectedDate);
 
   screens.home.innerHTML = `
     <section class="glass panel">
       <h2>Inicio</h2>
-      <p class="note">Resumen rápido del modelo y tu bankroll.</p>
+      <p class="note">Resumen de tu bankroll y recomendaciones principales.</p>
 
-      <div class="stats">
-        <div><strong>${money(stats.bankroll)}</strong><span>Bankroll</span></div>
+      <div class="home-stats">
+        <div><strong>${formatMoney(stats.bankroll)}</strong><span>Bankroll actual</span></div>
         <div><strong>${formatPct(stats.roi)}</strong><span>ROI</span></div>
+        <div><strong>${stats.wins}/${stats.losses}</strong><span>Tickets G/P</span></div>
         <div><strong>${stats.pending}</strong><span>Pendientes</span></div>
       </div>
     </section>
@@ -699,85 +816,357 @@ function renderHome() {
     <section class="glass panel">
       <h2>Pick más sólido</h2>
       ${
-        solid
-          ? `
-            <div class="daily-card static-card">
-              <span>${DATE_LABELS[date] || date}</span>
-              <strong>${solid.pick.text}</strong>
-              <small>${matchName(solid.match)} · IA ${formatPct(solid.pick.probability)} · Volatilidad ${solid.volatility.label}</small>
-              <button class="primary-action" onclick="addToCart('${solid.match.id}', '${solid.pick.type}')">Agregar al ticket</button>
-            </div>
-          `
-          : `<p class="note">No hay picks que superen tus filtros actuales.</p>`
+        solid ? `
+          <button class="daily-card" onclick="selectMatchFromHome('${solid.match.id}')">
+            <span>🛡️ Prioridad segura</span>
+            <strong>${solid.pick.text}</strong>
+            <small>${matchName(solid.match)}</small>
+            <em>IA ${formatPct(solid.pick.probability)} · Riesgo ${solid.pick.risk}</em>
+          </button>
+        ` : `<p class="note">No hay pick que pase los filtros actuales.</p>`
       }
     </section>
 
     <section class="glass panel">
-      <h2>Parley sugerido</h2>
-      <p class="note">Construido según tu perfil: <strong>${getProfileRules().label}</strong>.</p>
-
+      <h2>Parley recomendado</h2>
       ${
-        parlay.length
-          ? `
-            <div class="parlay-mini">
-              ${parlay.map((item, index) => `
-                <div class="parlay-mini-row">
-                  <span>${index + 1}</span>
-                  <strong>${item.pick.text}</strong>
-                  <small>${matchName(item.match)} · IA ${formatPct(item.pick.probability)}</small>
-                </div>
-              `).join("")}
+        parlay.legs.length ? `
+          <p class="note">Combinación sugerida según tu modo actual: <strong>${getProfileRules().label}</strong>.</p>
+          ${parlay.legs.map((leg, index) => `
+            <div class="mini-ticket-row">
+              <div>
+                <strong>${index + 1}. ${leg.pick.text}</strong>
+                <span>${matchName(leg.match)} · IA ${formatPct(leg.pick.probability)}</span>
+              </div>
             </div>
-
-            <div class="parlay-summary">
-              <div><strong>${formatPct(parlayProb)}</strong><span>Prob. IA</span></div>
-              <div><strong>@${formatOdds(parlayFairOdds)}</strong><span>Momio justo</span></div>
-              <div><strong>${parlay.length}</strong><span>Picks</span></div>
-            </div>
-
-            <button class="primary-action" onclick="addRecommendedParlay()">Agregar parley al ticket</button>
-          `
-          : `<p class="note">No hay suficientes picks para armar parley.</p>`
+          `).join("")}
+          <div class="ticket-summary">
+            <div><strong>${formatPct(parlay.combinedProbability)}</strong><span>Prob.</span></div>
+            <div><strong>@${formatOdds(parlay.fairOdds)}</strong><span>Momio justo</span></div>
+            <div><strong>${parlay.risk}</strong><span>Riesgo</span></div>
+            <div><strong>${parlay.legs.length}</strong><span>Picks</span></div>
+          </div>
+          <button class="primary-btn" onclick="addParlayToTicket('${selectedDate}')">Agregar parley al ticket</button>
+        ` : `<p class="note">No hay suficientes picks para armar parley con tus filtros.</p>`
       }
     </section>
   `;
 }
 
 function renderRecommended() {
-  const dates = [...new Set(currentMatches.map(match => match.date))];
-  const selectedDate = currentDateValue();
+  const matches = getMatchesByDate(selectedDate);
+  const match = currentMatches.find(item => item.id === selectedMatchId) || matches[0];
+
+  if (!match) {
+    screens.recommended.innerHTML = `
+      <section class="glass panel">
+        <h2>Recomendados</h2>
+        <p class="note">No hay partidos cargados.</p>
+      </section>
+    `;
+    return;
+  }
+
+  selectedMatchId = match.id;
+
+  const prediction = getPredictionForMatch(match);
+  const volatility = getVolatility(prediction, match);
+  const picks = getFullPicks(prediction, match);
+  const players = getPlayerSuggestions(prediction.favorite);
 
   screens.recommended.innerHTML = `
     <section class="glass panel">
       <h2>Recomendados</h2>
-      <p class="note">Picks ordenados por seguridad, contexto y volatilidad.</p>
 
-      <label for="dateSelect">Fecha</label>
-      <select id="dateSelect" onchange="renderAll()">
-        ${dates.map(date => `
-          <option value="${date}" ${date === selectedDate ? "selected" : ""}>${DATE_LABELS[date] || date}</option>
-        `).join("")}
-      </select>
+      <div class="select-grid">
+        <div>
+          <label>Fecha</label>
+          <select onchange="changeDate(this.value)">
+            ${[...new Set(currentMatches.map(item => item.date))].map(date => `
+              <option value="${date}" ${date === selectedDate ? "selected" : ""}>${DATE_LABELS[date] || date}</option>
+            `).join("")}
+          </select>
+        </div>
+
+        <div>
+          <label>Partido</label>
+          <select onchange="changeMatch(this.value)">
+            ${matches.map(item => `
+              <option value="${item.id}" ${item.id === selectedMatchId ? "selected" : ""}>${matchName(item)}</option>
+            `).join("")}
+          </select>
+        </div>
+      </div>
+
+      <label class="switch-row">
+        <input type="checkbox" ${settings.hideHighVolatility ? "checked" : ""} onchange="updateSetting('hideHighVolatility', this.checked)" />
+        Ocultar alta volatilidad
+      </label>
     </section>
 
-    ${renderSettingsBox()}
-
     <section class="glass panel">
-      <h2>Top picks</h2>
-      ${renderTopPicks(selectedDate)}
+      <h2>Sugerencia de la fecha</h2>
+      <p class="note">Modo actual: <strong>${getProfileRules().label}</strong>.</p>
+
+      <div class="top-picks-list">
+        ${getFilteredCandidates(selectedDate).slice(0, 6).map((item, index) => `
+          <button class="top-pick-row" onclick="selectMatchFromRecommended('${item.match.id}')">
+            <div class="rank">${index + 1}</div>
+            <div>
+              <strong>${item.pick.emoji} ${item.pick.text}</strong>
+              <span>${matchName(item.match)} · IA ${formatPct(item.pick.probability)} · Riesgo ${item.pick.risk}</span>
+            </div>
+            <em>@${formatOdds(item.pick.fairOdds)}</em>
+          </button>
+        `).join("") || `<p class="note">No hay picks que pasen tus filtros.</p>`}
+      </div>
+
+      <button class="primary-btn" onclick="addParlayToTicket('${selectedDate}')">Agregar parley recomendado</button>
     </section>
 
-    <section class="glass panel">
-      <h2>Partidos</h2>
-      ${renderMatchList(selectedDate)}
+    <section class="glass card">
+      <h2 class="match-title">${matchName(match)}</h2>
+      <p class="note">Predicción actual según datos disponibles. Favorito: <strong>${displayName(prediction.favorite.team)}</strong>.</p>
+
+      <div class="prob-grid">
+        <div class="prob"><strong>${prediction.probs.home}%</strong><span>${displayName(match.home)}</span></div>
+        <div class="prob"><strong>${prediction.probs.draw}%</strong><span>Empate</span></div>
+        <div class="prob"><strong>${prediction.probs.away}%</strong><span>${displayName(match.away)}</span></div>
+      </div>
+
+      <div class="volatility-box">
+        <strong>${volatility.emoji} Volatilidad ${volatility.label}</strong>
+        <span>${volatility.context.importance}</span>
+        ${volatility.context.notes.map(note => `<small>${note}</small>`).join("")}
+      </div>
+
+      <div class="insight-grid">
+        <div class="insight-card">
+          <span>🎯 Marcador IA</span>
+          <strong>${prediction.score}</strong>
+        </div>
+
+        <div class="insight-card">
+          <span>🚩 Córners esperados</span>
+          <strong>${displayName(match.home)} ${prediction.corners.home} / ${displayName(match.away)} ${prediction.corners.away}</strong>
+        </div>
+
+        <div class="insight-card">
+          <span>📉 Menos de 4.5 goles</span>
+          <strong>${prediction.under45}%</strong>
+        </div>
+
+        <div class="insight-card">
+          <span>⚽ Ambos anotan</span>
+          <strong>${prediction.bothScore}%</strong>
+        </div>
+
+        <div class="insight-card full">
+          <span>⚽ Jugadores sugeridos</span>
+          <strong>${players.join(" · ")}</strong>
+        </div>
+      </div>
+
+      ${renderHeatmap(prediction)}
+
+      ${picks.map(pick => `
+        <div class="pick ${pick.type}">
+          <div class="pick-title">${pick.emoji} ${pick.label}</div>
+          <strong>${pick.text}</strong>
+          <p class="pick-meta">IA ${formatPct(pick.probability)} · Riesgo ${pick.risk} · Momio justo @${formatOdds(pick.fairOdds)}</p>
+
+          <button class="primary-btn" onclick="addToTicket('${match.id}', '${pick.type}')">Agregar al ticket</button>
+        </div>
+      `).join("")}
     </section>
   `;
 }
 
-function renderSettingsBox() {
+function renderHeatmap(prediction) {
+  const maxGoals = 4;
+  const cells = [];
+
+  for (let h = 0; h <= maxGoals; h++) {
+    for (let a = 0; a <= maxGoals; a++) {
+      const probability = poisson(h, prediction.homeLambda) * poisson(a, prediction.awayLambda);
+      cells.push({ h, a, probability, score: `${h}-${a}` });
+    }
+  }
+
+  const maxProb = Math.max(...cells.map(cell => cell.probability));
+
   return `
+    <div class="heatmap-box">
+      <span>🔥 Heatmap de marcador</span>
+      <p class="note">Más brillante = marcador más probable.</p>
+
+      <div class="heatmap-labels">
+        <div></div>
+        <small>0</small><small>1</small><small>2</small><small>3</small><small>4</small>
+      </div>
+
+      <div class="heatmap-grid">
+        ${[0, 1, 2, 3, 4].map(h => `
+          <div class="row-label">${h}</div>
+          ${[0, 1, 2, 3, 4].map(a => {
+            const cell = cells.find(item => item.h === h && item.a === a);
+            const heat = maxProb ? Math.max(0.12, cell.probability / maxProb).toFixed(2) : 0.12;
+
+            return `
+              <div class="heat-cell" style="--heat:${heat}">
+                <strong>${cell.score}</strong>
+                <small>${Math.round(cell.probability * 100)}%</small>
+              </div>
+            `;
+          }).join("")}
+        `).join("")}
+      </div>
+    </div>
+  `;
+}
+
+function renderTicket() {
+  const probability = cartProbability();
+  const fairOdds = cartFairOdds();
+  const odds = Number(ticketDraft.odds || 0);
+  const stake = Number(ticketDraft.stake || 0);
+  const implied = odds > 1 ? 1 / odds : 0;
+  const edge = odds > 1 ? probability - implied : 0;
+  const valueStatus = odds > 1 && edge > 0 ? "🟢 Value positivo" : odds > 1 ? "🔴 Sin value" : "Escribe el momio";
+
+  screens.ticket.innerHTML = `
     <section class="glass panel">
-      <h2>Configuración rápida</h2>
+      <h2>Ticket actual</h2>
+      <p class="note">Agrega picks desde Recomendados y luego escribe el momio real de la casa.</p>
+
+      ${
+        cart.length ? cart.map(item => `
+          <div class="cart-item">
+            <div>
+              <strong>${item.emoji} ${item.text}</strong>
+              <span>${item.match} · IA ${formatPct(item.probability)} · Riesgo ${item.risk}</span>
+            </div>
+            <button onclick="removeFromTicket('${item.id}')">✕</button>
+          </div>
+        `).join("") : `<p class="note">Tu ticket está vacío.</p>`
+      }
+
+      ${cart.length ? `<button class="ghost" onclick="clearTicket()">Vaciar ticket</button>` : ""}
+    </section>
+
+    <section class="glass panel">
+      <h2>Datos del ticket</h2>
+
+      <label>Casa de apuesta</label>
+      <select onchange="updateDraft('book', this.value)">
+        ${BOOKS.map(book => `
+          <option value="${book}" ${ticketDraft.book === book ? "selected" : ""}>${book}</option>
+        `).join("")}
+      </select>
+
+      <label>Momio total de la casa</label>
+      <input type="number" step="0.01" min="1.01" placeholder="Ejemplo: 2.35" value="${ticketDraft.odds}" oninput="updateDraft('odds', this.value)" />
+
+      <label>Importe apostado</label>
+      <input type="number" step="1" min="1" placeholder="Ejemplo: 500" value="${ticketDraft.stake}" oninput="updateDraft('stake', this.value)" />
+
+      <div id="ticketLiveSummary" class="ticket-summary">
+        <div><strong>${formatPct(probability)}</strong><span>Prob. IA</span></div>
+        <div><strong>@${formatOdds(fairOdds)}</strong><span>Momio justo IA</span></div>
+        <div><strong>${formatMoney(cartPotentialReturn())}</strong><span>Retorno potencial</span></div>
+        <div><strong>${formatMoney(cartProfit())}</strong><span>Utilidad neta</span></div>
+      </div>
+
+      <div id="ticketLiveValue" class="value-result ${edge > 0 ? "good" : odds > 1 ? "bad" : ""}">
+        <strong>${valueStatus}</strong>
+        <span>${odds > 1 ? `Casa: ${formatPct(implied)} · IA: ${formatPct(probability)} · Edge: ${formatPct(edge)}` : "Ingresa el momio para calcular value."}</span>
+      </div>
+
+      <button class="primary-btn" onclick="saveCurrentTicket()">Guardar ticket</button>
+    </section>
+  `;
+}
+
+function renderHistory() {
+  const stats = getBankrollStats();
+
+  screens.history.innerHTML = `
+    <section class="glass panel">
+      <h2>Historial</h2>
+
+      <div class="home-stats">
+        <div><strong>${formatMoney(stats.totalStaked)}</strong><span>Apostado</span></div>
+        <div><strong>${formatMoney(stats.netProfit)}</strong><span>Utilidad</span></div>
+        <div><strong>${formatPct(stats.roi)}</strong><span>ROI</span></div>
+        <div><strong>${formatMoney(stats.pendingStake)}</strong><span>Pendiente</span></div>
+      </div>
+    </section>
+
+    <section class="glass panel">
+      <h2>Tickets</h2>
+
+      ${
+        tickets.length ? tickets.map(ticket => `
+          <div class="ticket-card ${ticket.status}">
+            <div class="ticket-head">
+              <strong>${ticket.book} · @${formatOdds(ticket.odds)}</strong>
+              <span>${statusLabel(ticket.status)}</span>
+            </div>
+
+            <p class="note">${new Date(ticket.createdAt).toLocaleDateString("es-MX")} · ${formatMoney(ticket.stake)} apostados · ${ticket.selections.length} picks</p>
+
+            ${ticket.selections.map(sel => `
+              <div class="ticket-selection">
+                <div>
+                  <strong>${sel.text}</strong>
+                  <span>${sel.match} · IA ${formatPct(sel.probability)}</span>
+                </div>
+              </div>
+            `).join("")}
+
+            <div class="ticket-summary">
+              <div><strong>${formatPct(ticket.combinedProbability)}</strong><span>Prob. IA</span></div>
+              <div><strong>@${formatOdds(ticket.fairOdds)}</strong><span>Justo IA</span></div>
+              <div><strong>${formatMoney(ticketProfit(ticket))}</strong><span>Utilidad</span></div>
+              <div><strong>${statusLabel(ticket.status)}</strong><span>Estado</span></div>
+            </div>
+
+            <div class="ticket-actions">
+              <button class="win" onclick="settleTicket('${ticket.id}', 'win')">✅ Ganado</button>
+              <button class="lose" onclick="settleTicket('${ticket.id}', 'loss')">❌ Perdido</button>
+              <button class="ghost-small" onclick="settleTicket('${ticket.id}', 'void')">🚫 Anulado</button>
+              <button class="ghost-small" onclick="settleTicket('${ticket.id}', 'pending')">⏳ Pendiente</button>
+              <button class="ghost-small" onclick="deleteTicket('${ticket.id}')">🗑️</button>
+            </div>
+          </div>
+        `).join("") : `<p class="note">Aún no has guardado tickets.</p>`
+      }
+    </section>
+  `;
+}
+
+function statusLabel(status) {
+  if (status === "win") return "✅ Ganado";
+  if (status === "loss") return "❌ Perdido";
+  if (status === "void") return "🚫 Anulado";
+  return "⏳ Pendiente";
+}
+
+function renderProfile() {
+  screens.profile.innerHTML = `
+    <section class="glass panel">
+      <h2>Perfil</h2>
+      <p class="note">Configura cómo quieres que piense MatchIQ.</p>
+
+      <label>Bankroll inicial</label>
+      <input type="number" min="0" step="1" value="${settings.initialBankroll}" oninput="updateSetting('initialBankroll', Number(this.value))" />
+
+      <label>Casa favorita</label>
+      <select onchange="updateSetting('favoriteBook', this.value)">
+        ${BOOKS.map(book => `
+          <option value="${book}" ${settings.favoriteBook === book ? "selected" : ""}>${book}</option>
+        `).join("")}
+      </select>
 
       <label>Perfil de riesgo</label>
       <select onchange="updateSetting('profile', this.value)">
@@ -796,368 +1185,72 @@ function renderSettingsBox() {
 
       <label class="switch-row">
         <input type="checkbox" ${settings.hideHighVolatility ? "checked" : ""} onchange="updateSetting('hideHighVolatility', this.checked)" />
-        Ocultar alta volatilidad
+        Ocultar partidos de alta volatilidad
+      </label>
+
+      <label class="switch-row">
+        <input type="checkbox" ${settings.showAggressive ? "checked" : ""} onchange="updateSetting('showAggressive', this.checked)" />
+        Mostrar agresivos interesantes
       </label>
     </section>
-  `;
-}
-
-function renderTopPicks(date) {
-  const ranked = getFilteredCandidates(date).slice(0, 12);
-
-  if (!ranked.length) {
-    return `<p class="note">No hay picks que superen la configuración actual.</p>`;
-  }
-
-  return `
-    <div class="top-picks-list">
-      ${ranked.map((item, index) => `
-        <div class="top-pick-row">
-          <div class="rank">${index + 1}</div>
-          <div>
-            <strong>${item.pick.emoji} ${item.pick.text}</strong>
-            <span>${matchName(item.match)} · IA ${formatPct(item.pick.probability)} · ${item.volatility.emoji} ${item.volatility.label}</span>
-          </div>
-          <button class="mini-add" onclick="addToCart('${item.match.id}', '${item.pick.type}')">+</button>
-        </div>
-      `).join("")}
-    </div>
-  `;
-}
-
-function renderMatchList(date) {
-  const matches = getMatchesByDate(date);
-
-  return `
-    <div class="match-list">
-      ${matches.map(match => {
-        const prediction = predictMatch(resultsData, match.home, match.away);
-        const volatility = getVolatility(prediction, match);
-        const picks = getFullPicks(prediction, match)
-          .sort((a, b) => b.safetyScore - a.safetyScore)
-          .slice(0, 3);
-
-        return `
-          <div class="match-detail-card">
-            <h3>${matchName(match)}</h3>
-            <p class="note">Marcador IA: <strong>${prediction.score}</strong> · ${volatility.emoji} Volatilidad ${volatility.label}</p>
-
-            <div class="prob-grid">
-              <div class="prob"><strong>${prediction.probs.home}%</strong><span>${displayName(match.home)}</span></div>
-              <div class="prob"><strong>${prediction.probs.draw}%</strong><span>Empate</span></div>
-              <div class="prob"><strong>${prediction.probs.away}%</strong><span>${displayName(match.away)}</span></div>
-            </div>
-
-            ${picks.map(pick => renderPickActions(match, pick)).join("")}
-          </div>
-        `;
-      }).join("")}
-    </div>
-  `;
-}
-
-function renderPickActions(match, pick) {
-  const state = getPickState(match.id, pick.type);
-  const inCart = cart.some(item => item.id === `${match.id}__${pick.type}`);
-
-  return `
-    <div class="pick ${pick.type} ${state ? "registered" : ""}">
-      <div class="pick-title">${pick.emoji} ${pick.label}</div>
-      <strong>${pick.text}</strong>
-      <p class="pick-meta">IA ${formatPct(pick.probability)} · Riesgo ${pick.risk} · Momio justo @${formatOdds(pick.fairOdds)}</p>
-
-      <div class="actions three-actions">
-        <button class="ghost-small ${inCart ? "active" : ""}" onclick="addToCart('${match.id}', '${pick.type}')">${inCart ? "En ticket" : "Agregar"}</button>
-        <button class="win ${state === "win" ? "active" : ""}" onclick="togglePick('${match.id}', '${pick.type}', 'win')">✅</button>
-        <button class="lose ${state === "loss" ? "active" : ""}" onclick="togglePick('${match.id}', '${pick.type}', 'loss')">❌</button>
-      </div>
-    </div>
-  `;
-}
-
-function renderTicket() {
-  const prob = combinedProbability(cart);
-  const fairOdds = prob ? 1 / prob : 0;
-
-  screens.ticket.innerHTML = `
-    <section class="glass panel">
-      <h2>Ticket actual</h2>
-      <p class="note">Agrega picks, escribe el momio real de la casa y calcula si hay value.</p>
-
-      ${
-        cart.length
-          ? `
-            <div class="cart-list">
-              ${cart.map(item => `
-                <div class="cart-item">
-                  <div>
-                    <strong>${item.pick}</strong>
-                    <span>${item.match} · IA ${formatPct(item.probability)} · ${item.volatility}</span>
-                  </div>
-                  <button onclick="removeFromCart('${item.id}')">✕</button>
-                </div>
-              `).join("")}
-            </div>
-
-            <div class="ticket-form">
-              <label>Casa de apuesta</label>
-              <select id="ticketHouse">
-                ${["Draftea", "Caliente", "Codere", "Bet365", "Playdoit", "Otra"].map(house => `
-                  <option value="${house}" ${house === settings.defaultHouse ? "selected" : ""}>${house}</option>
-                `).join("")}
-              </select>
-
-              <label>Momio total de la casa</label>
-              <input id="ticketOdds" type="number" min="1.01" step="0.01" placeholder="Ejemplo: 2.15" oninput="renderTicketPreview()" />
-
-              <label>Importe apostado</label>
-              <input id="ticketStake" type="number" min="1" step="1" placeholder="Ejemplo: 500" oninput="renderTicketPreview()" />
-
-              <div id="ticketPreview" class="ticket-preview">
-                ${renderTicketPreviewHTML(prob, fairOdds, 0, 0)}
-              </div>
-
-              <button class="primary-action" onclick="saveTicket()">Guardar ticket</button>
-              <button class="ghost" onclick="clearCart()">Vaciar ticket</button>
-            </div>
-          `
-          : `<p class="note">Tu ticket está vacío. Ve a Picks y toca “Agregar”.</p>`
-      }
-    </section>
-  `;
-}
-
-function renderTicketPreview() {
-  const preview = document.getElementById("ticketPreview");
-  if (!preview) return;
-
-  const odds = Number(document.getElementById("ticketOdds")?.value);
-  const stake = Number(document.getElementById("ticketStake")?.value);
-  const prob = combinedProbability(cart);
-  const fairOdds = prob ? 1 / prob : 0;
-
-  preview.innerHTML = renderTicketPreviewHTML(prob, fairOdds, odds, stake);
-}
-
-function renderTicketPreviewHTML(prob, fairOdds, odds, stake) {
-  const validOdds = Number(odds || 0);
-  const validStake = Number(stake || 0);
-
-  const payout = validOdds && validStake ? validStake * validOdds : 0;
-  const profit = payout ? payout - validStake : 0;
-  const implied = validOdds > 1 ? 1 / validOdds : 0;
-  const edge = implied ? prob - implied : 0;
-
-  let label = "Escribe momio e importe";
-  let cls = "";
-
-  if (validOdds > 1) {
-    if (edge >= 0.08) {
-      label = "🟢 Value fuerte";
-      cls = "good";
-    } else if (edge >= 0.03) {
-      label = "🟡 Value leve";
-      cls = "mid";
-    } else {
-      label = "🔴 Sin value";
-      cls = "bad";
-    }
-  }
-
-  return `
-    <div class="value-result ${cls}">
-      <strong>${label}</strong>
-      <span>Prob. IA combinada: ${formatPct(prob)} · Momio justo IA: @${formatOdds(fairOdds)}</span>
-    </div>
-
-    <div class="parlay-summary">
-      <div><strong>${money(payout)}</strong><span>Retorno</span></div>
-      <div><strong>${money(profit)}</strong><span>Utilidad</span></div>
-      <div><strong>${implied ? formatPct(edge) : "—"}</strong><span>Edge</span></div>
-    </div>
-  `;
-}
-
-function renderHistory() {
-  const stats = bankrollStats();
-
-  screens.history.innerHTML = `
-    <section class="glass panel">
-      <h2>Historial</h2>
-      <p class="note">Registro de tickets guardados.</p>
-
-      <div class="stats">
-        <div><strong>${stats.won}</strong><span>Ganados</span></div>
-        <div><strong>${stats.lost}</strong><span>Perdidos</span></div>
-        <div><strong>${money(stats.net)}</strong><span>Utilidad</span></div>
-      </div>
-    </section>
 
     <section class="glass panel">
-      <h2>Tickets</h2>
-      ${
-        tickets.length
-          ? tickets.map(ticket => renderTicketHistoryCard(ticket)).join("")
-          : `<p class="note">Aún no has guardado tickets.</p>`
-      }
-    </section>
-  `;
-}
-
-function renderTicketHistoryCard(ticket) {
-  const statusLabels = {
-    pending: "⏳ Pendiente",
-    won: "✅ Ganado",
-    lost: "❌ Perdido",
-    void: "🚫 Anulado"
-  };
-
-  return `
-    <div class="ticket-history-card">
-      <div class="ticket-history-head">
-        <strong>${ticket.id}</strong>
-        <span>${statusLabels[ticket.status]}</span>
-      </div>
-
-      <p class="note">${ticket.house} · Momio @${formatOdds(ticket.odds)} · Importe ${money(ticket.stake)}</p>
-
-      <div class="cart-list compact">
-        ${ticket.picks.map(item => `
-          <div class="cart-item">
-            <div>
-              <strong>${item.pick}</strong>
-              <span>${item.match}</span>
-            </div>
-          </div>
-        `).join("")}
-      </div>
-
-      <div class="parlay-summary">
-        <div><strong>${formatPct(ticket.probability)}</strong><span>Prob. IA</span></div>
-        <div><strong>${money(ticketProfit(ticket))}</strong><span>Resultado</span></div>
-        <div><strong>${formatPct(ticket.edge)}</strong><span>Edge</span></div>
-      </div>
-
-      <div class="actions three-actions">
-        <button class="win ${ticket.status === "won" ? "active" : ""}" onclick="updateTicketStatus('${ticket.id}', 'won')">Ganado</button>
-        <button class="lose ${ticket.status === "lost" ? "active" : ""}" onclick="updateTicketStatus('${ticket.id}', 'lost')">Perdido</button>
-        <button class="ghost-small ${ticket.status === "void" ? "active" : ""}" onclick="updateTicketStatus('${ticket.id}', 'void')">Anulado</button>
-      </div>
-    </div>
-  `;
-}
-
-function renderProfile() {
-  const stats = bankrollStats();
-
-  screens.profile.innerHTML = `
-    <section class="glass panel">
-      <h2>Perfil</h2>
-      <p class="note">Ajusta bankroll, casa favorita y perfil de riesgo.</p>
-
-      <div class="stats">
-        <div><strong>${money(stats.bankroll)}</strong><span>Bankroll actual</span></div>
-        <div><strong>${formatPct(stats.roi)}</strong><span>ROI</span></div>
-        <div><strong>${tickets.length}</strong><span>Tickets</span></div>
-      </div>
-    </section>
-
-    <section class="glass panel">
-      <h2>Ajustes</h2>
-
-      <label>Bankroll inicial</label>
-      <input type="number" value="${settings.bankroll}" oninput="updateSetting('bankroll', Number(this.value))" />
-
-      <label>Casa favorita</label>
-      <select onchange="updateSetting('defaultHouse', this.value)">
-        ${["Draftea", "Caliente", "Codere", "Bet365", "Playdoit", "Otra"].map(house => `
-          <option value="${house}" ${house === settings.defaultHouse ? "selected" : ""}>${house}</option>
-        `).join("")}
-      </select>
-
-      <label>Perfil de riesgo</label>
-      <select onchange="updateSetting('profile', this.value)">
-        <option value="safe" ${settings.profile === "safe" ? "selected" : ""}>🛡️ Seguro</option>
-        <option value="balanced" ${settings.profile === "balanced" ? "selected" : ""}>⚖️ Equilibrado</option>
-        <option value="aggressive" ${settings.profile === "aggressive" ? "selected" : ""}>🔥 Agresivo</option>
-      </select>
-
-      <label>Máximo picks en parley</label>
-      <select onchange="updateSetting('maxParlay', Number(this.value))">
-        <option value="2" ${Number(settings.maxParlay) === 2 ? "selected" : ""}>2 picks</option>
-        <option value="3" ${Number(settings.maxParlay) === 3 ? "selected" : ""}>3 picks</option>
-        <option value="4" ${Number(settings.maxParlay) === 4 ? "selected" : ""}>4 picks</option>
-        <option value="5" ${Number(settings.maxParlay) === 5 ? "selected" : ""}>5 picks</option>
-      </select>
-
-      <button class="ghost" onclick="resetAllData()">Borrar datos locales</button>
+      <h2>Zona de cuidado</h2>
+      <button class="ghost" onclick="clearAllTickets()">Borrar tickets e historial</button>
     </section>
   `;
 }
 
 function updateSetting(key, value) {
   settings[key] = value;
-  saveJSON(STORAGE_KEYS.settings, settings);
-  renderAll();
-}
 
-function resetAllData() {
-  const ok = confirm("¿Seguro que quieres borrar tickets, carrito y ajustes?");
-  if (!ok) return;
-
-  settings = { ...DEFAULT_SETTINGS };
-  cart = [];
-  tickets = [];
-  pickStates = {};
-
-  saveJSON(STORAGE_KEYS.settings, settings);
-  saveJSON(STORAGE_KEYS.cart, cart);
-  saveJSON(STORAGE_KEYS.tickets, tickets);
-  saveJSON(STORAGE_KEYS.pickStates, pickStates);
-
-  renderAll();
-}
-
-function switchTab(tab) {
-  activeTab = tab;
-
-  Object.entries(screens).forEach(([key, screen]) => {
-    screen.classList.toggle("active-screen", key === tab);
-  });
-
-  document.querySelectorAll(".nav-btn").forEach(btn => btn.classList.remove("active"));
-  const btns = Array.from(document.querySelectorAll(".nav-btn"));
-  const index = ["home", "recommended", "ticket", "history", "profile"].indexOf(tab);
-  if (btns[index]) btns[index].classList.add("active");
-
-  renderAll();
-  window.scrollTo({ top: 0, behavior: "smooth" });
-}
-
-function renderAll() {
-  renderHome();
-  renderRecommended();
-  renderTicket();
-  renderHistory();
-  renderProfile();
-}
-
-function showToast(message) {
-  let toast = document.getElementById("toast");
-
-  if (!toast) {
-    toast = document.createElement("div");
-    toast.id = "toast";
-    toast.className = "toast";
-    document.body.appendChild(toast);
+  if (key === "favoriteBook") {
+    ticketDraft.book = value;
+    saveDraft();
   }
 
-  toast.textContent = message;
-  toast.classList.add("show");
+  saveSettings();
 
-  setTimeout(() => {
-    toast.classList.remove("show");
-  }, 1700);
+  if (key === "initialBankroll") {
+    return;
+  }
+
+  renderAll();
+}
+
+function clearAllTickets() {
+  const ok = confirm("¿Seguro que quieres borrar todos tus tickets?");
+  if (!ok) return;
+
+  tickets = [];
+  cart = [];
+  saveTickets();
+  saveCart();
+  renderAll();
+}
+
+function changeDate(date) {
+  selectedDate = date;
+  const first = getMatchesByDate(selectedDate)[0];
+  selectedMatchId = first ? first.id : "";
+  renderAll();
+}
+
+function changeMatch(id) {
+  selectedMatchId = id;
+  renderAll();
+}
+
+function selectMatchFromRecommended(id) {
+  selectedMatchId = id;
+  renderAll();
+}
+
+function selectMatchFromHome(id) {
+  selectedMatchId = id;
+  const match = currentMatches.find(item => item.id === id);
+  if (match) selectedDate = match.date;
+  switchTab("recommended");
 }
 
 async function init() {
@@ -1165,7 +1258,7 @@ async function init() {
     screen.innerHTML = `
       <section class="glass panel">
         <h2>Cargando...</h2>
-        <p class="note">Conectando con datos y modelo.</p>
+        <p class="note">Conectando con datos y preparando modelo.</p>
       </section>
     `;
   });
@@ -1178,12 +1271,20 @@ async function init() {
       id: createMatchId(match)
     }));
 
+    const dates = [...new Set(currentMatches.map(match => match.date))];
+    const today = new Date().toISOString().slice(0, 10);
+
+    selectedDate = dates.includes(today) ? today : dates[0];
+    selectedMatchId = getMatchesByDate(selectedDate)[0]?.id || "";
+
+    updateHero("home");
+    updateCartBadge();
     renderAll();
   } catch (error) {
     screens.home.innerHTML = `
       <section class="glass panel">
         <h2>Error al cargar datos</h2>
-        <p class="note">No se pudo conectar al CSV original. Revisa conexión o intenta más tarde.</p>
+        <p class="note">No se pudo cargar el CSV original. Revisa conexión o scripts.</p>
       </section>
     `;
     console.error(error);

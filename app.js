@@ -44,13 +44,15 @@ const DISPLAY_NAMES = {
   "Bosnia and Herzegovina": "Bosnia y Herzegovina",
   "South Korea": "Corea del Sur",
   "Cape Verde": "Cabo Verde",
-  "DR Congo": "RD Congo"
+  "DR Congo": "RD Congo",
+  "Saudi Arabia": "Arabia Saudí",
+  "New Zealand": "Nueva Zelanda"
 };
 
 const DATE_LABELS = {
   "2026-06-24": "24 junio",
   "2026-06-25": "25 junio",
-  "2026-06-26": "26 junio",
+  "2026-06-26": "26 junio · Test ML",
   "2026-06-27": "27 junio"
 };
 
@@ -62,22 +64,128 @@ const CONTEXT_FACTORS = {
       "Ecuador podía llegar con urgencia competitiva.",
       "El contexto sube ritmo, tarjetas, córners y volatilidad.",
       "Cuidado con picks de goleada o marcador exacto."
-    ]
+    ],
+    model: {
+      homeUrgency: 0.05,
+      openLateRisk: 0.08
+    }
   },
+
   "2026-06-25-japan-sweden": {
     volatilityBoost: 10,
     importance: "Cruce parejo",
-    notes: ["Partido con perfiles competitivos similares."]
+    notes: ["Partido con perfiles competitivos similares."],
+    model: {
+      drawBoost: 0.025
+    }
   },
+
   "2026-06-25-paraguay-australia": {
     volatilityBoost: 12,
     importance: "Partido físico",
-    notes: ["Puede ser cerrado y de mucho contacto."]
+    notes: ["Puede ser cerrado y de mucho contacto."],
+    model: {
+      underBias: 0.035
+    }
   },
+
   "2026-06-25-turkey-united-states": {
     volatilityBoost: 10,
     importance: "Partido de ritmo alto",
-    notes: ["Riesgo de transiciones y partido abierto."]
+    notes: ["Riesgo de transiciones y partido abierto."],
+    model: {
+      openLateRisk: 0.08
+    }
+  },
+
+  "2026-06-26-norway-france": {
+    volatilityBoost: 16,
+    importance: "Cierre de grupo con posible gestión de energía",
+    notes: [
+      "Partido de alto nivel: evitar lectura simple de favorito.",
+      "El empate puede tener valor estratégico según tabla.",
+      "Cuidado con jugadores si hay rotación o minutos limitados."
+    ],
+    model: {
+      drawBoost: 0.055,
+      favoriteRotationRisk: 0.045,
+      underBias: 0.025
+    }
+  },
+
+  "2026-06-26-senegal-iraq": {
+    volatilityBoost: 12,
+    importance: "Partido de necesidad, pero con baja claridad ofensiva",
+    notes: [
+      "Senegal puede cargar más el partido.",
+      "Irak puede jugar más reactivo.",
+      "Mejor priorizar mercados de gol simple o doble oportunidad."
+    ],
+    model: {
+      motivationHome: 0.055,
+      defensiveAway: 0.025,
+      underBias: 0.02
+    }
+  },
+
+  "2026-06-26-uruguay-spain": {
+    volatilityBoost: 20,
+    importance: "Uruguay con urgencia competitiva ante una España fuerte",
+    notes: [
+      "Partido emocional y de presión.",
+      "Sube riesgo de córners, tarjetas y escenarios tardíos.",
+      "Evitar marcador exacto o España gana fácil."
+    ],
+    model: {
+      homeUrgency: 0.065,
+      awayUrgency: 0.02,
+      openLateRisk: 0.10,
+      drawBoost: 0.018
+    }
+  },
+
+  "2026-06-26-cape-verde-saudi-arabia": {
+    volatilityBoost: 14,
+    importance: "Partido de grupo con lectura sensible al primer gol",
+    notes: [
+      "Cabo Verde puede competir mejor de lo que indica el nombre.",
+      "Arabia Saudí puede sufrir si el partido se vuelve físico.",
+      "Mercados conservadores son mejores que resultado seco."
+    ],
+    model: {
+      drawBoost: 0.03,
+      openLateRisk: 0.045
+    }
+  },
+
+  "2026-06-26-new-zealand-belgium": {
+    volatilityBoost: 18,
+    importance: "Bélgica obligada a reaccionar",
+    notes: [
+      "Bélgica tiene más calidad, pero llega con presión.",
+      "Nueva Zelanda puede dejar espacios si necesita resultado.",
+      "Mejor evitar parley largo si agregas este partido."
+    ],
+    model: {
+      motivationAway: 0.075,
+      openLateRisk: 0.085,
+      favoriteRotationRisk: 0.02
+    }
+  },
+
+  "2026-06-26-egypt-iran": {
+    volatilityBoost: 15,
+    importance: "Partido de clasificación con posible valor del empate",
+    notes: [
+      "Egipto puede priorizar control si el empate le sirve.",
+      "Irán puede empujar más si necesita ganar.",
+      "Cuidado con resultado directo; mejor mercados de baja exposición."
+    ],
+    model: {
+      drawBoost: 0.05,
+      underBias: 0.035,
+      awayUrgency: 0.035
+    }
   }
 };
 
@@ -90,16 +198,17 @@ const DEFAULT_SETTINGS = {
   favoriteBook: "Draftea"
 };
 
-const SETTINGS_KEY = "matchiq_settings_v7";
-const CART_KEY = "matchiq_cart_v7";
-const TICKETS_KEY = "matchiq_tickets_v7";
-const DRAFT_KEY = "matchiq_ticket_draft_v7";
+const SETTINGS_KEY = "matchiq_settings_v711";
+const CART_KEY = "matchiq_cart_v711";
+const TICKETS_KEY = "matchiq_tickets_v711";
+const DRAFT_KEY = "matchiq_ticket_draft_v711";
 
 let resultsData = [];
 let currentMatches = [];
 let selectedDate = "";
 let selectedMatchId = "";
 let activeTab = "home";
+let predictionCache = new Map();
 
 let settings = loadJSON(SETTINGS_KEY, DEFAULT_SETTINGS);
 let cart = loadJSON(CART_KEY, []);
@@ -133,6 +242,16 @@ function saveJSON(key, value) {
 
 function displayName(team) {
   return DISPLAY_NAMES[team] || team;
+}
+
+function displayPickText(text) {
+  let output = text;
+
+  Object.entries(DISPLAY_NAMES).forEach(([original, translated]) => {
+    output = output.replaceAll(original, translated);
+  });
+
+  return output;
 }
 
 function matchName(match) {
@@ -170,8 +289,15 @@ function formatPct(value) {
 }
 
 function formatOdds(value) {
-  if (!Number.isFinite(Number(value))) return "—";
-  return Number(value).toFixed(2);
+  const number = Number(value);
+  if (!Number.isFinite(number) || number <= 0) return "—";
+  return number.toFixed(2);
+}
+
+function formatFair(value) {
+  const number = Number(value);
+  if (!Number.isFinite(number) || number <= 0) return "—";
+  return `+${number.toFixed(2)}`;
 }
 
 function clampNumber(value, min, max) {
@@ -209,7 +335,8 @@ function getContextForMatch(match) {
   return CONTEXT_FACTORS[match.id] || {
     volatilityBoost: 0,
     importance: "Contexto estándar",
-    notes: ["Sin alerta contextual manual registrada."]
+    notes: ["Sin alerta contextual manual registrada."],
+    model: {}
   };
 }
 
@@ -219,7 +346,7 @@ function getVolatility(prediction, match) {
 
   const favProb = prediction.favorite.prob;
   const totalGoals = prediction.homeLambda + prediction.awayLambda;
-  const drawProb = prediction.probs.draw / 100;
+  const drawProb = prediction.rawProbs?.draw ?? prediction.probs.draw / 100;
   const bothScoreProb = prediction.bothScore / 100;
 
   if (favProb < 0.45) score += 28;
@@ -273,49 +400,54 @@ function winAndUnder45Probability(prediction) {
 }
 
 function getPickProbability(pick, prediction, match) {
-  const favGoalProb = 1 - poisson(0, prediction.favorite.lambda);
   const volatility = getVolatility(prediction, match);
 
   let probability = 0.5;
 
-  if (pick.type === "safe") {
-    probability = pick.text.includes("anota")
-      ? favGoalProb
-      : prediction.under45 / 100;
-  }
+  if (pick.marketKey && prediction.markets && typeof prediction.markets[pick.marketKey] === "number") {
+    probability = prediction.markets[pick.marketKey];
+  } else {
+    const favGoalProb = 1 - poisson(0, prediction.favorite.lambda);
 
-  if (pick.type === "balanced") {
-    if (pick.text.includes("Doble oportunidad")) {
-      probability = prediction.favorite.prob + prediction.probs.draw / 100;
-    } else {
-      probability = prediction.favorite.prob;
+    if (pick.type === "safe") {
+      probability = pick.text.includes("anota") ? favGoalProb : prediction.under45 / 100;
     }
-  }
 
-  if (pick.type === "aggressive") {
-    probability = pick.text.includes("cero")
-      ? winToNilProbability(prediction)
-      : winAndUnder45Probability(prediction);
-  }
+    if (pick.type === "balanced") {
+      probability = pick.text.includes("Doble oportunidad")
+        ? prediction.favorite.prob + prediction.rawProbs.draw
+        : prediction.favorite.prob;
+    }
 
-  if (pick.type === "score") {
-    probability = scoreProbability(prediction.score, prediction);
-  }
+    if (pick.type === "aggressive") {
+      probability = pick.text.includes("cero")
+        ? winToNilProbability(prediction)
+        : winAndUnder45Probability(prediction);
+    }
 
-  if (pick.type === "corners") {
-    const cornerFav = prediction.favorite.side === "home"
-      ? prediction.corners.home
-      : prediction.corners.away;
+    if (pick.type === "score") {
+      probability = scoreProbability(prediction.score, prediction);
+    }
 
-    probability = cornerFav >= 5 ? 0.64 : 0.56;
-  }
+    if (pick.type === "corners") {
+      const cornerFav = prediction.favorite.side === "home"
+        ? prediction.corners.home
+        : prediction.corners.away;
 
-  if (pick.type === "player") {
-    probability = 0.57;
+      probability = cornerFav >= 5 ? 0.64 : 0.56;
+    }
+
+    if (pick.type === "player") {
+      probability = 0.55 + (prediction.favorite.prob - 0.50) * 0.25;
+    }
   }
 
   if (volatility.label === "Alta" && ["balanced", "aggressive", "score", "player"].includes(pick.type)) {
     probability *= 0.88;
+  }
+
+  if (pick.type === "player" && volatility.label !== "Baja") {
+    probability *= 0.93;
   }
 
   return clampNumber(probability, 0.01, 0.99);
@@ -339,11 +471,11 @@ function safetyScore(item) {
     corners: 7,
     balanced: 10,
     aggressive: 22,
-    player: 26,
-    score: 42
+    player: 28,
+    score: 44
   };
 
-  return item.pick.probability * 100 - item.volatility.score * 0.32 - (typePenalty[item.pick.type] || 20);
+  return item.pick.probability * 100 - item.volatility.score * 0.35 - (typePenalty[item.pick.type] || 20);
 }
 
 function getPlayerSuggestions(favorite) {
@@ -356,7 +488,10 @@ function getPlayerSuggestions(favorite) {
     "Spain": ["Morata 1+ tiro a puerta", "Yamal 1+ tiro", "Pedri 1+ pase clave"],
     "Germany": ["Musiala 1+ tiro", "Havertz 1+ tiro a puerta", "Wirtz 1+ pase clave"],
     "Netherlands": ["Gakpo 1+ tiro", "Depay 1+ tiro a puerta", "Xavi Simons 1+ tiro"],
-    "Belgium": ["Lukaku 1+ tiro a puerta", "De Bruyne 1+ pase clave", "Doku 1+ tiro"]
+    "Belgium": ["Lukaku 1+ tiro a puerta", "De Bruyne 1+ pase clave", "Doku 1+ tiro"],
+    "Norway": ["Haaland 1+ tiro a puerta", "Ødegaard 1+ pase clave", "Haaland 2+ tiros"],
+    "Uruguay": ["Darwin Núñez 1+ tiro a puerta", "Valverde 1+ tiro", "Pellistri 1+ tiro"],
+    "Egypt": ["Salah 1+ tiro a puerta", "Trézéguet 1+ tiro", "Marmoush 1+ tiro"]
   };
 
   return players[favorite.team] || [
@@ -374,7 +509,8 @@ function getFullPicks(prediction, match) {
     type: "player",
     label: "Jugador",
     emoji: "⚽",
-    text: players[0]
+    text: players[0],
+    marketKey: "playerShot"
   });
 
   const volatility = getVolatility(prediction, match);
@@ -383,8 +519,10 @@ function getFullPicks(prediction, match) {
     const probability = getPickProbability(pick, prediction, match);
     const fairOdds = 1 / probability;
     const valueOdds = 1.08 / probability;
+
     const item = {
       ...pick,
+      text: displayPickText(pick.text),
       probability,
       fairOdds,
       valueOdds,
@@ -405,7 +543,11 @@ function getMatchesByDate(date) {
 }
 
 function getPredictionForMatch(match) {
-  return predictMatch(resultsData, match.home, match.away);
+  if (!predictionCache.has(match.id)) {
+    predictionCache.set(match.id, predictMatch(resultsData, match.home, match.away, getContextForMatch(match)));
+  }
+
+  return predictionCache.get(match.id);
 }
 
 function getCandidatesForDate(date) {
@@ -429,6 +571,7 @@ function getFilteredCandidates(date) {
 
   return getCandidatesForDate(date)
     .filter(item => rules.topTypes.includes(item.pick.type))
+    .filter(item => settings.showAggressive || !["aggressive", "player", "score"].includes(item.pick.type))
     .filter(item => item.pick.probability >= rules.minProbability)
     .filter(item => {
       if (!settings.hideHighVolatility) return true;
@@ -443,6 +586,7 @@ function buildParlay(date) {
 
   const legs = getCandidatesForDate(date)
     .filter(item => rules.parlayTypes.includes(item.pick.type))
+    .filter(item => settings.showAggressive || !["aggressive", "player", "score"].includes(item.pick.type))
     .filter(item => item.pick.probability >= rules.minProbability)
     .filter(item => {
       if (!settings.hideHighVolatility) return true;
@@ -505,7 +649,29 @@ function saveDraft() {
 
 function updateCartBadge() {
   const badge = document.getElementById("cartBadge");
-  if (badge) badge.textContent = cart.length;
+  if (!badge) return;
+
+  badge.textContent = cart.length;
+  badge.style.display = cart.length > 0 ? "grid" : "none";
+}
+
+function showToast(message) {
+  let toast = document.getElementById("appToast");
+
+  if (!toast) {
+    toast = document.createElement("div");
+    toast.id = "appToast";
+    toast.className = "toast";
+    document.body.appendChild(toast);
+  }
+
+  toast.textContent = message;
+  toast.classList.add("show");
+
+  clearTimeout(showToast.timer);
+  showToast.timer = setTimeout(() => {
+    toast.classList.remove("show");
+  }, 1450);
 }
 
 function makeCartItem(match, pick) {
@@ -525,6 +691,11 @@ function makeCartItem(match, pick) {
   };
 }
 
+function isPickInCart(match, pick) {
+  const item = makeCartItem(match, pick);
+  return cart.some(cartItem => cartItem.id === item.id);
+}
+
 function addToTicket(matchId, pickType) {
   const match = currentMatches.find(item => item.id === matchId);
   if (!match) return;
@@ -540,38 +711,53 @@ function addToTicket(matchId, pickType) {
   if (!exists) {
     cart.push(item);
     saveCart();
+    showToast("✅ Agregado al ticket");
+  } else {
+    showToast("Ya está en el ticket");
   }
 
   renderAll();
-  switchTab("ticket");
 }
 
 function addParlayToTicket(date) {
   const parlay = buildParlay(date);
+  let added = 0;
 
   parlay.legs.forEach(leg => {
     const item = makeCartItem(leg.match, leg.pick);
     const exists = cart.some(cartItem => cartItem.id === item.id);
-    if (!exists) cart.push(item);
+
+    if (!exists) {
+      cart.push(item);
+      added++;
+    }
   });
 
   saveCart();
+
+  if (added > 0) {
+    showToast(`✅ ${added} picks agregados`);
+  } else {
+    showToast("El parley ya está en ticket");
+  }
+
   renderAll();
-  switchTab("ticket");
 }
 
 function removeFromTicket(id) {
   cart = cart.filter(item => item.id !== id);
   saveCart();
+  showToast("Pick eliminado");
   renderAll();
 }
 
 function clearTicket() {
-  const ok = confirm("¿Quieres vaciar el ticket actual?");
+  const ok = confirm("Vas a quitar todos los picks del ticket actual. ¿Continuar?");
   if (!ok) return;
 
   cart = [];
   saveCart();
+  showToast("Ticket vaciado");
   renderAll();
 }
 
@@ -587,6 +773,74 @@ function updateDraft(key, value) {
   renderTicket();
 }
 
+function getTicketEvaluation() {
+  if (!cart.length) {
+    return {
+      title: "Agrega picks para evaluar",
+      text: "Tu entrada todavía está vacía.",
+      className: "mid",
+      risk: "Sin datos",
+      suggestedStake: [0, 0]
+    };
+  }
+
+  const probability = cartProbability();
+  const odds = Number(ticketDraft.odds || 0);
+  const implied = odds > 1 ? 1 / odds : 0;
+  const edge = odds > 1 ? probability - implied : 0;
+
+  const highVolatility = cart.filter(item => item.volatility === "Alta").length;
+  const riskyTypes = cart.filter(item => ["aggressive", "score", "player"].includes(item.type)).length;
+
+  let score = probability * 100;
+
+  if (edge > 0) score += 10;
+  if (edge < -0.05) score -= 12;
+  if (cart.length >= 4) score -= 8;
+  if (cart.length >= 5) score -= 14;
+  if (highVolatility) score -= highVolatility * 10;
+  if (riskyTypes) score -= riskyTypes * 6;
+
+  score = clampNumber(score, 0, 100);
+
+  let title = "🟡 Ticket aceptable";
+  let text = "Tiene sentido, pero no lo sobreexpongas.";
+  let className = "mid";
+  let risk = "Medio";
+  let stakePct = [0.015, 0.035];
+
+  if (score >= 68) {
+    title = "🟢 Ticket interesante";
+    text = "Buena estructura para probar, especialmente si el momio real acompaña.";
+    className = "good";
+    risk = "Bajo/medio";
+    stakePct = [0.025, 0.05];
+  }
+
+  if (score < 46) {
+    title = "🔴 Ticket peligroso";
+    text = "Demasiada volatilidad o probabilidad combinada baja. Considera quitar picks.";
+    className = "bad";
+    risk = "Alto";
+    stakePct = [0.005, 0.015];
+  }
+
+  const bankroll = Number(settings.initialBankroll || 0);
+  const suggestedStake = [
+    Math.round(bankroll * stakePct[0]),
+    Math.round(bankroll * stakePct[1])
+  ];
+
+  return {
+    title,
+    text,
+    className,
+    risk,
+    score,
+    suggestedStake
+  };
+}
+
 function updateTicketLivePreview() {
   const probability = cartProbability();
   const fairOdds = cartFairOdds();
@@ -597,15 +851,17 @@ function updateTicketLivePreview() {
   const profit = potentialReturn - stake;
   const implied = odds > 1 ? 1 / odds : 0;
   const edge = odds > 1 ? probability - implied : 0;
+  const evaluation = getTicketEvaluation();
 
   const summary = document.getElementById("ticketLiveSummary");
   const valueBox = document.getElementById("ticketLiveValue");
+  const gradeBox = document.getElementById("ticketLiveGrade");
 
   if (!summary || !valueBox) return;
 
   summary.innerHTML = `
     <div><strong>${formatPct(probability)}</strong><span>Prob. IA</span></div>
-    <div><strong>@${formatOdds(fairOdds)}</strong><span>Momio justo IA</span></div>
+    <div><strong>${formatFair(fairOdds)}</strong><span>Momio justo IA</span></div>
     <div><strong>${formatMoney(potentialReturn)}</strong><span>Retorno potencial</span></div>
     <div><strong>${formatMoney(profit)}</strong><span>Utilidad neta</span></div>
   `;
@@ -615,11 +871,19 @@ function updateTicketLivePreview() {
     <strong>${odds > 1 && edge > 0 ? "🟢 Value positivo" : odds > 1 ? "🔴 Sin value" : "Escribe el momio"}</strong>
     <span>${odds > 1 ? `Casa: ${formatPct(implied)} · IA: ${formatPct(probability)} · Edge: ${formatPct(edge)}` : "Ingresa el momio para calcular value."}</span>
   `;
+
+  if (gradeBox) {
+    gradeBox.className = `ticket-grade ${evaluation.className}`;
+    gradeBox.innerHTML = `
+      <strong>${evaluation.title}</strong>
+      <span>${evaluation.text} · Riesgo: ${evaluation.risk} · Stake sugerido: ${formatMoney(evaluation.suggestedStake[0])} - ${formatMoney(evaluation.suggestedStake[1])}</span>
+    `;
+  }
 }
 
 function saveCurrentTicket() {
   if (!cart.length) {
-    alert("Agrega al menos un pick al ticket.");
+    alert("Agrega al menos un pick al ticket antes de guardarlo.");
     return;
   }
 
@@ -636,6 +900,17 @@ function saveCurrentTicket() {
     return;
   }
 
+  const probability = cartProbability();
+  const implied = odds > 1 ? 1 / odds : 0;
+  const edge = probability - implied;
+
+  if (edge < 0) {
+    const ok = confirm("Este ticket tiene value negativo según la IA. Puedes guardarlo, pero no parece una entrada fuerte. ¿Guardar de todos modos?");
+    if (!ok) return;
+  }
+
+  const evaluation = getTicketEvaluation();
+
   const ticket = {
     id: `ticket_${Date.now()}`,
     createdAt: new Date().toISOString(),
@@ -645,7 +920,8 @@ function saveCurrentTicket() {
     stake,
     selections: [...cart],
     combinedProbability: cartProbability(),
-    fairOdds: cartFairOdds()
+    fairOdds: cartFairOdds(),
+    evaluation
   };
 
   tickets.unshift(ticket);
@@ -660,6 +936,7 @@ function saveCurrentTicket() {
   saveCart();
   saveDraft();
 
+  showToast("Ticket guardado");
   renderAll();
   switchTab("history");
 }
@@ -686,15 +963,17 @@ function settleTicket(id, status) {
   });
 
   saveTickets();
+  showToast("Estado actualizado");
   renderAll();
 }
 
 function deleteTicket(id) {
-  const ok = confirm("¿Eliminar este ticket?");
+  const ok = confirm("¿Eliminar este ticket del historial?");
   if (!ok) return;
 
   tickets = tickets.filter(ticket => ticket.id !== id);
   saveTickets();
+  showToast("Ticket eliminado");
   renderAll();
 }
 
@@ -818,10 +1097,10 @@ function renderHome() {
       ${
         solid ? `
           <button class="daily-card" onclick="selectMatchFromHome('${solid.match.id}')">
-            <span>🛡️ Prioridad segura</span>
+            <span>🧠 Ensemble ML v1.7.1</span>
             <strong>${solid.pick.text}</strong>
             <small>${matchName(solid.match)}</small>
-            <em>IA ${formatPct(solid.pick.probability)} · Riesgo ${solid.pick.risk}</em>
+            <em>IA ${formatPct(solid.pick.probability)} · Riesgo ${solid.pick.risk} · ${formatFair(solid.pick.fairOdds)}</em>
           </button>
         ` : `<p class="note">No hay pick que pase los filtros actuales.</p>`
       }
@@ -842,11 +1121,12 @@ function renderHome() {
           `).join("")}
           <div class="ticket-summary">
             <div><strong>${formatPct(parlay.combinedProbability)}</strong><span>Prob.</span></div>
-            <div><strong>@${formatOdds(parlay.fairOdds)}</strong><span>Momio justo</span></div>
+            <div><strong>${formatFair(parlay.fairOdds)}</strong><span>Momio justo</span></div>
             <div><strong>${parlay.risk}</strong><span>Riesgo</span></div>
             <div><strong>${parlay.legs.length}</strong><span>Picks</span></div>
           </div>
           <button class="primary-btn" onclick="addParlayToTicket('${selectedDate}')">Agregar parley al ticket</button>
+          <p class="tiny-note">Ningún parley es seguro; úsalo como filtro de riesgo, no como garantía.</p>
         ` : `<p class="note">No hay suficientes picks para armar parley con tus filtros.</p>`
       }
     </section>
@@ -872,6 +1152,7 @@ function renderRecommended() {
   const prediction = getPredictionForMatch(match);
   const volatility = getVolatility(prediction, match);
   const picks = getFullPicks(prediction, match);
+  const visiblePicks = picks.filter(pick => settings.showAggressive || !["aggressive", "player", "score"].includes(pick.type));
   const players = getPlayerSuggestions(prediction.favorite);
 
   screens.recommended.innerHTML = `
@@ -916,7 +1197,7 @@ function renderRecommended() {
               <strong>${item.pick.emoji} ${item.pick.text}</strong>
               <span>${matchName(item.match)} · IA ${formatPct(item.pick.probability)} · Riesgo ${item.pick.risk}</span>
             </div>
-            <em>@${formatOdds(item.pick.fairOdds)}</em>
+            <em>${formatFair(item.pick.fairOdds)}</em>
           </button>
         `).join("") || `<p class="note">No hay picks que pasen tus filtros.</p>`}
       </div>
@@ -926,13 +1207,15 @@ function renderRecommended() {
 
     <section class="glass card">
       <h2 class="match-title">${matchName(match)}</h2>
-      <p class="note">Predicción actual según datos disponibles. Favorito: <strong>${displayName(prediction.favorite.team)}</strong>.</p>
+      <p class="note">Predicción con <strong>${prediction.modelLabel}</strong>. Favorito estadístico: <strong>${displayName(prediction.favorite.team)}</strong>.</p>
 
       <div class="prob-grid">
         <div class="prob"><strong>${prediction.probs.home}%</strong><span>${displayName(match.home)}</span></div>
         <div class="prob"><strong>${prediction.probs.draw}%</strong><span>Empate</span></div>
         <div class="prob"><strong>${prediction.probs.away}%</strong><span>${displayName(match.away)}</span></div>
       </div>
+
+      ${renderModelPanel(prediction)}
 
       <div class="volatility-box">
         <strong>${volatility.emoji} Volatilidad ${volatility.label}</strong>
@@ -969,16 +1252,60 @@ function renderRecommended() {
 
       ${renderHeatmap(prediction)}
 
-      ${picks.map(pick => `
-        <div class="pick ${pick.type}">
-          <div class="pick-title">${pick.emoji} ${pick.label}</div>
-          <strong>${pick.text}</strong>
-          <p class="pick-meta">IA ${formatPct(pick.probability)} · Riesgo ${pick.risk} · Momio justo @${formatOdds(pick.fairOdds)}</p>
+      ${visiblePicks.map(pick => {
+        const inTicket = isPickInCart(match, pick);
 
-          <button class="primary-btn" onclick="addToTicket('${match.id}', '${pick.type}')">Agregar al ticket</button>
-        </div>
-      `).join("")}
+        return `
+          <div class="pick ${pick.type}">
+            <div class="pick-title">${pick.emoji} ${pick.label}</div>
+            <strong>${pick.text}</strong>
+            <p class="pick-meta">IA ${formatPct(pick.probability)} · Riesgo ${pick.risk} · Momio justo ${formatFair(pick.fairOdds)}</p>
+
+            <button class="primary-btn ${inTicket ? "in-ticket" : ""}" ${inTicket ? "disabled" : ""} onclick="addToTicket('${match.id}', '${pick.type}')">
+              ${inTicket ? "✅ En ticket" : "Agregar al ticket"}
+            </button>
+          </div>
+        `;
+      }).join("")}
+
+      <p class="tiny-note">La IA ayuda a filtrar riesgo, pero ningún pick es seguro.</p>
     </section>
+  `;
+}
+
+function renderModelPanel(prediction) {
+  const favoriteSide = prediction.favorite.side;
+
+  const labels = {
+    poisson: "Poisson",
+    elo: "Elo",
+    form: "Forma",
+    logistic: "Logística",
+    monteCarlo: "Monte Carlo"
+  };
+
+  return `
+    <div class="model-box">
+      <strong>🧠 Modelo ensemble</strong>
+      <span>Confianza ${prediction.confidence.label} · ${prediction.confidence.score}/100</span>
+      <small>Combina goles esperados, Elo, forma reciente, simulación Monte Carlo y contexto del partido.</small>
+
+      <div class="model-bars">
+        ${Object.entries(prediction.models).map(([key, model]) => {
+          const value = model[favoriteSide] || 0;
+
+          return `
+            <div class="model-bar">
+              <span>${labels[key] || key}</span>
+              <div class="model-track">
+                <div class="model-fill" style="--w:${Math.round(value * 100)}%"></div>
+              </div>
+              <strong>${formatPct(value)}</strong>
+            </div>
+          `;
+        }).join("")}
+      </div>
+    </div>
   `;
 }
 
@@ -1029,9 +1356,10 @@ function renderTicket() {
   const probability = cartProbability();
   const fairOdds = cartFairOdds();
   const odds = Number(ticketDraft.odds || 0);
-  const stake = Number(ticketDraft.stake || 0);
   const implied = odds > 1 ? 1 / odds : 0;
   const edge = odds > 1 ? probability - implied : 0;
+  const evaluation = getTicketEvaluation();
+
   const valueStatus = odds > 1 && edge > 0 ? "🟢 Value positivo" : odds > 1 ? "🔴 Sin value" : "Escribe el momio";
 
   screens.ticket.innerHTML = `
@@ -1048,7 +1376,7 @@ function renderTicket() {
             </div>
             <button onclick="removeFromTicket('${item.id}')">✕</button>
           </div>
-        `).join("") : `<p class="note">Tu ticket está vacío.</p>`
+        `).join("") : `<p class="note">Tu ticket está vacío. Ve a Picks y agrega selecciones para construir tu entrada.</p>`
       }
 
       ${cart.length ? `<button class="ghost" onclick="clearTicket()">Vaciar ticket</button>` : ""}
@@ -1072,7 +1400,7 @@ function renderTicket() {
 
       <div id="ticketLiveSummary" class="ticket-summary">
         <div><strong>${formatPct(probability)}</strong><span>Prob. IA</span></div>
-        <div><strong>@${formatOdds(fairOdds)}</strong><span>Momio justo IA</span></div>
+        <div><strong>${formatFair(fairOdds)}</strong><span>Momio justo IA</span></div>
         <div><strong>${formatMoney(cartPotentialReturn())}</strong><span>Retorno potencial</span></div>
         <div><strong>${formatMoney(cartProfit())}</strong><span>Utilidad neta</span></div>
       </div>
@@ -1082,7 +1410,16 @@ function renderTicket() {
         <span>${odds > 1 ? `Casa: ${formatPct(implied)} · IA: ${formatPct(probability)} · Edge: ${formatPct(edge)}` : "Ingresa el momio para calcular value."}</span>
       </div>
 
-      <button class="primary-btn" onclick="saveCurrentTicket()">Guardar ticket</button>
+      <div id="ticketLiveGrade" class="ticket-grade ${evaluation.className}">
+        <strong>${evaluation.title}</strong>
+        <span>${evaluation.text} · Riesgo: ${evaluation.risk} · Stake sugerido: ${formatMoney(evaluation.suggestedStake[0])} - ${formatMoney(evaluation.suggestedStake[1])}</span>
+      </div>
+
+      <button class="primary-btn ${cart.length ? "" : "disabled"}" ${cart.length ? "" : "disabled"} onclick="saveCurrentTicket()">
+        ${cart.length ? "Guardar ticket" : "Agrega picks para guardar"}
+      </button>
+
+      <p class="tiny-note">La IA ayuda a filtrar riesgo, pero ningún pick ni parley es seguro.</p>
     </section>
   `;
 }
@@ -1107,9 +1444,9 @@ function renderHistory() {
 
       ${
         tickets.length ? tickets.map(ticket => `
-          <div class="ticket-card ${ticket.status}">
+          <div class="ticket-card ticket-${ticket.status}">
             <div class="ticket-head">
-              <strong>${ticket.book} · @${formatOdds(ticket.odds)}</strong>
+              <strong>${ticket.book} · +${formatOdds(ticket.odds)}</strong>
               <span>${statusLabel(ticket.status)}</span>
             </div>
 
@@ -1126,7 +1463,7 @@ function renderHistory() {
 
             <div class="ticket-summary">
               <div><strong>${formatPct(ticket.combinedProbability)}</strong><span>Prob. IA</span></div>
-              <div><strong>@${formatOdds(ticket.fairOdds)}</strong><span>Justo IA</span></div>
+              <div><strong>${formatFair(ticket.fairOdds)}</strong><span>Justo IA</span></div>
               <div><strong>${formatMoney(ticketProfit(ticket))}</strong><span>Utilidad</span></div>
               <div><strong>${statusLabel(ticket.status)}</strong><span>Estado</span></div>
             </div>
@@ -1156,7 +1493,7 @@ function renderProfile() {
   screens.profile.innerHTML = `
     <section class="glass panel">
       <h2>Perfil</h2>
-      <p class="note">Configura cómo quieres que piense MatchIQ.</p>
+      <p class="note">Ajusta tu bankroll, riesgo y casa favorita para que las recomendaciones se adapten a ti.</p>
 
       <label>Bankroll inicial</label>
       <input type="number" min="0" step="1" value="${settings.initialBankroll}" oninput="updateSetting('initialBankroll', Number(this.value))" />
@@ -1219,13 +1556,14 @@ function updateSetting(key, value) {
 }
 
 function clearAllTickets() {
-  const ok = confirm("¿Seguro que quieres borrar todos tus tickets?");
+  const ok = confirm("Esto borrará todos tus tickets e historial. ¿Seguro?");
   if (!ok) return;
 
   tickets = [];
   cart = [];
   saveTickets();
   saveCart();
+  showToast("Historial borrado");
   renderAll();
 }
 
@@ -1258,7 +1596,7 @@ async function init() {
     screen.innerHTML = `
       <section class="glass panel">
         <h2>Cargando...</h2>
-        <p class="note">Conectando con datos y preparando modelo.</p>
+        <p class="note">Conectando con datos y preparando modelo ensemble.</p>
       </section>
     `;
   });
@@ -1271,10 +1609,12 @@ async function init() {
       id: createMatchId(match)
     }));
 
+    predictionCache = new Map();
+
     const dates = [...new Set(currentMatches.map(match => match.date))];
     const today = new Date().toISOString().slice(0, 10);
 
-    selectedDate = dates.includes(today) ? today : dates[0];
+    selectedDate = dates.includes(today) ? today : "2026-06-26";
     selectedMatchId = getMatchesByDate(selectedDate)[0]?.id || "";
 
     updateHero("home");

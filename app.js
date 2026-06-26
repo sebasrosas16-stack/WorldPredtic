@@ -1,7 +1,7 @@
 const PICK_TYPES = [
-  { key: "safe", name: "Conservadores", emoji: "🟢" },
-  { key: "balanced", name: "Equilibrados", emoji: "🟡" },
-  { key: "aggressive", name: "Agresivos", emoji: "🔴" },
+  { key: "safe", name: "Conservadores", emoji: "🛡️" },
+  { key: "balanced", name: "Equilibrados", emoji: "⚖️" },
+  { key: "aggressive", name: "Agresivos", emoji: "🔥" },
   { key: "score", name: "Marcadores", emoji: "🎯" },
   { key: "player", name: "Jugadores", emoji: "⚽" },
   { key: "corners", name: "Córners", emoji: "🚩" }
@@ -52,6 +52,49 @@ const DATE_LABELS = {
   "2026-06-27": "27 junio"
 };
 
+const DEFAULT_SETTINGS = {
+  profile: "safe",
+  maxParlay: 3,
+  hideHighVolatility: true,
+  showAggressive: true
+};
+
+const CONTEXT_FACTORS = {
+  "2026-06-25-ecuador-germany": {
+    volatilityBoost: 18,
+    importance: "Partido de alta presión",
+    notes: [
+      "Ecuador puede estar obligado a competir con máxima intensidad.",
+      "El contexto puede subir ritmo, tarjetas, córners y volatilidad.",
+      "Si Alemania depende de jugadores creativos condicionados físicamente, se reduce confianza en goleadas."
+    ]
+  },
+  "2026-06-25-japan-sweden": {
+    volatilityBoost: 10,
+    importance: "Cruce parejo",
+    notes: [
+      "Partido con perfiles competitivos similares.",
+      "Resultado directo más volátil que mercados de goles/córners."
+    ]
+  },
+  "2026-06-25-paraguay-australia": {
+    volatilityBoost: 12,
+    importance: "Partido físico",
+    notes: [
+      "Puede ser un partido cerrado y de contacto.",
+      "Cuidado con picks de ganador directo si el modelo no marca diferencia clara."
+    ]
+  },
+  "2026-06-25-turkey-united-states": {
+    volatilityBoost: 10,
+    importance: "Partido de ritmo alto",
+    notes: [
+      "Riesgo de transiciones y partido abierto.",
+      "Mejor evaluar goles/córners antes que marcador exacto."
+    ]
+  }
+};
+
 const dateSelect = document.getElementById("dateSelect");
 const select = document.getElementById("matchSelect");
 const card = document.getElementById("matchCard");
@@ -62,12 +105,33 @@ const lossesEl = document.getElementById("losses");
 const hitRateEl = document.getElementById("hitRate");
 const resetBtn = document.getElementById("resetBtn");
 
-const STORAGE_KEY = "matchiq_pick_record_v5";
+const RECORD_KEY = "matchiq_record_v6";
+const SETTINGS_KEY = "matchiq_settings_v6";
 
 let resultsData = [];
 let currentMatches = [];
 
-let record = JSON.parse(localStorage.getItem(STORAGE_KEY)) || createEmptyRecord();
+let settings = loadSettings();
+let record = loadRecord();
+
+function loadSettings() {
+  const saved = JSON.parse(localStorage.getItem(SETTINGS_KEY));
+  return { ...DEFAULT_SETTINGS, ...(saved || {}) };
+}
+
+function saveSettings() {
+  localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+}
+
+function loadRecord() {
+  const saved = JSON.parse(localStorage.getItem(RECORD_KEY));
+  return saved || { pickStates: {} };
+}
+
+function saveRecord() {
+  localStorage.setItem(RECORD_KEY, JSON.stringify(record));
+  renderRecord();
+}
 
 function displayName(team) {
   return DISPLAY_NAMES[team] || team;
@@ -85,42 +149,6 @@ function createMatchId(match) {
     .replaceAll("'", "");
 }
 
-function createEmptyRecord() {
-  const byType = {};
-  PICK_TYPES.forEach(type => {
-    byType[type.key] = { wins: 0, losses: 0 };
-  });
-
-  return {
-    wins: 0,
-    losses: 0,
-    byType,
-    history: []
-  };
-}
-
-function normalizeRecord() {
-  if (!record.byType) record.byType = {};
-
-  PICK_TYPES.forEach(type => {
-    if (!record.byType[type.key]) {
-      record.byType[type.key] = { wins: 0, losses: 0 };
-    }
-  });
-
-  if (!record.history) record.history = [];
-}
-
-function saveRecord() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(record));
-  renderRecord();
-}
-
-function rate(wins, losses) {
-  const total = wins + losses;
-  return total ? Math.round((wins / total) * 100) : 0;
-}
-
 function formatPct(value) {
   return `${Math.round(value * 100)}%`;
 }
@@ -130,78 +158,87 @@ function formatOdds(value) {
   return Number(value).toFixed(2);
 }
 
-function ensureRecordBlocks() {
-  if (!document.getElementById("typeStats")) {
-    resetBtn.insertAdjacentHTML("beforebegin", `<div id="typeStats" class="type-stats"></div>`);
-  }
-
-  if (!document.getElementById("historyList")) {
-    resetBtn.insertAdjacentHTML(
-      "beforebegin",
-      `
-      <h3 class="mini-title">Últimos resultados</h3>
-      <div id="historyList" class="history-list"></div>
-      `
-    );
-  }
+function clampNumber(value, min, max) {
+  return Math.max(min, Math.min(max, value));
 }
 
-function renderRecord() {
-  normalizeRecord();
-
-  const total = record.wins + record.losses;
-
-  winsEl.textContent = record.wins;
-  lossesEl.textContent = record.losses;
-  hitRateEl.textContent = total ? `${rate(record.wins, record.losses)}%` : "0%";
-
-  renderTypeStats();
-  renderHistory();
-}
-
-function renderTypeStats() {
-  ensureRecordBlocks();
-
-  const typeStats = document.getElementById("typeStats");
-
-  typeStats.innerHTML = PICK_TYPES.map(type => {
-    const item = record.byType[type.key];
-    const total = item.wins + item.losses;
-
-    return `
-      <div class="type-row">
-        <div>
-          <strong>${type.emoji} ${type.name}</strong>
-          <span>${item.wins} buenas / ${item.losses} malas</span>
-        </div>
-        <div class="mini-rate">${total ? rate(item.wins, item.losses) : 0}%</div>
-      </div>
-    `;
-  }).join("");
-}
-
-function renderHistory() {
-  ensureRecordBlocks();
-
-  const historyList = document.getElementById("historyList");
-
-  if (!record.history.length) {
-    historyList.innerHTML = `<p class="note">Todavía no has marcado ningún pick.</p>`;
-    return;
+function getProfileRules() {
+  if (settings.profile === "balanced") {
+    return {
+      label: "⚖️ Equilibrado",
+      minProbability: 0.58,
+      parlayTypes: ["safe", "balanced", "corners", "aggressive"],
+      topTypes: ["safe", "balanced", "corners", "aggressive", "player"],
+      allowHighVolatility: false
+    };
   }
 
-  historyList.innerHTML = record.history
-    .slice(-8)
-    .reverse()
-    .map(item => `
-      <div class="history-item">
-        <div>
-          <strong>${item.ok ? "✅" : "❌"} ${item.pick}</strong>
-          <span>${item.match} · ${item.typeLabel}</span>
-        </div>
-      </div>
-    `)
-    .join("");
+  if (settings.profile === "aggressive") {
+    return {
+      label: "🔥 Agresivo",
+      minProbability: 0.42,
+      parlayTypes: ["safe", "balanced", "corners", "aggressive", "player"],
+      topTypes: ["safe", "balanced", "corners", "aggressive", "player", "score"],
+      allowHighVolatility: true
+    };
+  }
+
+  return {
+    label: "🛡️ Seguro",
+    minProbability: 0.70,
+    parlayTypes: ["safe", "balanced", "corners"],
+    topTypes: ["safe", "balanced", "corners"],
+    allowHighVolatility: false
+  };
+}
+
+function getContextForMatch(match) {
+  return CONTEXT_FACTORS[match.id] || {
+    volatilityBoost: 0,
+    importance: "Contexto estándar",
+    notes: ["Sin alerta contextual manual registrada."]
+  };
+}
+
+function getVolatility(prediction, match) {
+  const context = getContextForMatch(match);
+
+  let score = 40;
+
+  const favProb = prediction.favorite.prob;
+  const goalTotal = prediction.homeLambda + prediction.awayLambda;
+  const drawProb = prediction.probs.draw / 100;
+  const bothScoreProb = prediction.bothScore / 100;
+
+  if (favProb < 0.45) score += 28;
+  else if (favProb < 0.56) score += 16;
+  else if (favProb > 0.68) score -= 10;
+
+  if (drawProb > 0.28) score += 8;
+  if (goalTotal > 3.1) score += 12;
+  if (bothScoreProb > 0.58) score += 10;
+  if (prediction.under45 < 68) score += 8;
+
+  score += context.volatilityBoost;
+  score = clampNumber(score, 0, 100);
+
+  let label = "Baja";
+  let emoji = "🟢";
+
+  if (score >= 70) {
+    label = "Alta";
+    emoji = "🔴";
+  } else if (score >= 45) {
+    label = "Media";
+    emoji = "🟡";
+  }
+
+  return {
+    score,
+    label,
+    emoji,
+    context
+  };
 }
 
 function scoreProbability(score, prediction) {
@@ -239,28 +276,34 @@ function winAndUnder45Probability(prediction) {
   return total;
 }
 
-function getPickProbability(pick, prediction) {
+function getPickProbability(pick, prediction, match) {
   const favGoalProb = 1 - poisson(0, prediction.favorite.lambda);
+  const volatility = getVolatility(prediction, match);
+
+  let probability = 0.5;
 
   if (pick.type === "safe") {
-    if (pick.text.includes("anota")) return favGoalProb;
-    return prediction.under45 / 100;
+    probability = pick.text.includes("anota")
+      ? favGoalProb
+      : prediction.under45 / 100;
   }
 
   if (pick.type === "balanced") {
     if (pick.text.includes("Doble oportunidad")) {
-      return prediction.favorite.prob + (prediction.probs.draw / 100);
+      probability = prediction.favorite.prob + prediction.probs.draw / 100;
+    } else {
+      probability = prediction.favorite.prob;
     }
-    return prediction.favorite.prob;
   }
 
   if (pick.type === "aggressive") {
-    if (pick.text.includes("cero")) return winToNilProbability(prediction);
-    return winAndUnder45Probability(prediction);
+    probability = pick.text.includes("cero")
+      ? winToNilProbability(prediction)
+      : winAndUnder45Probability(prediction);
   }
 
   if (pick.type === "score") {
-    return scoreProbability(prediction.score, prediction);
+    probability = scoreProbability(prediction.score, prediction);
   }
 
   if (pick.type === "corners") {
@@ -268,31 +311,58 @@ function getPickProbability(pick, prediction) {
       ? prediction.corners.home
       : prediction.corners.away;
 
-    return cornerFav >= 5 ? 0.64 : 0.56;
+    probability = cornerFav >= 5 ? 0.64 : 0.56;
   }
 
   if (pick.type === "player") {
-    return 0.57;
+    probability = 0.57;
   }
 
-  return 0.5;
+  if (volatility.label === "Alta" && ["balanced", "aggressive", "score", "player"].includes(pick.type)) {
+    probability *= 0.88;
+  }
+
+  if (volatility.label === "Media" && ["aggressive", "score"].includes(pick.type)) {
+    probability *= 0.93;
+  }
+
+  return clampNumber(probability, 0.01, 0.99);
 }
 
 function confidenceLabel(probability) {
-  if (probability >= 0.72) return "Alta";
-  if (probability >= 0.52) return "Media";
+  if (probability >= 0.76) return "Alta";
+  if (probability >= 0.58) return "Media";
   return "Baja";
 }
 
 function riskLabel(probability) {
-  if (probability >= 0.72) return "Bajo";
-  if (probability >= 0.52) return "Medio";
+  if (probability >= 0.76) return "Bajo";
+  if (probability >= 0.58) return "Medio";
   return "Alto";
 }
 
-function decoratePicks(picks, prediction) {
+function safetyScore(item) {
+  const typePenalty = {
+    safe: 0,
+    corners: 7,
+    balanced: 10,
+    aggressive: 22,
+    player: 26,
+    score: 42
+  };
+
+  return (
+    item.pick.probability * 100
+    - item.volatility.score * 0.32
+    - (typePenalty[item.pick.type] || 20)
+  );
+}
+
+function decoratePicks(picks, prediction, match) {
+  const volatility = getVolatility(prediction, match);
+
   return picks.map(pick => {
-    const probability = Math.max(0.01, Math.min(0.99, getPickProbability(pick, prediction)));
+    const probability = getPickProbability(pick, prediction, match);
     const fairOdds = 1 / probability;
     const valueOdds = 1.08 / probability;
 
@@ -302,9 +372,14 @@ function decoratePicks(picks, prediction) {
       fairOdds,
       valueOdds,
       confidence: confidenceLabel(probability),
-      risk: riskLabel(probability)
+      risk: riskLabel(probability),
+      safetyScore: 0,
+      volatility
     };
-  });
+  }).map(pick => ({
+    ...pick,
+    safetyScore: safetyScore({ pick, volatility })
+  }));
 }
 
 function getPlayerSuggestions(favorite) {
@@ -327,7 +402,7 @@ function getPlayerSuggestions(favorite) {
   ];
 }
 
-function getFullPicks(prediction) {
+function getFullPicks(prediction, match) {
   const basePicks = generatePicks(prediction);
   const players = getPlayerSuggestions(prediction.favorite);
 
@@ -338,41 +413,39 @@ function getFullPicks(prediction) {
     text: players[0]
   });
 
-  return decoratePicks(basePicks, prediction);
+  return decoratePicks(basePicks, prediction, match);
 }
 
-function makeWhy(prediction, pick) {
+function makeWhy(prediction, pick, match) {
   const fav = displayName(prediction.favorite.team);
-  const homeGF = prediction.homeStats.gf.toFixed(2);
-  const awayGF = prediction.awayStats.gf.toFixed(2);
-  const homeGA = prediction.homeStats.ga.toFixed(2);
-  const awayGA = prediction.awayStats.ga.toFixed(2);
+  const volatility = getVolatility(prediction, match);
+  const context = volatility.context;
 
   if (pick.type === "safe") {
-    return `${pick.text} aparece como pick sólido porque ${fav} tiene una expectativa de gol de ${prediction.favorite.lambda.toFixed(2)} y el mercado estimado supera ${formatPct(pick.probability)}. Es un pick pensado para estabilidad, no para pagar alto.`;
+    return `${pick.text} aparece como pick sólido porque ${fav} tiene expectativa de gol de ${prediction.favorite.lambda.toFixed(2)} y una probabilidad IA de ${formatPct(pick.probability)}. Volatilidad del partido: ${volatility.label}.`;
   }
 
   if (pick.type === "balanced") {
-    return `${pick.text} tiene valor medio porque el modelo le da a ${fav} la mayor probabilidad de resultado. Forma reciente: ${displayName(prediction.home)} GF ${homeGF}, GA ${homeGA}; ${displayName(prediction.away)} GF ${awayGF}, GA ${awayGA}.`;
+    return `${pick.text} depende más del resultado. El modelo favorece a ${fav}, pero ajusta la confianza por contexto: ${context.importance}.`;
   }
 
   if (pick.type === "aggressive") {
-    return `${pick.text} es interesante, pero volátil. Depende de que ${fav} gane y limite mucho al rival. Úsalo como pick pequeño o combinado con cautela.`;
+    return `${pick.text} tiene lógica, pero es volátil. Se recomienda solo como jugada pequeña o si el momio supera @${formatOdds(pick.valueOdds)}.`;
   }
 
   if (pick.type === "score") {
-    return `El marcador ${prediction.score} es el más probable dentro de la matriz Poisson, pero los marcadores exactos siempre tienen probabilidad baja. Es útil para momios altos, no para apuesta fuerte.`;
+    return `El marcador ${prediction.score} es el más probable de la matriz, pero el marcador exacto siempre tiene varianza alta. No debe ir en parley de baja volatilidad.`;
   }
 
   if (pick.type === "corners") {
-    return `El pick de córners sale como proxy del dominio ofensivo esperado. No viene directo del CSV, porque el archivo histórico no incluye córners; se estima con goles esperados y superioridad ofensiva.`;
+    return `El pick de córners es proxy de dominio ofensivo. Funciona mejor cuando el favorito proyecta más volumen, pero no sustituye datos reales de tiros/córners en vivo.`;
   }
 
   if (pick.type === "player") {
-    return `El pick de jugador es una sugerencia proxy basada en el equipo favorito y roles ofensivos conocidos. Para hacerlo exacto necesitaremos datos en vivo de titulares, tiros y props.`;
+    return `El pick de jugador depende mucho de alineación confirmada y estado físico. Antes de la API debe tratarse como sugerencia, no como pick premium.`;
   }
 
-  return "El modelo combina forma reciente, goles esperados y distribución de marcadores.";
+  return "El modelo combina forma reciente, goles esperados, contexto y volatilidad.";
 }
 
 function getMatchesByDate(date) {
@@ -380,17 +453,18 @@ function getMatchesByDate(date) {
 }
 
 function getCandidatesForDate(date) {
-  const matches = getMatchesByDate(date);
   const candidates = [];
 
-  matches.forEach(match => {
+  getMatchesByDate(date).forEach(match => {
     const prediction = predictMatch(resultsData, match.home, match.away);
-    const picks = getFullPicks(prediction);
+    const volatility = getVolatility(prediction, match);
+    const picks = getFullPicks(prediction, match);
 
     picks.forEach(pick => {
       candidates.push({
         match,
         prediction,
+        volatility,
         pick
       });
     });
@@ -399,13 +473,255 @@ function getCandidatesForDate(date) {
   return candidates;
 }
 
+function getFilteredCandidates(date) {
+  const rules = getProfileRules();
+
+  return getCandidatesForDate(date)
+    .filter(item => rules.topTypes.includes(item.pick.type))
+    .filter(item => item.pick.probability >= rules.minProbability)
+    .filter(item => {
+      if (!settings.hideHighVolatility) return true;
+      return item.volatility.label !== "Alta";
+    })
+    .sort((a, b) => b.pick.safetyScore - a.pick.safetyScore);
+}
+
+function buildParlay(date) {
+  const rules = getProfileRules();
+  const usedMatches = new Set();
+
+  const legs = getCandidatesForDate(date)
+    .filter(item => rules.parlayTypes.includes(item.pick.type))
+    .filter(item => item.pick.probability >= rules.minProbability)
+    .filter(item => {
+      if (!settings.hideHighVolatility) return true;
+      return item.volatility.label !== "Alta";
+    })
+    .sort((a, b) => b.pick.safetyScore - a.pick.safetyScore)
+    .filter(item => {
+      if (usedMatches.has(item.match.id)) return false;
+      usedMatches.add(item.match.id);
+      return true;
+    })
+    .slice(0, Number(settings.maxParlay));
+
+  const combinedProbability = legs.reduce((acc, item) => acc * item.pick.probability, 1);
+  const fairOdds = legs.length ? 1 / combinedProbability : 0;
+
+  let risk = "Alto";
+  if (combinedProbability >= 0.55) risk = "Bajo";
+  else if (combinedProbability >= 0.35) risk = "Medio";
+
+  return {
+    legs,
+    combinedProbability,
+    fairOdds,
+    risk
+  };
+}
+
+function getAvoidedPicks(date) {
+  return getCandidatesForDate(date)
+    .filter(item => {
+      if (item.pick.type === "score") return true;
+      if (item.pick.type === "player" && settings.profile !== "aggressive") return true;
+      if (item.volatility.label === "Alta" && ["balanced", "aggressive"].includes(item.pick.type)) return true;
+      if (item.pick.probability < 0.42) return true;
+      return false;
+    })
+    .slice(0, 5);
+}
+
+function pickKey(matchId, pickType) {
+  return `${matchId}__${pickType}`;
+}
+
+function getPickState(matchId, pickType) {
+  const key = pickKey(matchId, pickType);
+  return record.pickStates[key]?.status || null;
+}
+
+function computeRecordStats() {
+  const stats = {
+    wins: 0,
+    losses: 0,
+    byType: {}
+  };
+
+  PICK_TYPES.forEach(type => {
+    stats.byType[type.key] = { wins: 0, losses: 0 };
+  });
+
+  Object.values(record.pickStates || {}).forEach(item => {
+    if (item.status === "win") {
+      stats.wins++;
+      stats.byType[item.type].wins++;
+    }
+
+    if (item.status === "loss") {
+      stats.losses++;
+      stats.byType[item.type].losses++;
+    }
+  });
+
+  return stats;
+}
+
+function ensureRecordBlocks() {
+  if (!document.getElementById("typeStats")) {
+    resetBtn.insertAdjacentHTML("beforebegin", `<div id="typeStats" class="type-stats"></div>`);
+  }
+
+  if (!document.getElementById("historyList")) {
+    resetBtn.insertAdjacentHTML(
+      "beforebegin",
+      `
+      <h3 class="mini-title">Últimos resultados</h3>
+      <div id="historyList" class="history-list"></div>
+      `
+    );
+  }
+}
+
+function renderRecord() {
+  ensureRecordBlocks();
+
+  const stats = computeRecordStats();
+  const total = stats.wins + stats.losses;
+
+  winsEl.textContent = stats.wins;
+  lossesEl.textContent = stats.losses;
+  hitRateEl.textContent = total ? `${Math.round((stats.wins / total) * 100)}%` : "0%";
+
+  renderTypeStats(stats);
+  renderHistory();
+}
+
+function renderTypeStats(stats) {
+  const typeStats = document.getElementById("typeStats");
+
+  typeStats.innerHTML = PICK_TYPES.map(type => {
+    const item = stats.byType[type.key];
+    const total = item.wins + item.losses;
+    const rate = total ? Math.round((item.wins / total) * 100) : 0;
+
+    return `
+      <div class="type-row">
+        <div>
+          <strong>${type.emoji} ${type.name}</strong>
+          <span>${item.wins} buenas / ${item.losses} malas</span>
+        </div>
+        <div class="mini-rate">${rate}%</div>
+      </div>
+    `;
+  }).join("");
+}
+
+function renderHistory() {
+  const historyList = document.getElementById("historyList");
+
+  const items = Object.values(record.pickStates || {})
+    .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
+    .slice(0, 8);
+
+  if (!items.length) {
+    historyList.innerHTML = `<p class="note">Todavía no has marcado ningún pick.</p>`;
+    return;
+  }
+
+  historyList.innerHTML = items.map(item => `
+    <div class="history-item">
+      <strong>${item.status === "win" ? "✅" : "❌"} ${item.pick}</strong>
+      <span>${item.match} · ${item.typeLabel}</span>
+    </div>
+  `).join("");
+}
+
+function togglePick(matchId, pickType, status) {
+  const match = currentMatches.find(item => item.id === matchId);
+  if (!match) return;
+
+  const prediction = predictMatch(resultsData, match.home, match.away);
+  const picks = getFullPicks(prediction, match);
+  const pick = picks.find(item => item.type === pickType);
+  if (!pick) return;
+
+  const key = pickKey(matchId, pickType);
+  const current = record.pickStates[key];
+
+  if (current && current.status === status) {
+    delete record.pickStates[key];
+  } else {
+    record.pickStates[key] = {
+      matchId,
+      type: pickType,
+      typeLabel: pick.label,
+      pick: pick.text,
+      match: matchName(match),
+      status,
+      updatedAt: new Date().toISOString()
+    };
+  }
+
+  saveRecord();
+  renderMatch(match);
+}
+
+function renderSettingsPanel() {
+  const rules = getProfileRules();
+
+  return `
+    <div class="settings-box">
+      <div class="settings-head">
+        <strong>Configuración del modelo</strong>
+        <span>Modo actual: ${rules.label}</span>
+      </div>
+
+      <label>Perfil de riesgo</label>
+      <select onchange="updateSetting('profile', this.value)">
+        <option value="safe" ${settings.profile === "safe" ? "selected" : ""}>🛡️ Seguro</option>
+        <option value="balanced" ${settings.profile === "balanced" ? "selected" : ""}>⚖️ Equilibrado</option>
+        <option value="aggressive" ${settings.profile === "aggressive" ? "selected" : ""}>🔥 Agresivo</option>
+      </select>
+
+      <label>Máximo picks en parley</label>
+      <select onchange="updateSetting('maxParlay', Number(this.value))">
+        <option value="2" ${Number(settings.maxParlay) === 2 ? "selected" : ""}>2 picks</option>
+        <option value="3" ${Number(settings.maxParlay) === 3 ? "selected" : ""}>3 picks</option>
+        <option value="4" ${Number(settings.maxParlay) === 4 ? "selected" : ""}>4 picks</option>
+        <option value="5" ${Number(settings.maxParlay) === 5 ? "selected" : ""}>5 picks</option>
+      </select>
+
+      <label class="switch-row">
+        <input type="checkbox" ${settings.hideHighVolatility ? "checked" : ""} onchange="updateSetting('hideHighVolatility', this.checked)" />
+        Ocultar partidos de alta volatilidad
+      </label>
+
+      <label class="switch-row">
+        <input type="checkbox" ${settings.showAggressive ? "checked" : ""} onchange="updateSetting('showAggressive', this.checked)" />
+        Mostrar pick agresivo interesante
+      </label>
+    </div>
+  `;
+}
+
+function updateSetting(key, value) {
+  settings[key] = value;
+  saveSettings();
+
+  renderDailySuggestion();
+
+  const match = currentMatches.find(item => item.id === select.value);
+  if (match) renderMatch(match);
+}
+
 function renderDailyCard(title, item, subtitle) {
   if (!item) {
     return `
       <div class="daily-card">
         <span>${title}</span>
-        <strong>Sin datos suficientes</strong>
-        <small>Selecciona otra fecha</small>
+        <strong>Sin pick suficiente</strong>
+        <small>El filtro actual es muy estricto</small>
         <em>—</em>
       </div>
     `;
@@ -421,14 +737,69 @@ function renderDailyCard(title, item, subtitle) {
   `;
 }
 
+function renderParlay(date) {
+  const parlay = buildParlay(date);
+
+  if (!parlay.legs.length) {
+    return `
+      <div class="parlay-box">
+        <h3>🧩 Parley recomendado</h3>
+        <p class="note">No hay suficientes picks que pasen los filtros actuales.</p>
+      </div>
+    `;
+  }
+
+  return `
+    <div class="parlay-box">
+      <h3>🧩 Parley recomendado</h3>
+      <p class="note">Perfil: <strong>${getProfileRules().label}</strong>. Ningún parley es seguro; esta es la combinación con menor volatilidad según tu configuración.</p>
+
+      ${parlay.legs.map((item, index) => `
+        <button class="parlay-leg" onclick="selectMatchById('${item.match.id}')">
+          <span>${index + 1}</span>
+          <div>
+            <strong>${item.pick.text}</strong>
+            <small>${matchName(item.match)} · IA ${formatPct(item.pick.probability)} · ${item.volatility.emoji} Volatilidad ${item.volatility.label}</small>
+          </div>
+        </button>
+      `).join("")}
+
+      <div class="parlay-summary">
+        <div><strong>${formatPct(parlay.combinedProbability)}</strong><span>Prob. combinada</span></div>
+        <div><strong>@${formatOdds(parlay.fairOdds)}</strong><span>Momio justo</span></div>
+        <div><strong>${parlay.risk}</strong><span>Riesgo</span></div>
+      </div>
+    </div>
+  `;
+}
+
+function renderAvoidedPicks(date) {
+  const avoided = getAvoidedPicks(date);
+
+  if (!avoided.length) {
+    return "";
+  }
+
+  return `
+    <div class="avoid-box">
+      <h3>⚠️ Picks evitados</h3>
+      <p class="note">No todo lo que aparece en el modelo debe jugarse.</p>
+
+      ${avoided.map(item => `
+        <div class="avoid-row">
+          <strong>❌ ${item.pick.text}</strong>
+          <span>${matchName(item.match)} · IA ${formatPct(item.pick.probability)} · Volatilidad ${item.volatility.label}</span>
+        </div>
+      `).join("")}
+    </div>
+  `;
+}
+
 function renderTopPicksList(date) {
-  const ranked = getCandidatesForDate(date)
-    .filter(item => item.pick.type !== "score")
-    .sort((a, b) => b.pick.probability - a.pick.probability)
-    .slice(0, 8);
+  const ranked = getFilteredCandidates(date).slice(0, 8);
 
   if (!ranked.length) {
-    return `<p class="note">No hay picks disponibles para esta fecha.</p>`;
+    return `<p class="note">No hay picks que superen los filtros actuales.</p>`;
   }
 
   return `
@@ -453,30 +824,38 @@ function renderDailySuggestion() {
 
   const solid = candidates
     .filter(item => ["safe", "corners"].includes(item.pick.type))
-    .sort((a, b) => b.pick.probability - a.pick.probability)[0];
+    .filter(item => item.volatility.label !== "Alta")
+    .sort((a, b) => b.pick.safetyScore - a.pick.safetyScore)[0];
 
   const value = candidates
-    .filter(item => ["safe", "balanced", "aggressive"].includes(item.pick.type))
-    .filter(item => item.pick.probability >= 0.42)
+    .filter(item => ["safe", "balanced", "corners"].includes(item.pick.type))
+    .filter(item => item.pick.probability >= 0.58)
+    .filter(item => item.volatility.label !== "Alta")
     .sort((a, b) => a.pick.valueOdds - b.pick.valueOdds)[0];
 
   const risky = candidates
     .filter(item => ["aggressive", "score"].includes(item.pick.type))
-    .filter(item => item.pick.probability >= 0.07 && item.pick.probability <= 0.40)
+    .filter(item => item.pick.probability >= 0.07 && item.pick.probability <= 0.45)
     .sort((a, b) => b.pick.probability - a.pick.probability)[0];
 
   dailySuggestion.innerHTML = `
     <h2>Sugerencia del día</h2>
-    <p class="note">Fecha: <strong>${DATE_LABELS[selectedDate] || selectedDate}</strong>. La app revisa todos los partidos de ese día.</p>
+    <p class="note">Fecha: <strong>${DATE_LABELS[selectedDate] || selectedDate}</strong>. La app revisa todos los partidos y filtra por seguridad.</p>
+
+    ${renderSettingsPanel()}
 
     <div class="daily-grid">
-      ${renderDailyCard("🟢 Más sólido", solid, "Probabilidad alta")}
-      ${renderDailyCard("🔥 Caza-value", value, value ? `Buscar momio arriba de @${formatOdds(value.pick.valueOdds)}` : "—")}
-      ${renderDailyCard("🧨 Arriesgado interesante", risky, "Pago potencial alto")}
+      ${renderDailyCard("🛡️ Pick más sólido", solid, "Prioridad segura")}
+      ${renderDailyCard("💰 Caza-value", value, value ? `Buscar momio arriba de @${formatOdds(value.pick.valueOdds)}` : "—")}
+      ${settings.showAggressive ? renderDailyCard("🔥 Agresivo interesante", risky, "Separado del pick seguro") : ""}
     </div>
 
-    <h3 class="mini-title">Top picks de la fecha</h3>
+    ${renderParlay(selectedDate)}
+
+    <h3 class="mini-title">Top picks según configuración</h3>
     ${renderTopPicksList(selectedDate)}
+
+    ${renderAvoidedPicks(selectedDate)}
   `;
 }
 
@@ -487,13 +866,7 @@ function renderHeatmap(prediction) {
   for (let h = 0; h <= maxGoals; h++) {
     for (let a = 0; a <= maxGoals; a++) {
       const probability = poisson(h, prediction.homeLambda) * poisson(a, prediction.awayLambda);
-
-      cells.push({
-        h,
-        a,
-        probability,
-        score: `${h}-${a}`
-      });
+      cells.push({ h, a, probability, score: `${h}-${a}` });
     }
   }
 
@@ -538,15 +911,42 @@ function renderHeatmap(prediction) {
   `;
 }
 
+function renderPickCard(match, pick) {
+  const state = getPickState(match.id, pick.type);
+  const registeredClass = state ? "registered" : "";
+  const stateClass = state === "win" ? "is-win" : state === "loss" ? "is-loss" : "";
+
+  return `
+    <div class="pick ${pick.type} ${registeredClass} ${stateClass}">
+      <div class="pick-title">${pick.emoji} ${pick.label}</div>
+      <strong>${pick.text}</strong>
+      <p class="pick-meta">IA ${formatPct(pick.probability)} · Riesgo ${pick.risk} · Momio justo @${formatOdds(pick.fairOdds)}</p>
+
+      ${state ? `
+        <div class="result-status">
+          ${state === "win" ? "✅ Registrado como cumplido" : "❌ Registrado como fallido"}
+          <small>Toca el mismo botón para quitarlo o el otro para cambiarlo.</small>
+        </div>
+      ` : ""}
+
+      <div class="actions">
+        <button class="win ${state === "win" ? "active" : ""}" onclick="togglePick('${match.id}', '${pick.type}', 'win')">✅ Se cumplió</button>
+        <button class="lose ${state === "loss" ? "active" : ""}" onclick="togglePick('${match.id}', '${pick.type}', 'loss')">❌ Falló</button>
+      </div>
+    </div>
+  `;
+}
+
 function renderMatch(match) {
   const prediction = predictMatch(resultsData, match.home, match.away);
-  const picks = getFullPicks(prediction);
+  const picks = getFullPicks(prediction, match);
   const players = getPlayerSuggestions(prediction.favorite);
-  const bestPick = [...picks].sort((a, b) => b.probability - a.probability)[0];
+  const volatility = getVolatility(prediction, match);
+  const bestPick = [...picks].sort((a, b) => b.safetyScore - a.safetyScore)[0];
 
   card.innerHTML = `
     <h2 class="match-title">${matchName(match)}</h2>
-    <p class="note">Marcador IA probable: <strong>${prediction.score}</strong>. Favorito del modelo: <strong>${displayName(prediction.favorite.team)}</strong>.</p>
+    <p class="note">Predicción actual según datos disponibles. Favorito del modelo: <strong>${displayName(prediction.favorite.team)}</strong>.</p>
 
     <div class="prob-grid">
       <div class="prob"><strong>${prediction.probs.home}%</strong><span>${displayName(match.home)}</span></div>
@@ -554,10 +954,16 @@ function renderMatch(match) {
       <div class="prob"><strong>${prediction.probs.away}%</strong><span>${displayName(match.away)}</span></div>
     </div>
 
+    <div class="volatility-box">
+      <strong>${volatility.emoji} Volatilidad ${volatility.label}</strong>
+      <span>${volatility.context.importance}</span>
+      ${volatility.context.notes.map(note => `<small>${note}</small>`).join("")}
+    </div>
+
     <div class="insight-grid">
       <div class="insight-card">
-        <span>🎯 Top marcadores</span>
-        <strong>${prediction.topScores.join(" · ")}</strong>
+        <span>🎯 Marcador IA</span>
+        <strong>${prediction.score}</strong>
       </div>
 
       <div class="insight-card">
@@ -586,7 +992,7 @@ function renderMatch(match) {
     <div class="why-box">
       <span>🧠 ¿Por qué?</span>
       <strong>${bestPick.text}</strong>
-      <p>${makeWhy(prediction, bestPick)}</p>
+      <p>${makeWhy(prediction, bestPick, match)}</p>
     </div>
 
     <div class="value-box">
@@ -599,7 +1005,7 @@ function renderMatch(match) {
         `).join("")}
       </select>
 
-      <label for="oddsInput">Momio decimal que ves en Draftea</label>
+      <label for="oddsInput">Momio decimal que ves</label>
       <input id="oddsInput" type="number" min="1.01" step="0.01" placeholder="Ejemplo: 1.85" oninput="analyzeValue()" />
 
       <div id="valueResult" class="value-result">
@@ -607,32 +1013,21 @@ function renderMatch(match) {
       </div>
     </div>
 
-    ${picks.map(pick => `
-      <div class="pick ${pick.type}">
-        <div class="pick-title">${pick.emoji} ${pick.label}</div>
-        <strong>${pick.text}</strong>
-        <p class="pick-meta">IA ${formatPct(pick.probability)} · Riesgo ${pick.risk} · Momio justo @${formatOdds(pick.fairOdds)}</p>
-
-        <div class="actions">
-          <button class="win" onclick="markPick('${match.id}', '${pick.type}', true)">✅ Se cumplió</button>
-          <button class="lose" onclick="markPick('${match.id}', '${pick.type}', false)">❌ Falló</button>
-        </div>
-      </div>
-    `).join("")}
+    ${picks.map(pick => renderPickCard(match, pick)).join("")}
 
     <p class="note">
-      Modelo actual: forma reciente ponderada + goles esperados + distribución Poisson. 
-      Córners y jugadores siguen siendo proxy hasta conectar API en vivo.
+      Modelo actual: histórico + forma reciente + goles esperados + contexto manual + volatilidad. 
+      Jugadores y córners siguen siendo proxy hasta conectar API en vivo.
     </p>
   `;
 }
 
 function analyzeValue() {
-  const match = currentMatches.find(m => m.id === select.value);
+  const match = currentMatches.find(item => item.id === select.value);
   if (!match) return;
 
   const prediction = predictMatch(resultsData, match.home, match.away);
-  const picks = getFullPicks(prediction);
+  const picks = getFullPicks(prediction, match);
 
   const valuePickSelect = document.getElementById("valuePickSelect");
   const oddsInput = document.getElementById("oddsInput");
@@ -654,7 +1049,7 @@ function analyzeValue() {
 
   const implied = 1 / odds;
   const edge = pick.probability - implied;
-  const ev = (pick.probability * odds) - 1;
+  const ev = pick.probability * odds - 1;
 
   let label = "🔴 Sin value";
   let className = "value-result bad";
@@ -674,42 +1069,17 @@ function analyzeValue() {
   `;
 }
 
-function markPick(matchId, pickType, ok) {
-  const match = currentMatches.find(m => m.id === matchId);
-  if (!match) return;
-
-  const prediction = predictMatch(resultsData, match.home, match.away);
-  const picks = getFullPicks(prediction);
-  const pick = picks.find(p => p.type === pickType);
-
-  if (!pick) return;
-
-  if (ok) {
-    record.wins++;
-    record.byType[pickType].wins++;
-  } else {
-    record.losses++;
-    record.byType[pickType].losses++;
-  }
-
-  record.history.push({
-    match: matchName(match),
-    pick: pick.text,
-    type: pickType,
-    typeLabel: pick.label,
-    ok,
-    date: new Date().toISOString()
-  });
-
-  saveRecord();
-}
-
 function buildDateOptions() {
   const dates = [...new Set(currentMatches.map(match => match.date))];
 
   dateSelect.innerHTML = dates.map(date => `
     <option value="${date}">${DATE_LABELS[date] || date}</option>
   `).join("");
+
+  const today = new Date().toISOString().slice(0, 10);
+  if (dates.includes(today)) {
+    dateSelect.value = today;
+  }
 }
 
 function buildMatchOptions() {
@@ -742,7 +1112,7 @@ async function init() {
 
   dailySuggestion.innerHTML = `
     <h2>Sugerencia del día</h2>
-    <p class="note">Cargando modelo...</p>
+    <p class="note">Cargando configuración y modelo...</p>
   `;
 
   try {
@@ -779,22 +1149,24 @@ dateSelect.addEventListener("change", () => {
   buildMatchOptions();
   renderDailySuggestion();
 
-  const match = currentMatches.find(m => m.id === select.value);
-  renderMatch(match);
+  const match = currentMatches.find(item => item.id === select.value);
+  if (match) renderMatch(match);
 });
 
 select.addEventListener("change", () => {
-  const match = currentMatches.find(m => m.id === select.value);
-  renderMatch(match);
+  const match = currentMatches.find(item => item.id === select.value);
+  if (match) renderMatch(match);
 });
 
 resetBtn.addEventListener("click", () => {
   const confirmReset = confirm("¿Seguro que quieres borrar todo tu historial?");
   if (!confirmReset) return;
 
-  record = createEmptyRecord();
+  record = { pickStates: {} };
   saveRecord();
+
+  const match = currentMatches.find(item => item.id === select.value);
+  if (match) renderMatch(match);
 });
 
-normalizeRecord();
 init();

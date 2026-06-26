@@ -56,7 +56,9 @@ const DEFAULT_SETTINGS = {
   profile: "safe",
   maxParlay: 3,
   hideHighVolatility: true,
-  showAggressive: true
+  showAggressive: true,
+  defaultHouse: "Draftea",
+  bankroll: 1000
 };
 
 const CONTEXT_FACTORS = {
@@ -95,42 +97,41 @@ const CONTEXT_FACTORS = {
   }
 };
 
-const dateSelect = document.getElementById("dateSelect");
-const select = document.getElementById("matchSelect");
-const card = document.getElementById("matchCard");
-const dailySuggestion = document.getElementById("dailySuggestion");
-
-const winsEl = document.getElementById("wins");
-const lossesEl = document.getElementById("losses");
-const hitRateEl = document.getElementById("hitRate");
-const resetBtn = document.getElementById("resetBtn");
-
-const RECORD_KEY = "matchiq_record_v6";
-const SETTINGS_KEY = "matchiq_settings_v6";
+const STORAGE_KEYS = {
+  settings: "matchiq_settings_v7",
+  cart: "matchiq_cart_v7",
+  tickets: "matchiq_tickets_v7",
+  pickStates: "matchiq_pick_states_v7"
+};
 
 let resultsData = [];
 let currentMatches = [];
+let activeTab = "home";
 
-let settings = loadSettings();
-let record = loadRecord();
+let settings = loadJSON(STORAGE_KEYS.settings, DEFAULT_SETTINGS);
+let cart = loadJSON(STORAGE_KEYS.cart, []);
+let tickets = loadJSON(STORAGE_KEYS.tickets, []);
+let pickStates = loadJSON(STORAGE_KEYS.pickStates, {});
 
-function loadSettings() {
-  const saved = JSON.parse(localStorage.getItem(SETTINGS_KEY));
-  return { ...DEFAULT_SETTINGS, ...(saved || {}) };
+const screens = {
+  home: document.getElementById("screen-home"),
+  recommended: document.getElementById("screen-recommended"),
+  ticket: document.getElementById("screen-ticket"),
+  history: document.getElementById("screen-history"),
+  profile: document.getElementById("screen-profile")
+};
+
+function loadJSON(key, fallback) {
+  try {
+    const saved = JSON.parse(localStorage.getItem(key));
+    return saved ?? fallback;
+  } catch {
+    return fallback;
+  }
 }
 
-function saveSettings() {
-  localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
-}
-
-function loadRecord() {
-  const saved = JSON.parse(localStorage.getItem(RECORD_KEY));
-  return saved || { pickStates: {} };
-}
-
-function saveRecord() {
-  localStorage.setItem(RECORD_KEY, JSON.stringify(record));
-  renderRecord();
+function saveJSON(key, value) {
+  localStorage.setItem(key, JSON.stringify(value));
 }
 
 function displayName(team) {
@@ -147,6 +148,13 @@ function createMatchId(match) {
     .replaceAll(" ", "-")
     .replaceAll(".", "")
     .replaceAll("'", "");
+}
+
+function money(value) {
+  return new Intl.NumberFormat("es-MX", {
+    style: "currency",
+    currency: "MXN"
+  }).format(Number(value || 0));
 }
 
 function formatPct(value) {
@@ -168,8 +176,7 @@ function getProfileRules() {
       label: "⚖️ Equilibrado",
       minProbability: 0.58,
       parlayTypes: ["safe", "balanced", "corners", "aggressive"],
-      topTypes: ["safe", "balanced", "corners", "aggressive", "player"],
-      allowHighVolatility: false
+      topTypes: ["safe", "balanced", "corners", "aggressive", "player"]
     };
   }
 
@@ -178,8 +185,7 @@ function getProfileRules() {
       label: "🔥 Agresivo",
       minProbability: 0.42,
       parlayTypes: ["safe", "balanced", "corners", "aggressive", "player"],
-      topTypes: ["safe", "balanced", "corners", "aggressive", "player", "score"],
-      allowHighVolatility: true
+      topTypes: ["safe", "balanced", "corners", "aggressive", "player", "score"]
     };
   }
 
@@ -187,8 +193,7 @@ function getProfileRules() {
     label: "🛡️ Seguro",
     minProbability: 0.70,
     parlayTypes: ["safe", "balanced", "corners"],
-    topTypes: ["safe", "balanced", "corners"],
-    allowHighVolatility: false
+    topTypes: ["safe", "balanced", "corners"]
   };
 }
 
@@ -204,7 +209,6 @@ function getVolatility(prediction, match) {
   const context = getContextForMatch(match);
 
   let score = 40;
-
   const favProb = prediction.favorite.prob;
   const goalTotal = prediction.homeLambda + prediction.awayLambda;
   const drawProb = prediction.probs.draw / 100;
@@ -233,12 +237,7 @@ function getVolatility(prediction, match) {
     emoji = "🟡";
   }
 
-  return {
-    score,
-    label,
-    emoji,
-    context
-  };
+  return { score, label, emoji, context };
 }
 
 function scoreProbability(score, prediction) {
@@ -302,9 +301,7 @@ function getPickProbability(pick, prediction, match) {
       : winAndUnder45Probability(prediction);
   }
 
-  if (pick.type === "score") {
-    probability = scoreProbability(prediction.score, prediction);
-  }
+  if (pick.type === "score") probability = scoreProbability(prediction.score, prediction);
 
   if (pick.type === "corners") {
     const cornerFav = prediction.favorite.side === "home"
@@ -314,9 +311,7 @@ function getPickProbability(pick, prediction, match) {
     probability = cornerFav >= 5 ? 0.64 : 0.56;
   }
 
-  if (pick.type === "player") {
-    probability = 0.57;
-  }
+  if (pick.type === "player") probability = 0.57;
 
   if (volatility.label === "Alta" && ["balanced", "aggressive", "score", "player"].includes(pick.type)) {
     probability *= 0.88;
@@ -366,20 +361,20 @@ function decoratePicks(picks, prediction, match) {
     const fairOdds = 1 / probability;
     const valueOdds = 1.08 / probability;
 
-    return {
+    const decorated = {
       ...pick,
       probability,
       fairOdds,
       valueOdds,
       confidence: confidenceLabel(probability),
       risk: riskLabel(probability),
-      safetyScore: 0,
-      volatility
+      volatility,
+      safetyScore: 0
     };
-  }).map(pick => ({
-    ...pick,
-    safetyScore: safetyScore({ pick, volatility })
-  }));
+
+    decorated.safetyScore = safetyScore({ pick: decorated, volatility });
+    return decorated;
+  });
 }
 
 function getPlayerSuggestions(favorite) {
@@ -416,38 +411,6 @@ function getFullPicks(prediction, match) {
   return decoratePicks(basePicks, prediction, match);
 }
 
-function makeWhy(prediction, pick, match) {
-  const fav = displayName(prediction.favorite.team);
-  const volatility = getVolatility(prediction, match);
-  const context = volatility.context;
-
-  if (pick.type === "safe") {
-    return `${pick.text} aparece como pick sólido porque ${fav} tiene expectativa de gol de ${prediction.favorite.lambda.toFixed(2)} y una probabilidad IA de ${formatPct(pick.probability)}. Volatilidad del partido: ${volatility.label}.`;
-  }
-
-  if (pick.type === "balanced") {
-    return `${pick.text} depende más del resultado. El modelo favorece a ${fav}, pero ajusta la confianza por contexto: ${context.importance}.`;
-  }
-
-  if (pick.type === "aggressive") {
-    return `${pick.text} tiene lógica, pero es volátil. Se recomienda solo como jugada pequeña o si el momio supera @${formatOdds(pick.valueOdds)}.`;
-  }
-
-  if (pick.type === "score") {
-    return `El marcador ${prediction.score} es el más probable de la matriz, pero el marcador exacto siempre tiene varianza alta. No debe ir en parley de baja volatilidad.`;
-  }
-
-  if (pick.type === "corners") {
-    return `El pick de córners es proxy de dominio ofensivo. Funciona mejor cuando el favorito proyecta más volumen, pero no sustituye datos reales de tiros/córners en vivo.`;
-  }
-
-  if (pick.type === "player") {
-    return `El pick de jugador depende mucho de alineación confirmada y estado físico. Antes de la API debe tratarse como sugerencia, no como pick premium.`;
-  }
-
-  return "El modelo combina forma reciente, goles esperados, contexto y volatilidad.";
-}
-
 function getMatchesByDate(date) {
   return currentMatches.filter(match => match.date === date);
 }
@@ -461,12 +424,7 @@ function getCandidatesForDate(date) {
     const picks = getFullPicks(prediction, match);
 
     picks.forEach(pick => {
-      candidates.push({
-        match,
-        prediction,
-        volatility,
-        pick
-      });
+      candidates.push({ match, prediction, volatility, pick });
     });
   });
 
@@ -484,6 +442,69 @@ function getFilteredCandidates(date) {
       return item.volatility.label !== "Alta";
     })
     .sort((a, b) => b.pick.safetyScore - a.pick.safetyScore);
+}
+
+function currentDateValue() {
+  const selector = document.getElementById("dateSelect");
+  return selector?.value || currentMatches[0]?.date || "2026-06-26";
+}
+
+function makeCartItem(item) {
+  return {
+    id: `${item.match.id}__${item.pick.type}`,
+    matchId: item.match.id,
+    match: matchName(item.match),
+    date: item.match.date,
+    pickType: item.pick.type,
+    typeLabel: item.pick.label,
+    pick: item.pick.text,
+    probability: item.pick.probability,
+    fairOdds: item.pick.fairOdds,
+    volatility: item.volatility.label,
+    createdAt: new Date().toISOString()
+  };
+}
+
+function addToCart(matchId, pickType) {
+  const match = currentMatches.find(item => item.id === matchId);
+  if (!match) return;
+
+  const prediction = predictMatch(resultsData, match.home, match.away);
+  const volatility = getVolatility(prediction, match);
+  const picks = getFullPicks(prediction, match);
+  const pick = picks.find(item => item.type === pickType);
+
+  if (!pick) return;
+
+  const candidate = { match, prediction, volatility, pick };
+  const cartItem = makeCartItem(candidate);
+
+  if (cart.some(item => item.id === cartItem.id)) {
+    showToast("Ese pick ya está en el ticket");
+    return;
+  }
+
+  cart.push(cartItem);
+  saveJSON(STORAGE_KEYS.cart, cart);
+  showToast("Agregado al ticket");
+  renderAll();
+}
+
+function removeFromCart(id) {
+  cart = cart.filter(item => item.id !== id);
+  saveJSON(STORAGE_KEYS.cart, cart);
+  renderAll();
+}
+
+function clearCart() {
+  cart = [];
+  saveJSON(STORAGE_KEYS.cart, cart);
+  renderAll();
+}
+
+function combinedProbability(items = cart) {
+  if (!items.length) return 0;
+  return items.reduce((acc, item) => acc * item.probability, 1);
 }
 
 function buildParlay(date) {
@@ -505,136 +526,122 @@ function buildParlay(date) {
     })
     .slice(0, Number(settings.maxParlay));
 
-  const combinedProbability = legs.reduce((acc, item) => acc * item.pick.probability, 1);
-  const fairOdds = legs.length ? 1 / combinedProbability : 0;
+  return legs;
+}
 
-  let risk = "Alto";
-  if (combinedProbability >= 0.55) risk = "Bajo";
-  else if (combinedProbability >= 0.35) risk = "Medio";
+function addRecommendedParlay() {
+  const legs = buildParlay(currentDateValue());
+
+  legs.forEach(item => {
+    const cartItem = makeCartItem(item);
+    if (!cart.some(existing => existing.id === cartItem.id)) {
+      cart.push(cartItem);
+    }
+  });
+
+  saveJSON(STORAGE_KEYS.cart, cart);
+  showToast("Parley agregado al ticket");
+  renderAll();
+  switchTab("ticket");
+}
+
+function saveTicket() {
+  if (!cart.length) {
+    showToast("Agrega picks al ticket primero");
+    return;
+  }
+
+  const house = document.getElementById("ticketHouse")?.value || settings.defaultHouse;
+  const odds = Number(document.getElementById("ticketOdds")?.value);
+  const stake = Number(document.getElementById("ticketStake")?.value);
+
+  if (!odds || odds <= 1) {
+    showToast("Escribe un momio válido");
+    return;
+  }
+
+  if (!stake || stake <= 0) {
+    showToast("Escribe un importe válido");
+    return;
+  }
+
+  const prob = combinedProbability(cart);
+  const fairOdds = prob ? 1 / prob : 0;
+  const payout = stake * odds;
+  const profit = payout - stake;
+  const implied = 1 / odds;
+  const edge = prob - implied;
+
+  const ticket = {
+    id: `T-${Date.now()}`,
+    house,
+    odds,
+    stake,
+    payout,
+    profitIfWin: profit,
+    probability: prob,
+    fairOdds,
+    edge,
+    status: "pending",
+    picks: [...cart],
+    createdAt: new Date().toISOString()
+  };
+
+  tickets.unshift(ticket);
+  saveJSON(STORAGE_KEYS.tickets, tickets);
+  clearCart();
+  showToast("Ticket guardado");
+  switchTab("history");
+}
+
+function updateTicketStatus(ticketId, status) {
+  tickets = tickets.map(ticket => {
+    if (ticket.id !== ticketId) return ticket;
+    return {
+      ...ticket,
+      status,
+      settledAt: new Date().toISOString()
+    };
+  });
+
+  saveJSON(STORAGE_KEYS.tickets, tickets);
+  renderAll();
+}
+
+function ticketProfit(ticket) {
+  if (ticket.status === "won") return ticket.profitIfWin;
+  if (ticket.status === "lost") return -ticket.stake;
+  return 0;
+}
+
+function bankrollStats() {
+  const settled = tickets.filter(t => ["won", "lost"].includes(t.status));
+  const totalStaked = settled.reduce((sum, t) => sum + Number(t.stake || 0), 0);
+  const net = settled.reduce((sum, t) => sum + ticketProfit(t), 0);
+  const roi = totalStaked ? net / totalStaked : 0;
+
+  const won = tickets.filter(t => t.status === "won").length;
+  const lost = tickets.filter(t => t.status === "lost").length;
+  const pending = tickets.filter(t => t.status === "pending").length;
 
   return {
-    legs,
-    combinedProbability,
-    fairOdds,
-    risk
+    bankroll: Number(settings.bankroll || 0) + net,
+    totalStaked,
+    net,
+    roi,
+    won,
+    lost,
+    pending,
+    total: tickets.length
   };
 }
 
-function getAvoidedPicks(date) {
-  return getCandidatesForDate(date)
-    .filter(item => {
-      if (item.pick.type === "score") return true;
-      if (item.pick.type === "player" && settings.profile !== "aggressive") return true;
-      if (item.volatility.label === "Alta" && ["balanced", "aggressive"].includes(item.pick.type)) return true;
-      if (item.pick.probability < 0.42) return true;
-      return false;
-    })
-    .slice(0, 5);
-}
-
-function pickKey(matchId, pickType) {
+function pickStateKey(matchId, pickType) {
   return `${matchId}__${pickType}`;
 }
 
 function getPickState(matchId, pickType) {
-  const key = pickKey(matchId, pickType);
-  return record.pickStates[key]?.status || null;
-}
-
-function computeRecordStats() {
-  const stats = {
-    wins: 0,
-    losses: 0,
-    byType: {}
-  };
-
-  PICK_TYPES.forEach(type => {
-    stats.byType[type.key] = { wins: 0, losses: 0 };
-  });
-
-  Object.values(record.pickStates || {}).forEach(item => {
-    if (item.status === "win") {
-      stats.wins++;
-      stats.byType[item.type].wins++;
-    }
-
-    if (item.status === "loss") {
-      stats.losses++;
-      stats.byType[item.type].losses++;
-    }
-  });
-
-  return stats;
-}
-
-function ensureRecordBlocks() {
-  if (!document.getElementById("typeStats")) {
-    resetBtn.insertAdjacentHTML("beforebegin", `<div id="typeStats" class="type-stats"></div>`);
-  }
-
-  if (!document.getElementById("historyList")) {
-    resetBtn.insertAdjacentHTML(
-      "beforebegin",
-      `
-      <h3 class="mini-title">Últimos resultados</h3>
-      <div id="historyList" class="history-list"></div>
-      `
-    );
-  }
-}
-
-function renderRecord() {
-  ensureRecordBlocks();
-
-  const stats = computeRecordStats();
-  const total = stats.wins + stats.losses;
-
-  winsEl.textContent = stats.wins;
-  lossesEl.textContent = stats.losses;
-  hitRateEl.textContent = total ? `${Math.round((stats.wins / total) * 100)}%` : "0%";
-
-  renderTypeStats(stats);
-  renderHistory();
-}
-
-function renderTypeStats(stats) {
-  const typeStats = document.getElementById("typeStats");
-
-  typeStats.innerHTML = PICK_TYPES.map(type => {
-    const item = stats.byType[type.key];
-    const total = item.wins + item.losses;
-    const rate = total ? Math.round((item.wins / total) * 100) : 0;
-
-    return `
-      <div class="type-row">
-        <div>
-          <strong>${type.emoji} ${type.name}</strong>
-          <span>${item.wins} buenas / ${item.losses} malas</span>
-        </div>
-        <div class="mini-rate">${rate}%</div>
-      </div>
-    `;
-  }).join("");
-}
-
-function renderHistory() {
-  const historyList = document.getElementById("historyList");
-
-  const items = Object.values(record.pickStates || {})
-    .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
-    .slice(0, 8);
-
-  if (!items.length) {
-    historyList.innerHTML = `<p class="note">Todavía no has marcado ningún pick.</p>`;
-    return;
-  }
-
-  historyList.innerHTML = items.map(item => `
-    <div class="history-item">
-      <strong>${item.status === "win" ? "✅" : "❌"} ${item.pick}</strong>
-      <span>${item.match} · ${item.typeLabel}</span>
-    </div>
-  `).join("");
+  return pickStates[pickStateKey(matchId, pickType)]?.status || null;
 }
 
 function togglePick(matchId, pickType, status) {
@@ -646,13 +653,13 @@ function togglePick(matchId, pickType, status) {
   const pick = picks.find(item => item.type === pickType);
   if (!pick) return;
 
-  const key = pickKey(matchId, pickType);
-  const current = record.pickStates[key];
+  const key = pickStateKey(matchId, pickType);
+  const current = pickStates[key];
 
   if (current && current.status === status) {
-    delete record.pickStates[key];
+    delete pickStates[key];
   } else {
-    record.pickStates[key] = {
+    pickStates[key] = {
       matchId,
       type: pickType,
       typeLabel: pick.label,
@@ -663,19 +670,114 @@ function togglePick(matchId, pickType, status) {
     };
   }
 
-  saveRecord();
-  renderMatch(match);
+  saveJSON(STORAGE_KEYS.pickStates, pickStates);
+  renderAll();
 }
 
-function renderSettingsPanel() {
-  const rules = getProfileRules();
+function renderHome() {
+  const stats = bankrollStats();
+  const date = currentDateValue();
+  const candidates = getFilteredCandidates(date);
 
-  return `
-    <div class="settings-box">
-      <div class="settings-head">
-        <strong>Configuración del modelo</strong>
-        <span>Modo actual: ${rules.label}</span>
+  const solid = candidates[0];
+  const parlay = buildParlay(date);
+  const parlayProb = combinedProbability(parlay.map(item => makeCartItem(item)));
+  const parlayFairOdds = parlayProb ? 1 / parlayProb : 0;
+
+  screens.home.innerHTML = `
+    <section class="glass panel">
+      <h2>Inicio</h2>
+      <p class="note">Resumen rápido del modelo y tu bankroll.</p>
+
+      <div class="stats">
+        <div><strong>${money(stats.bankroll)}</strong><span>Bankroll</span></div>
+        <div><strong>${formatPct(stats.roi)}</strong><span>ROI</span></div>
+        <div><strong>${stats.pending}</strong><span>Pendientes</span></div>
       </div>
+    </section>
+
+    <section class="glass panel">
+      <h2>Pick más sólido</h2>
+      ${
+        solid
+          ? `
+            <div class="daily-card static-card">
+              <span>${DATE_LABELS[date] || date}</span>
+              <strong>${solid.pick.text}</strong>
+              <small>${matchName(solid.match)} · IA ${formatPct(solid.pick.probability)} · Volatilidad ${solid.volatility.label}</small>
+              <button class="primary-action" onclick="addToCart('${solid.match.id}', '${solid.pick.type}')">Agregar al ticket</button>
+            </div>
+          `
+          : `<p class="note">No hay picks que superen tus filtros actuales.</p>`
+      }
+    </section>
+
+    <section class="glass panel">
+      <h2>Parley sugerido</h2>
+      <p class="note">Construido según tu perfil: <strong>${getProfileRules().label}</strong>.</p>
+
+      ${
+        parlay.length
+          ? `
+            <div class="parlay-mini">
+              ${parlay.map((item, index) => `
+                <div class="parlay-mini-row">
+                  <span>${index + 1}</span>
+                  <strong>${item.pick.text}</strong>
+                  <small>${matchName(item.match)} · IA ${formatPct(item.pick.probability)}</small>
+                </div>
+              `).join("")}
+            </div>
+
+            <div class="parlay-summary">
+              <div><strong>${formatPct(parlayProb)}</strong><span>Prob. IA</span></div>
+              <div><strong>@${formatOdds(parlayFairOdds)}</strong><span>Momio justo</span></div>
+              <div><strong>${parlay.length}</strong><span>Picks</span></div>
+            </div>
+
+            <button class="primary-action" onclick="addRecommendedParlay()">Agregar parley al ticket</button>
+          `
+          : `<p class="note">No hay suficientes picks para armar parley.</p>`
+      }
+    </section>
+  `;
+}
+
+function renderRecommended() {
+  const dates = [...new Set(currentMatches.map(match => match.date))];
+  const selectedDate = currentDateValue();
+
+  screens.recommended.innerHTML = `
+    <section class="glass panel">
+      <h2>Recomendados</h2>
+      <p class="note">Picks ordenados por seguridad, contexto y volatilidad.</p>
+
+      <label for="dateSelect">Fecha</label>
+      <select id="dateSelect" onchange="renderAll()">
+        ${dates.map(date => `
+          <option value="${date}" ${date === selectedDate ? "selected" : ""}>${DATE_LABELS[date] || date}</option>
+        `).join("")}
+      </select>
+    </section>
+
+    ${renderSettingsBox()}
+
+    <section class="glass panel">
+      <h2>Top picks</h2>
+      ${renderTopPicks(selectedDate)}
+    </section>
+
+    <section class="glass panel">
+      <h2>Partidos</h2>
+      ${renderMatchList(selectedDate)}
+    </section>
+  `;
+}
+
+function renderSettingsBox() {
+  return `
+    <section class="glass panel">
+      <h2>Configuración rápida</h2>
 
       <label>Perfil de riesgo</label>
       <select onchange="updateSetting('profile', this.value)">
@@ -694,426 +796,379 @@ function renderSettingsPanel() {
 
       <label class="switch-row">
         <input type="checkbox" ${settings.hideHighVolatility ? "checked" : ""} onchange="updateSetting('hideHighVolatility', this.checked)" />
-        Ocultar partidos de alta volatilidad
+        Ocultar alta volatilidad
       </label>
-
-      <label class="switch-row">
-        <input type="checkbox" ${settings.showAggressive ? "checked" : ""} onchange="updateSetting('showAggressive', this.checked)" />
-        Mostrar pick agresivo interesante
-      </label>
-    </div>
+    </section>
   `;
 }
 
-function updateSetting(key, value) {
-  settings[key] = value;
-  saveSettings();
-
-  renderDailySuggestion();
-
-  const match = currentMatches.find(item => item.id === select.value);
-  if (match) renderMatch(match);
-}
-
-function renderDailyCard(title, item, subtitle) {
-  if (!item) {
-    return `
-      <div class="daily-card">
-        <span>${title}</span>
-        <strong>Sin pick suficiente</strong>
-        <small>El filtro actual es muy estricto</small>
-        <em>—</em>
-      </div>
-    `;
-  }
-
-  return `
-    <button class="daily-card" onclick="selectMatchById('${item.match.id}')">
-      <span>${title}</span>
-      <strong>${item.pick.text}</strong>
-      <small>${matchName(item.match)}</small>
-      <em>${subtitle} · IA ${formatPct(item.pick.probability)}</em>
-    </button>
-  `;
-}
-
-function renderParlay(date) {
-  const parlay = buildParlay(date);
-
-  if (!parlay.legs.length) {
-    return `
-      <div class="parlay-box">
-        <h3>🧩 Parley recomendado</h3>
-        <p class="note">No hay suficientes picks que pasen los filtros actuales.</p>
-      </div>
-    `;
-  }
-
-  return `
-    <div class="parlay-box">
-      <h3>🧩 Parley recomendado</h3>
-      <p class="note">Perfil: <strong>${getProfileRules().label}</strong>. Ningún parley es seguro; esta es la combinación con menor volatilidad según tu configuración.</p>
-
-      ${parlay.legs.map((item, index) => `
-        <button class="parlay-leg" onclick="selectMatchById('${item.match.id}')">
-          <span>${index + 1}</span>
-          <div>
-            <strong>${item.pick.text}</strong>
-            <small>${matchName(item.match)} · IA ${formatPct(item.pick.probability)} · ${item.volatility.emoji} Volatilidad ${item.volatility.label}</small>
-          </div>
-        </button>
-      `).join("")}
-
-      <div class="parlay-summary">
-        <div><strong>${formatPct(parlay.combinedProbability)}</strong><span>Prob. combinada</span></div>
-        <div><strong>@${formatOdds(parlay.fairOdds)}</strong><span>Momio justo</span></div>
-        <div><strong>${parlay.risk}</strong><span>Riesgo</span></div>
-      </div>
-    </div>
-  `;
-}
-
-function renderAvoidedPicks(date) {
-  const avoided = getAvoidedPicks(date);
-
-  if (!avoided.length) {
-    return "";
-  }
-
-  return `
-    <div class="avoid-box">
-      <h3>⚠️ Picks evitados</h3>
-      <p class="note">No todo lo que aparece en el modelo debe jugarse.</p>
-
-      ${avoided.map(item => `
-        <div class="avoid-row">
-          <strong>❌ ${item.pick.text}</strong>
-          <span>${matchName(item.match)} · IA ${formatPct(item.pick.probability)} · Volatilidad ${item.volatility.label}</span>
-        </div>
-      `).join("")}
-    </div>
-  `;
-}
-
-function renderTopPicksList(date) {
-  const ranked = getFilteredCandidates(date).slice(0, 8);
+function renderTopPicks(date) {
+  const ranked = getFilteredCandidates(date).slice(0, 12);
 
   if (!ranked.length) {
-    return `<p class="note">No hay picks que superen los filtros actuales.</p>`;
+    return `<p class="note">No hay picks que superen la configuración actual.</p>`;
   }
 
   return `
     <div class="top-picks-list">
       ${ranked.map((item, index) => `
-        <button class="top-pick-row" onclick="selectMatchById('${item.match.id}')">
+        <div class="top-pick-row">
           <div class="rank">${index + 1}</div>
           <div>
             <strong>${item.pick.emoji} ${item.pick.text}</strong>
-            <span>${matchName(item.match)} · IA ${formatPct(item.pick.probability)} · Riesgo ${item.pick.risk}</span>
+            <span>${matchName(item.match)} · IA ${formatPct(item.pick.probability)} · ${item.volatility.emoji} ${item.volatility.label}</span>
           </div>
-          <em>@${formatOdds(item.pick.fairOdds)}</em>
-        </button>
+          <button class="mini-add" onclick="addToCart('${item.match.id}', '${item.pick.type}')">+</button>
+        </div>
       `).join("")}
     </div>
   `;
 }
 
-function renderDailySuggestion() {
-  const selectedDate = dateSelect.value;
-  const candidates = getCandidatesForDate(selectedDate);
-
-  const solid = candidates
-    .filter(item => ["safe", "corners"].includes(item.pick.type))
-    .filter(item => item.volatility.label !== "Alta")
-    .sort((a, b) => b.pick.safetyScore - a.pick.safetyScore)[0];
-
-  const value = candidates
-    .filter(item => ["safe", "balanced", "corners"].includes(item.pick.type))
-    .filter(item => item.pick.probability >= 0.58)
-    .filter(item => item.volatility.label !== "Alta")
-    .sort((a, b) => a.pick.valueOdds - b.pick.valueOdds)[0];
-
-  const risky = candidates
-    .filter(item => ["aggressive", "score"].includes(item.pick.type))
-    .filter(item => item.pick.probability >= 0.07 && item.pick.probability <= 0.45)
-    .sort((a, b) => b.pick.probability - a.pick.probability)[0];
-
-  dailySuggestion.innerHTML = `
-    <h2>Sugerencia del día</h2>
-    <p class="note">Fecha: <strong>${DATE_LABELS[selectedDate] || selectedDate}</strong>. La app revisa todos los partidos y filtra por seguridad.</p>
-
-    ${renderSettingsPanel()}
-
-    <div class="daily-grid">
-      ${renderDailyCard("🛡️ Pick más sólido", solid, "Prioridad segura")}
-      ${renderDailyCard("💰 Caza-value", value, value ? `Buscar momio arriba de @${formatOdds(value.pick.valueOdds)}` : "—")}
-      ${settings.showAggressive ? renderDailyCard("🔥 Agresivo interesante", risky, "Separado del pick seguro") : ""}
-    </div>
-
-    ${renderParlay(selectedDate)}
-
-    <h3 class="mini-title">Top picks según configuración</h3>
-    ${renderTopPicksList(selectedDate)}
-
-    ${renderAvoidedPicks(selectedDate)}
-  `;
-}
-
-function renderHeatmap(prediction) {
-  const maxGoals = 4;
-  const cells = [];
-
-  for (let h = 0; h <= maxGoals; h++) {
-    for (let a = 0; a <= maxGoals; a++) {
-      const probability = poisson(h, prediction.homeLambda) * poisson(a, prediction.awayLambda);
-      cells.push({ h, a, probability, score: `${h}-${a}` });
-    }
-  }
-
-  const maxProb = Math.max(...cells.map(cell => cell.probability));
+function renderMatchList(date) {
+  const matches = getMatchesByDate(date);
 
   return `
-    <div class="heatmap-box">
-      <span>🔥 Heatmap de marcador</span>
-      <p class="note">Más brillante = marcador más probable según el modelo.</p>
+    <div class="match-list">
+      ${matches.map(match => {
+        const prediction = predictMatch(resultsData, match.home, match.away);
+        const volatility = getVolatility(prediction, match);
+        const picks = getFullPicks(prediction, match)
+          .sort((a, b) => b.safetyScore - a.safetyScore)
+          .slice(0, 3);
 
-      <div class="heatmap-labels">
-        <div></div>
-        <small>0</small>
-        <small>1</small>
-        <small>2</small>
-        <small>3</small>
-        <small>4</small>
-      </div>
+        return `
+          <div class="match-detail-card">
+            <h3>${matchName(match)}</h3>
+            <p class="note">Marcador IA: <strong>${prediction.score}</strong> · ${volatility.emoji} Volatilidad ${volatility.label}</p>
 
-      <div class="heatmap-grid">
-        ${[0, 1, 2, 3, 4].map(h => `
-          <div class="row-label">${h}</div>
-          ${[0, 1, 2, 3, 4].map(a => {
-            const cell = cells.find(item => item.h === h && item.a === a);
-            const heat = maxProb ? Math.max(0.12, cell.probability / maxProb).toFixed(2) : 0.12;
+            <div class="prob-grid">
+              <div class="prob"><strong>${prediction.probs.home}%</strong><span>${displayName(match.home)}</span></div>
+              <div class="prob"><strong>${prediction.probs.draw}%</strong><span>Empate</span></div>
+              <div class="prob"><strong>${prediction.probs.away}%</strong><span>${displayName(match.away)}</span></div>
+            </div>
 
-            return `
-              <div class="heat-cell" style="--heat:${heat}">
-                <strong>${cell.score}</strong>
-                <small>${Math.round(cell.probability * 100)}%</small>
-              </div>
-            `;
-          }).join("")}
-        `).join("")}
-      </div>
-
-      <div class="heatmap-teams">
-        <small>${displayName(prediction.home)} = filas</small>
-        <small>${displayName(prediction.away)} = columnas</small>
-      </div>
+            ${picks.map(pick => renderPickActions(match, pick)).join("")}
+          </div>
+        `;
+      }).join("")}
     </div>
   `;
 }
 
-function renderPickCard(match, pick) {
+function renderPickActions(match, pick) {
   const state = getPickState(match.id, pick.type);
-  const registeredClass = state ? "registered" : "";
-  const stateClass = state === "win" ? "is-win" : state === "loss" ? "is-loss" : "";
+  const inCart = cart.some(item => item.id === `${match.id}__${pick.type}`);
 
   return `
-    <div class="pick ${pick.type} ${registeredClass} ${stateClass}">
+    <div class="pick ${pick.type} ${state ? "registered" : ""}">
       <div class="pick-title">${pick.emoji} ${pick.label}</div>
       <strong>${pick.text}</strong>
       <p class="pick-meta">IA ${formatPct(pick.probability)} · Riesgo ${pick.risk} · Momio justo @${formatOdds(pick.fairOdds)}</p>
 
-      ${state ? `
-        <div class="result-status">
-          ${state === "win" ? "✅ Registrado como cumplido" : "❌ Registrado como fallido"}
-          <small>Toca el mismo botón para quitarlo o el otro para cambiarlo.</small>
-        </div>
-      ` : ""}
-
-      <div class="actions">
-        <button class="win ${state === "win" ? "active" : ""}" onclick="togglePick('${match.id}', '${pick.type}', 'win')">✅ Se cumplió</button>
-        <button class="lose ${state === "loss" ? "active" : ""}" onclick="togglePick('${match.id}', '${pick.type}', 'loss')">❌ Falló</button>
+      <div class="actions three-actions">
+        <button class="ghost-small ${inCart ? "active" : ""}" onclick="addToCart('${match.id}', '${pick.type}')">${inCart ? "En ticket" : "Agregar"}</button>
+        <button class="win ${state === "win" ? "active" : ""}" onclick="togglePick('${match.id}', '${pick.type}', 'win')">✅</button>
+        <button class="lose ${state === "loss" ? "active" : ""}" onclick="togglePick('${match.id}', '${pick.type}', 'loss')">❌</button>
       </div>
     </div>
   `;
 }
 
-function renderMatch(match) {
-  const prediction = predictMatch(resultsData, match.home, match.away);
-  const picks = getFullPicks(prediction, match);
-  const players = getPlayerSuggestions(prediction.favorite);
-  const volatility = getVolatility(prediction, match);
-  const bestPick = [...picks].sort((a, b) => b.safetyScore - a.safetyScore)[0];
+function renderTicket() {
+  const prob = combinedProbability(cart);
+  const fairOdds = prob ? 1 / prob : 0;
 
-  card.innerHTML = `
-    <h2 class="match-title">${matchName(match)}</h2>
-    <p class="note">Predicción actual según datos disponibles. Favorito del modelo: <strong>${displayName(prediction.favorite.team)}</strong>.</p>
+  screens.ticket.innerHTML = `
+    <section class="glass panel">
+      <h2>Ticket actual</h2>
+      <p class="note">Agrega picks, escribe el momio real de la casa y calcula si hay value.</p>
 
-    <div class="prob-grid">
-      <div class="prob"><strong>${prediction.probs.home}%</strong><span>${displayName(match.home)}</span></div>
-      <div class="prob"><strong>${prediction.probs.draw}%</strong><span>Empate</span></div>
-      <div class="prob"><strong>${prediction.probs.away}%</strong><span>${displayName(match.away)}</span></div>
+      ${
+        cart.length
+          ? `
+            <div class="cart-list">
+              ${cart.map(item => `
+                <div class="cart-item">
+                  <div>
+                    <strong>${item.pick}</strong>
+                    <span>${item.match} · IA ${formatPct(item.probability)} · ${item.volatility}</span>
+                  </div>
+                  <button onclick="removeFromCart('${item.id}')">✕</button>
+                </div>
+              `).join("")}
+            </div>
+
+            <div class="ticket-form">
+              <label>Casa de apuesta</label>
+              <select id="ticketHouse">
+                ${["Draftea", "Caliente", "Codere", "Bet365", "Playdoit", "Otra"].map(house => `
+                  <option value="${house}" ${house === settings.defaultHouse ? "selected" : ""}>${house}</option>
+                `).join("")}
+              </select>
+
+              <label>Momio total de la casa</label>
+              <input id="ticketOdds" type="number" min="1.01" step="0.01" placeholder="Ejemplo: 2.15" oninput="renderTicketPreview()" />
+
+              <label>Importe apostado</label>
+              <input id="ticketStake" type="number" min="1" step="1" placeholder="Ejemplo: 500" oninput="renderTicketPreview()" />
+
+              <div id="ticketPreview" class="ticket-preview">
+                ${renderTicketPreviewHTML(prob, fairOdds, 0, 0)}
+              </div>
+
+              <button class="primary-action" onclick="saveTicket()">Guardar ticket</button>
+              <button class="ghost" onclick="clearCart()">Vaciar ticket</button>
+            </div>
+          `
+          : `<p class="note">Tu ticket está vacío. Ve a Picks y toca “Agregar”.</p>`
+      }
+    </section>
+  `;
+}
+
+function renderTicketPreview() {
+  const preview = document.getElementById("ticketPreview");
+  if (!preview) return;
+
+  const odds = Number(document.getElementById("ticketOdds")?.value);
+  const stake = Number(document.getElementById("ticketStake")?.value);
+  const prob = combinedProbability(cart);
+  const fairOdds = prob ? 1 / prob : 0;
+
+  preview.innerHTML = renderTicketPreviewHTML(prob, fairOdds, odds, stake);
+}
+
+function renderTicketPreviewHTML(prob, fairOdds, odds, stake) {
+  const validOdds = Number(odds || 0);
+  const validStake = Number(stake || 0);
+
+  const payout = validOdds && validStake ? validStake * validOdds : 0;
+  const profit = payout ? payout - validStake : 0;
+  const implied = validOdds > 1 ? 1 / validOdds : 0;
+  const edge = implied ? prob - implied : 0;
+
+  let label = "Escribe momio e importe";
+  let cls = "";
+
+  if (validOdds > 1) {
+    if (edge >= 0.08) {
+      label = "🟢 Value fuerte";
+      cls = "good";
+    } else if (edge >= 0.03) {
+      label = "🟡 Value leve";
+      cls = "mid";
+    } else {
+      label = "🔴 Sin value";
+      cls = "bad";
+    }
+  }
+
+  return `
+    <div class="value-result ${cls}">
+      <strong>${label}</strong>
+      <span>Prob. IA combinada: ${formatPct(prob)} · Momio justo IA: @${formatOdds(fairOdds)}</span>
     </div>
 
-    <div class="volatility-box">
-      <strong>${volatility.emoji} Volatilidad ${volatility.label}</strong>
-      <span>${volatility.context.importance}</span>
-      ${volatility.context.notes.map(note => `<small>${note}</small>`).join("")}
+    <div class="parlay-summary">
+      <div><strong>${money(payout)}</strong><span>Retorno</span></div>
+      <div><strong>${money(profit)}</strong><span>Utilidad</span></div>
+      <div><strong>${implied ? formatPct(edge) : "—"}</strong><span>Edge</span></div>
     </div>
+  `;
+}
 
-    <div class="insight-grid">
-      <div class="insight-card">
-        <span>🎯 Marcador IA</span>
-        <strong>${prediction.score}</strong>
+function renderHistory() {
+  const stats = bankrollStats();
+
+  screens.history.innerHTML = `
+    <section class="glass panel">
+      <h2>Historial</h2>
+      <p class="note">Registro de tickets guardados.</p>
+
+      <div class="stats">
+        <div><strong>${stats.won}</strong><span>Ganados</span></div>
+        <div><strong>${stats.lost}</strong><span>Perdidos</span></div>
+        <div><strong>${money(stats.net)}</strong><span>Utilidad</span></div>
+      </div>
+    </section>
+
+    <section class="glass panel">
+      <h2>Tickets</h2>
+      ${
+        tickets.length
+          ? tickets.map(ticket => renderTicketHistoryCard(ticket)).join("")
+          : `<p class="note">Aún no has guardado tickets.</p>`
+      }
+    </section>
+  `;
+}
+
+function renderTicketHistoryCard(ticket) {
+  const statusLabels = {
+    pending: "⏳ Pendiente",
+    won: "✅ Ganado",
+    lost: "❌ Perdido",
+    void: "🚫 Anulado"
+  };
+
+  return `
+    <div class="ticket-history-card">
+      <div class="ticket-history-head">
+        <strong>${ticket.id}</strong>
+        <span>${statusLabels[ticket.status]}</span>
       </div>
 
-      <div class="insight-card">
-        <span>🚩 Córners esperados</span>
-        <strong>${displayName(match.home)} ${prediction.corners.home} / ${displayName(match.away)} ${prediction.corners.away}</strong>
+      <p class="note">${ticket.house} · Momio @${formatOdds(ticket.odds)} · Importe ${money(ticket.stake)}</p>
+
+      <div class="cart-list compact">
+        ${ticket.picks.map(item => `
+          <div class="cart-item">
+            <div>
+              <strong>${item.pick}</strong>
+              <span>${item.match}</span>
+            </div>
+          </div>
+        `).join("")}
       </div>
 
-      <div class="insight-card">
-        <span>📉 Menos de 4.5 goles</span>
-        <strong>${prediction.under45}%</strong>
+      <div class="parlay-summary">
+        <div><strong>${formatPct(ticket.probability)}</strong><span>Prob. IA</span></div>
+        <div><strong>${money(ticketProfit(ticket))}</strong><span>Resultado</span></div>
+        <div><strong>${formatPct(ticket.edge)}</strong><span>Edge</span></div>
       </div>
 
-      <div class="insight-card">
-        <span>⚽ Ambos anotan</span>
-        <strong>${prediction.bothScore}%</strong>
-      </div>
-
-      <div class="insight-card full">
-        <span>⚽ Jugadores sugeridos</span>
-        <strong>${players.join(" · ")}</strong>
+      <div class="actions three-actions">
+        <button class="win ${ticket.status === "won" ? "active" : ""}" onclick="updateTicketStatus('${ticket.id}', 'won')">Ganado</button>
+        <button class="lose ${ticket.status === "lost" ? "active" : ""}" onclick="updateTicketStatus('${ticket.id}', 'lost')">Perdido</button>
+        <button class="ghost-small ${ticket.status === "void" ? "active" : ""}" onclick="updateTicketStatus('${ticket.id}', 'void')">Anulado</button>
       </div>
     </div>
+  `;
+}
 
-    ${renderHeatmap(prediction)}
+function renderProfile() {
+  const stats = bankrollStats();
 
-    <div class="why-box">
-      <span>🧠 ¿Por qué?</span>
-      <strong>${bestPick.text}</strong>
-      <p>${makeWhy(prediction, bestPick, match)}</p>
-    </div>
+  screens.profile.innerHTML = `
+    <section class="glass panel">
+      <h2>Perfil</h2>
+      <p class="note">Ajusta bankroll, casa favorita y perfil de riesgo.</p>
 
-    <div class="value-box">
-      <span>💰 Detector de value</span>
+      <div class="stats">
+        <div><strong>${money(stats.bankroll)}</strong><span>Bankroll actual</span></div>
+        <div><strong>${formatPct(stats.roi)}</strong><span>ROI</span></div>
+        <div><strong>${tickets.length}</strong><span>Tickets</span></div>
+      </div>
+    </section>
 
-      <label for="valuePickSelect">Mercado</label>
-      <select id="valuePickSelect" onchange="analyzeValue()">
-        ${picks.map(pick => `
-          <option value="${pick.type}">${pick.emoji} ${pick.text} · IA ${formatPct(pick.probability)}</option>
+    <section class="glass panel">
+      <h2>Ajustes</h2>
+
+      <label>Bankroll inicial</label>
+      <input type="number" value="${settings.bankroll}" oninput="updateSetting('bankroll', Number(this.value))" />
+
+      <label>Casa favorita</label>
+      <select onchange="updateSetting('defaultHouse', this.value)">
+        ${["Draftea", "Caliente", "Codere", "Bet365", "Playdoit", "Otra"].map(house => `
+          <option value="${house}" ${house === settings.defaultHouse ? "selected" : ""}>${house}</option>
         `).join("")}
       </select>
 
-      <label for="oddsInput">Momio decimal que ves</label>
-      <input id="oddsInput" type="number" min="1.01" step="0.01" placeholder="Ejemplo: 1.85" oninput="analyzeValue()" />
+      <label>Perfil de riesgo</label>
+      <select onchange="updateSetting('profile', this.value)">
+        <option value="safe" ${settings.profile === "safe" ? "selected" : ""}>🛡️ Seguro</option>
+        <option value="balanced" ${settings.profile === "balanced" ? "selected" : ""}>⚖️ Equilibrado</option>
+        <option value="aggressive" ${settings.profile === "aggressive" ? "selected" : ""}>🔥 Agresivo</option>
+      </select>
 
-      <div id="valueResult" class="value-result">
-        Escribe un momio para saber si hay value.
-      </div>
-    </div>
+      <label>Máximo picks en parley</label>
+      <select onchange="updateSetting('maxParlay', Number(this.value))">
+        <option value="2" ${Number(settings.maxParlay) === 2 ? "selected" : ""}>2 picks</option>
+        <option value="3" ${Number(settings.maxParlay) === 3 ? "selected" : ""}>3 picks</option>
+        <option value="4" ${Number(settings.maxParlay) === 4 ? "selected" : ""}>4 picks</option>
+        <option value="5" ${Number(settings.maxParlay) === 5 ? "selected" : ""}>5 picks</option>
+      </select>
 
-    ${picks.map(pick => renderPickCard(match, pick)).join("")}
-
-    <p class="note">
-      Modelo actual: histórico + forma reciente + goles esperados + contexto manual + volatilidad. 
-      Jugadores y córners siguen siendo proxy hasta conectar API en vivo.
-    </p>
+      <button class="ghost" onclick="resetAllData()">Borrar datos locales</button>
+    </section>
   `;
 }
 
-function analyzeValue() {
-  const match = currentMatches.find(item => item.id === select.value);
-  if (!match) return;
-
-  const prediction = predictMatch(resultsData, match.home, match.away);
-  const picks = getFullPicks(prediction, match);
-
-  const valuePickSelect = document.getElementById("valuePickSelect");
-  const oddsInput = document.getElementById("oddsInput");
-  const result = document.getElementById("valueResult");
-
-  if (!valuePickSelect || !oddsInput || !result) return;
-
-  const selectedType = valuePickSelect.value;
-  const odds = Number(oddsInput.value);
-  const pick = picks.find(item => item.type === selectedType);
-
-  if (!pick) return;
-
-  if (!odds || odds <= 1) {
-    result.innerHTML = "Escribe un momio decimal válido.";
-    result.className = "value-result";
-    return;
-  }
-
-  const implied = 1 / odds;
-  const edge = pick.probability - implied;
-  const ev = pick.probability * odds - 1;
-
-  let label = "🔴 Sin value";
-  let className = "value-result bad";
-
-  if (edge >= 0.08 && ev > 0) {
-    label = "🟢 Value fuerte";
-    className = "value-result good";
-  } else if (edge >= 0.03 && ev > 0) {
-    label = "🟡 Value leve";
-    className = "value-result mid";
-  }
-
-  result.className = className;
-  result.innerHTML = `
-    <strong>${label}</strong>
-    <span>IA: ${formatPct(pick.probability)} · Casa: ${formatPct(implied)} · Edge: ${formatPct(edge)} · EV: ${formatPct(ev)}</span>
-  `;
+function updateSetting(key, value) {
+  settings[key] = value;
+  saveJSON(STORAGE_KEYS.settings, settings);
+  renderAll();
 }
 
-function buildDateOptions() {
-  const dates = [...new Set(currentMatches.map(match => match.date))];
+function resetAllData() {
+  const ok = confirm("¿Seguro que quieres borrar tickets, carrito y ajustes?");
+  if (!ok) return;
 
-  dateSelect.innerHTML = dates.map(date => `
-    <option value="${date}">${DATE_LABELS[date] || date}</option>
-  `).join("");
+  settings = { ...DEFAULT_SETTINGS };
+  cart = [];
+  tickets = [];
+  pickStates = {};
 
-  const today = new Date().toISOString().slice(0, 10);
-  if (dates.includes(today)) {
-    dateSelect.value = today;
-  }
+  saveJSON(STORAGE_KEYS.settings, settings);
+  saveJSON(STORAGE_KEYS.cart, cart);
+  saveJSON(STORAGE_KEYS.tickets, tickets);
+  saveJSON(STORAGE_KEYS.pickStates, pickStates);
+
+  renderAll();
 }
 
-function buildMatchOptions() {
-  const selectedDate = dateSelect.value;
-  const matches = getMatchesByDate(selectedDate);
+function switchTab(tab) {
+  activeTab = tab;
 
-  select.innerHTML = matches.map(match => `
-    <option value="${match.id}">${matchName(match)}</option>
-  `).join("");
-}
+  Object.entries(screens).forEach(([key, screen]) => {
+    screen.classList.toggle("active-screen", key === tab);
+  });
 
-function selectMatchById(id) {
-  const match = currentMatches.find(item => item.id === id);
-  if (!match) return;
+  document.querySelectorAll(".nav-btn").forEach(btn => btn.classList.remove("active"));
+  const btns = Array.from(document.querySelectorAll(".nav-btn"));
+  const index = ["home", "recommended", "ticket", "history", "profile"].indexOf(tab);
+  if (btns[index]) btns[index].classList.add("active");
 
-  dateSelect.value = match.date;
-  buildMatchOptions();
-  select.value = id;
-  renderDailySuggestion();
-  renderMatch(match);
-
+  renderAll();
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-async function init() {
-  card.innerHTML = `
-    <h2 class="match-title">Cargando datos...</h2>
-    <p class="note">Conectando con el repositorio original y calculando modelo.</p>
-  `;
+function renderAll() {
+  renderHome();
+  renderRecommended();
+  renderTicket();
+  renderHistory();
+  renderProfile();
+}
 
-  dailySuggestion.innerHTML = `
-    <h2>Sugerencia del día</h2>
-    <p class="note">Cargando configuración y modelo...</p>
-  `;
+function showToast(message) {
+  let toast = document.getElementById("toast");
+
+  if (!toast) {
+    toast = document.createElement("div");
+    toast.id = "toast";
+    toast.className = "toast";
+    document.body.appendChild(toast);
+  }
+
+  toast.textContent = message;
+  toast.classList.add("show");
+
+  setTimeout(() => {
+    toast.classList.remove("show");
+  }, 1700);
+}
+
+async function init() {
+  Object.values(screens).forEach(screen => {
+    screen.innerHTML = `
+      <section class="glass panel">
+        <h2>Cargando...</h2>
+        <p class="note">Conectando con datos y modelo.</p>
+      </section>
+    `;
+  });
 
   try {
     resultsData = await loadResults();
@@ -1123,50 +1178,16 @@ async function init() {
       id: createMatchId(match)
     }));
 
-    buildDateOptions();
-    buildMatchOptions();
-    renderRecord();
-    renderDailySuggestion();
-
-    const firstMatch = currentMatches.find(match => match.id === select.value);
-    renderMatch(firstMatch);
+    renderAll();
   } catch (error) {
-    card.innerHTML = `
-      <h2 class="match-title">Error al cargar datos</h2>
-      <p class="note">No se pudo conectar al CSV original. Revisa conexión o vuelve a intentar.</p>
+    screens.home.innerHTML = `
+      <section class="glass panel">
+        <h2>Error al cargar datos</h2>
+        <p class="note">No se pudo conectar al CSV original. Revisa conexión o intenta más tarde.</p>
+      </section>
     `;
-
-    dailySuggestion.innerHTML = `
-      <h2>Sugerencia del día</h2>
-      <p class="note">No se pudo cargar el modelo.</p>
-    `;
-
     console.error(error);
   }
 }
-
-dateSelect.addEventListener("change", () => {
-  buildMatchOptions();
-  renderDailySuggestion();
-
-  const match = currentMatches.find(item => item.id === select.value);
-  if (match) renderMatch(match);
-});
-
-select.addEventListener("change", () => {
-  const match = currentMatches.find(item => item.id === select.value);
-  if (match) renderMatch(match);
-});
-
-resetBtn.addEventListener("click", () => {
-  const confirmReset = confirm("¿Seguro que quieres borrar todo tu historial?");
-  if (!confirmReset) return;
-
-  record = { pickStates: {} };
-  saveRecord();
-
-  const match = currentMatches.find(item => item.id === select.value);
-  if (match) renderMatch(match);
-});
 
 init();

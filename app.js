@@ -2,9 +2,10 @@ const PICK_TYPES = [
   { key: "safe", name: "Conservadores", emoji: "🛡️" },
   { key: "balanced", name: "Equilibrados", emoji: "⚖️" },
   { key: "aggressive", name: "Agresivos", emoji: "🔥" },
-  { key: "score", name: "Marcadores", emoji: "🎯" },
+  { key: "corners", name: "Córners", emoji: "🚩" },
+  { key: "cards", name: "Tarjetas", emoji: "🟨" },
   { key: "player", name: "Jugadores", emoji: "⚽" },
-  { key: "corners", name: "Córners", emoji: "🚩" }
+  { key: "score", name: "Marcadores", emoji: "🎯" }
 ];
 
 const BOOKS = ["Draftea", "Caliente", "Codere", "Bet365", "Betcris", "Otra"];
@@ -52,7 +53,7 @@ const DISPLAY_NAMES = {
 const DATE_LABELS = {
   "2026-06-24": "24 junio",
   "2026-06-25": "25 junio",
-  "2026-06-26": "26 junio · Test ML",
+  "2026-06-26": "26 junio · Market Engine",
   "2026-06-27": "27 junio"
 };
 
@@ -198,10 +199,21 @@ const DEFAULT_SETTINGS = {
   favoriteBook: "Draftea"
 };
 
-const SETTINGS_KEY = "matchiq_settings_v711";
-const CART_KEY = "matchiq_cart_v711";
-const TICKETS_KEY = "matchiq_tickets_v711";
-const DRAFT_KEY = "matchiq_ticket_draft_v711";
+const STORAGE_KEYS = {
+  settings: "matchiq_settings_master",
+  cart: "matchiq_cart_master",
+  tickets: "matchiq_tickets_master",
+  draft: "matchiq_ticket_draft_master"
+};
+
+const LEGACY_KEYS = {
+  settings: ["matchiq_settings_v7", "matchiq_settings_v711"],
+  cart: ["matchiq_cart_v7", "matchiq_cart_v711"],
+  tickets: ["matchiq_tickets_v7", "matchiq_tickets_v711"],
+  draft: ["matchiq_ticket_draft_v7", "matchiq_ticket_draft_v711"]
+};
+
+migrateStorage();
 
 let resultsData = [];
 let currentMatches = [];
@@ -210,10 +222,14 @@ let selectedMatchId = "";
 let activeTab = "home";
 let predictionCache = new Map();
 
-let settings = loadJSON(SETTINGS_KEY, DEFAULT_SETTINGS);
-let cart = loadJSON(CART_KEY, []);
-let tickets = loadJSON(TICKETS_KEY, []);
-let ticketDraft = loadJSON(DRAFT_KEY, {
+let settings = {
+  ...DEFAULT_SETTINGS,
+  ...loadJSON(STORAGE_KEYS.settings, DEFAULT_SETTINGS)
+};
+
+let cart = loadJSON(STORAGE_KEYS.cart, []);
+let tickets = loadJSON(STORAGE_KEYS.tickets, []);
+let ticketDraft = loadJSON(STORAGE_KEYS.draft, {
   book: settings.favoriteBook || "Draftea",
   odds: "",
   stake: ""
@@ -240,12 +256,66 @@ function saveJSON(key, value) {
   localStorage.setItem(key, JSON.stringify(value));
 }
 
+function uniqueById(items) {
+  const map = new Map();
+
+  items.forEach(item => {
+    if (!item) return;
+    const key = item.id || `${item.createdAt || ""}-${item.book || ""}-${item.odds || ""}-${item.stake || ""}-${JSON.stringify(item.selections || [])}`;
+    if (!map.has(key)) map.set(key, item);
+  });
+
+  return [...map.values()];
+}
+
+function migrateStorage() {
+  const oldSettings = LEGACY_KEYS.settings
+    .map(key => loadJSON(key, null))
+    .filter(Boolean);
+
+  const masterSettings = loadJSON(STORAGE_KEYS.settings, null);
+
+  if (!masterSettings && oldSettings.length) {
+    saveJSON(STORAGE_KEYS.settings, {
+      ...DEFAULT_SETTINGS,
+      ...oldSettings[0]
+    });
+  }
+
+  const allTickets = [
+    ...loadJSON(STORAGE_KEYS.tickets, []),
+    ...LEGACY_KEYS.tickets.flatMap(key => loadJSON(key, []))
+  ];
+
+  if (allTickets.length) {
+    saveJSON(STORAGE_KEYS.tickets, uniqueById(allTickets));
+  }
+
+  const allCart = [
+    ...loadJSON(STORAGE_KEYS.cart, []),
+    ...LEGACY_KEYS.cart.flatMap(key => loadJSON(key, []))
+  ];
+
+  if (allCart.length) {
+    saveJSON(STORAGE_KEYS.cart, uniqueById(allCart));
+  }
+
+  const masterDraft = loadJSON(STORAGE_KEYS.draft, null);
+  const oldDraft = LEGACY_KEYS.draft
+    .map(key => loadJSON(key, null))
+    .filter(Boolean)[0];
+
+  if (!masterDraft && oldDraft) {
+    saveJSON(STORAGE_KEYS.draft, oldDraft);
+  }
+}
+
 function displayName(team) {
   return DISPLAY_NAMES[team] || team;
 }
 
 function displayPickText(text) {
-  let output = text;
+  let output = text || "";
 
   Object.entries(DISPLAY_NAMES).forEach(([original, translated]) => {
     output = output.replaceAll(original, translated);
@@ -267,7 +337,7 @@ function createMatchId(match) {
 }
 
 function normalizeKey(text) {
-  return text
+  return String(text || "")
     .toLowerCase()
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
@@ -304,13 +374,22 @@ function clampNumber(value, min, max) {
   return Math.max(min, Math.min(max, value));
 }
 
+function qualityLabel(value) {
+  if (value === "proxy") return "⚠️ Proxy";
+  return "🧠 Modelo fuerte";
+}
+
+function qualityClass(value) {
+  return value === "proxy" ? "proxy" : "strong";
+}
+
 function getProfileRules() {
   if (settings.profile === "balanced") {
     return {
       label: "⚖️ Equilibrado",
       minProbability: 0.58,
-      parlayTypes: ["safe", "balanced", "corners", "aggressive"],
-      topTypes: ["safe", "balanced", "corners", "aggressive", "player"]
+      parlayTypes: ["safe", "balanced", "corners", "cards", "aggressive"],
+      topTypes: ["safe", "balanced", "corners", "cards", "aggressive", "player"]
     };
   }
 
@@ -318,16 +397,16 @@ function getProfileRules() {
     return {
       label: "🔥 Agresivo",
       minProbability: 0.42,
-      parlayTypes: ["safe", "balanced", "corners", "aggressive", "player"],
-      topTypes: ["safe", "balanced", "corners", "aggressive", "player", "score"]
+      parlayTypes: ["safe", "balanced", "corners", "cards", "aggressive", "player"],
+      topTypes: ["safe", "balanced", "corners", "cards", "aggressive", "player", "score"]
     };
   }
 
   return {
     label: "🛡️ Seguro",
-    minProbability: 0.70,
+    minProbability: 0.66,
     parlayTypes: ["safe", "balanced", "corners"],
-    topTypes: ["safe", "balanced", "corners"]
+    topTypes: ["safe", "balanced", "corners", "cards"]
   };
 }
 
@@ -367,7 +446,7 @@ function getVolatility(prediction, match) {
 }
 
 function scoreProbability(score, prediction) {
-  const [h, a] = score.split("-").map(Number);
+  const [h, a] = String(score || "0-0").split("-").map(Number);
   return poisson(h, prediction.homeLambda) * poisson(a, prediction.awayLambda);
 }
 
@@ -410,13 +489,11 @@ function getPickProbability(pick, prediction, match) {
     const favGoalProb = 1 - poisson(0, prediction.favorite.lambda);
 
     if (pick.type === "safe") {
-      probability = pick.text.includes("anota") ? favGoalProb : prediction.under45 / 100;
+      probability = pick.text.includes("+0.5") ? favGoalProb : prediction.under45 / 100;
     }
 
     if (pick.type === "balanced") {
-      probability = pick.text.includes("Doble oportunidad")
-        ? prediction.favorite.prob + prediction.rawProbs.draw
-        : prediction.favorite.prob;
+      probability = prediction.favorite.prob + prediction.rawProbs.draw;
     }
 
     if (pick.type === "aggressive") {
@@ -429,21 +506,17 @@ function getPickProbability(pick, prediction, match) {
       probability = scoreProbability(prediction.score, prediction);
     }
 
-    if (pick.type === "corners") {
-      const cornerFav = prediction.favorite.side === "home"
-        ? prediction.corners.home
-        : prediction.corners.away;
-
-      probability = cornerFav >= 5 ? 0.64 : 0.56;
-    }
-
     if (pick.type === "player") {
       probability = 0.55 + (prediction.favorite.prob - 0.50) * 0.25;
     }
   }
 
-  if (volatility.label === "Alta" && ["balanced", "aggressive", "score", "player"].includes(pick.type)) {
+  if (volatility.label === "Alta" && ["balanced", "aggressive", "score", "player", "cards"].includes(pick.type)) {
     probability *= 0.88;
+  }
+
+  if (pick.dataQuality === "proxy") {
+    probability *= 0.96;
   }
 
   if (pick.type === "player" && volatility.label !== "Baja") {
@@ -468,35 +541,38 @@ function riskLabel(probability) {
 function safetyScore(item) {
   const typePenalty = {
     safe: 0,
-    corners: 7,
-    balanced: 10,
+    balanced: 9,
+    corners: 10,
+    cards: 13,
     aggressive: 22,
-    player: 28,
-    score: 44
+    player: 30,
+    score: 46
   };
 
-  return item.pick.probability * 100 - item.volatility.score * 0.35 - (typePenalty[item.pick.type] || 20);
+  const qualityPenalty = item.pick.dataQuality === "proxy" ? 8 : 0;
+
+  return item.pick.probability * 100 - item.volatility.score * 0.35 - (typePenalty[item.pick.type] || 20) - qualityPenalty;
 }
 
 function getPlayerSuggestions(favorite) {
   const players = {
-    "Brazil": ["Vinícius Jr. 1+ tiro a puerta", "Rodrygo 1+ tiro", "Neymar participa en gol"],
-    "Mexico": ["Santiago Giménez 1+ tiro a puerta", "Lozano 1+ tiro", "Alexis Vega 1+ tiro"],
-    "France": ["Mbappé 1+ tiro a puerta", "Griezmann 1+ pase clave", "Dembélé 1+ tiro"],
-    "Argentina": ["Messi participa en gol", "Lautaro 1+ tiro a puerta", "Julián Álvarez 1+ tiro"],
-    "Portugal": ["Cristiano Ronaldo 1+ tiro a puerta", "Bruno Fernandes 1+ tiro", "Bernardo Silva 1+ pase clave"],
-    "Spain": ["Morata 1+ tiro a puerta", "Yamal 1+ tiro", "Pedri 1+ pase clave"],
-    "Germany": ["Musiala 1+ tiro", "Havertz 1+ tiro a puerta", "Wirtz 1+ pase clave"],
-    "Netherlands": ["Gakpo 1+ tiro", "Depay 1+ tiro a puerta", "Xavi Simons 1+ tiro"],
-    "Belgium": ["Lukaku 1+ tiro a puerta", "De Bruyne 1+ pase clave", "Doku 1+ tiro"],
-    "Norway": ["Haaland 1+ tiro a puerta", "Ødegaard 1+ pase clave", "Haaland 2+ tiros"],
-    "Uruguay": ["Darwin Núñez 1+ tiro a puerta", "Valverde 1+ tiro", "Pellistri 1+ tiro"],
-    "Egypt": ["Salah 1+ tiro a puerta", "Trézéguet 1+ tiro", "Marmoush 1+ tiro"]
+    "Brazil": ["Vinícius Jr. tiros a puerta +0.5", "Rodrygo tiros +0.5", "Neymar participa en gol"],
+    "Mexico": ["Santiago Giménez tiros a puerta +0.5", "Lozano tiros +0.5", "Alexis Vega tiros +0.5"],
+    "France": ["Mbappé tiros a puerta +0.5", "Griezmann pases clave +0.5", "Dembélé tiros +0.5"],
+    "Argentina": ["Messi tiros a puerta +0.5", "Lautaro tiros a puerta +0.5", "Julián Álvarez tiros +0.5"],
+    "Portugal": ["Cristiano Ronaldo tiros a puerta +0.5", "Bruno Fernandes tiros +0.5", "Bernardo Silva pases clave +0.5"],
+    "Spain": ["Morata tiros a puerta +0.5", "Yamal tiros +0.5", "Pedri pases clave +0.5"],
+    "Germany": ["Musiala tiros +0.5", "Havertz tiros a puerta +0.5", "Wirtz pases clave +0.5"],
+    "Netherlands": ["Gakpo tiros +0.5", "Depay tiros a puerta +0.5", "Xavi Simons tiros +0.5"],
+    "Belgium": ["Lukaku tiros a puerta +0.5", "De Bruyne pases clave +0.5", "Doku tiros +0.5"],
+    "Norway": ["Haaland tiros a puerta +0.5", "Ødegaard pases clave +0.5", "Haaland tiros +1.5"],
+    "Uruguay": ["Darwin Núñez tiros a puerta +0.5", "Valverde tiros +0.5", "Pellistri tiros +0.5"],
+    "Egypt": ["Salah tiros a puerta +0.5", "Trézéguet tiros +0.5", "Marmoush tiros +0.5"]
   };
 
   return players[favorite.team] || [
-    `${displayName(favorite.team)} delantero 1+ tiro`,
-    `${displayName(favorite.team)} mediapunta 1+ tiro`,
+    `${displayName(favorite.team)} delantero tiros +0.5`,
+    `${displayName(favorite.team)} mediapunta tiros +0.5`,
     `${displayName(favorite.team)} participa en gol`
   ];
 }
@@ -509,8 +585,13 @@ function getFullPicks(prediction, match) {
     type: "player",
     label: "Jugador",
     emoji: "⚽",
+    market: "Jugador",
+    line: "+0.5",
+    direction: "OVER",
     text: players[0],
-    marketKey: "playerShot"
+    marketKey: "playerShot",
+    dataQuality: "proxy",
+    rationale: "Estimación proxy: no usa alineación confirmada ni datos reales de tiros por jugador."
   });
 
   const volatility = getVolatility(prediction, match);
@@ -518,14 +599,14 @@ function getFullPicks(prediction, match) {
   return basePicks.map(pick => {
     const probability = getPickProbability(pick, prediction, match);
     const fairOdds = 1 / probability;
-    const valueOdds = 1.08 / probability;
 
     const item = {
       ...pick,
       text: displayPickText(pick.text),
+      market: displayPickText(pick.market),
       probability,
       fairOdds,
-      valueOdds,
+      valueOdds: 1.08 / probability,
       confidence: confidenceLabel(probability),
       risk: riskLabel(probability),
       volatility
@@ -631,20 +712,20 @@ function cartProfit() {
 }
 
 function saveSettings() {
-  saveJSON(SETTINGS_KEY, settings);
+  saveJSON(STORAGE_KEYS.settings, settings);
 }
 
 function saveCart() {
-  saveJSON(CART_KEY, cart);
+  saveJSON(STORAGE_KEYS.cart, cart);
   updateCartBadge();
 }
 
 function saveTickets() {
-  saveJSON(TICKETS_KEY, tickets);
+  saveJSON(STORAGE_KEYS.tickets, tickets);
 }
 
 function saveDraft() {
-  saveJSON(DRAFT_KEY, ticketDraft);
+  saveJSON(STORAGE_KEYS.draft, ticketDraft);
 }
 
 function updateCartBadge() {
@@ -684,6 +765,11 @@ function makeCartItem(match, pick) {
     typeLabel: pick.label,
     emoji: pick.emoji,
     text: pick.text,
+    market: pick.market || pick.typeLabel || pick.label,
+    line: pick.line || "",
+    direction: pick.direction || "",
+    dataQuality: pick.dataQuality || "strong",
+    rationale: pick.rationale || "",
     probability: pick.probability,
     fairOdds: pick.fairOdds,
     risk: pick.risk,
@@ -780,6 +866,7 @@ function getTicketEvaluation() {
       text: "Tu entrada todavía está vacía.",
       className: "mid",
       risk: "Sin datos",
+      warnings: [],
       suggestedStake: [0, 0]
     };
   }
@@ -790,7 +877,8 @@ function getTicketEvaluation() {
   const edge = odds > 1 ? probability - implied : 0;
 
   const highVolatility = cart.filter(item => item.volatility === "Alta").length;
-  const riskyTypes = cart.filter(item => ["aggressive", "score", "player"].includes(item.type)).length;
+  const proxyCount = cart.filter(item => item.dataQuality === "proxy").length;
+  const riskyTypes = cart.filter(item => ["aggressive", "score", "player", "cards"].includes(item.type)).length;
 
   let score = probability * 100;
 
@@ -800,6 +888,7 @@ function getTicketEvaluation() {
   if (cart.length >= 5) score -= 14;
   if (highVolatility) score -= highVolatility * 10;
   if (riskyTypes) score -= riskyTypes * 6;
+  if (proxyCount >= 2) score -= 10;
 
   score = clampNumber(score, 0, 100);
 
@@ -819,11 +908,19 @@ function getTicketEvaluation() {
 
   if (score < 46) {
     title = "🔴 Ticket peligroso";
-    text = "Demasiada volatilidad o probabilidad combinada baja. Considera quitar picks.";
+    text = "Demasiada volatilidad, probabilidad baja o muchos mercados proxy.";
     className = "bad";
     risk = "Alto";
     stakePct = [0.005, 0.015];
   }
+
+  const warnings = [];
+
+  if (edge < 0 && odds > 1) warnings.push("Tiene value negativo frente al momio de la casa.");
+  if (cart.length >= 4) warnings.push("Tiene muchas selecciones; considera bajarlo a 2 o 3 picks.");
+  if (highVolatility) warnings.push(`Incluye ${highVolatility} pick(s) de alta volatilidad.`);
+  if (proxyCount) warnings.push(`Incluye ${proxyCount} mercado(s) proxy: córners, tarjetas o jugadores.`);
+  if (riskyTypes >= 2) warnings.push("Combina varios mercados de alta varianza.");
 
   const bankroll = Number(settings.initialBankroll || 0);
   const suggestedStake = [
@@ -837,8 +934,22 @@ function getTicketEvaluation() {
     className,
     risk,
     score,
+    warnings,
     suggestedStake
   };
+}
+
+function renderWarnings(warnings) {
+  if (!warnings || !warnings.length) return "";
+
+  return `
+    <div class="warning-list">
+      <strong>Alertas del ticket</strong>
+      <ul>
+        ${warnings.map(warning => `<li>${warning}</li>`).join("")}
+      </ul>
+    </div>
+  `;
 }
 
 function updateTicketLivePreview() {
@@ -856,6 +967,7 @@ function updateTicketLivePreview() {
   const summary = document.getElementById("ticketLiveSummary");
   const valueBox = document.getElementById("ticketLiveValue");
   const gradeBox = document.getElementById("ticketLiveGrade");
+  const warningsBox = document.getElementById("ticketLiveWarnings");
 
   if (!summary || !valueBox) return;
 
@@ -878,6 +990,10 @@ function updateTicketLivePreview() {
       <strong>${evaluation.title}</strong>
       <span>${evaluation.text} · Riesgo: ${evaluation.risk} · Stake sugerido: ${formatMoney(evaluation.suggestedStake[0])} - ${formatMoney(evaluation.suggestedStake[1])}</span>
     `;
+  }
+
+  if (warningsBox) {
+    warningsBox.innerHTML = renderWarnings(evaluation.warnings);
   }
 }
 
@@ -981,8 +1097,8 @@ function getBankrollStats() {
   const settled = tickets.filter(isSettled);
   const pending = tickets.filter(ticket => ticket.status === "pending");
 
-  const totalStaked = settled.reduce((sum, ticket) => sum + ticket.stake, 0);
-  const pendingStake = pending.reduce((sum, ticket) => sum + ticket.stake, 0);
+  const totalStaked = settled.reduce((sum, ticket) => sum + Number(ticket.stake || 0), 0);
+  const pendingStake = pending.reduce((sum, ticket) => sum + Number(ticket.stake || 0), 0);
   const netProfit = settled.reduce((sum, ticket) => sum + ticketProfit(ticket), 0);
   const bankroll = Number(settings.initialBankroll || 0) + netProfit;
   const roi = totalStaked ? netProfit / totalStaked : 0;
@@ -1097,10 +1213,10 @@ function renderHome() {
       ${
         solid ? `
           <button class="daily-card" onclick="selectMatchFromHome('${solid.match.id}')">
-            <span>🧠 Ensemble ML v1.7.1</span>
+            <span>🧠 Market Engine v1.7.2</span>
             <strong>${solid.pick.text}</strong>
             <small>${matchName(solid.match)}</small>
-            <em>IA ${formatPct(solid.pick.probability)} · Riesgo ${solid.pick.risk} · ${formatFair(solid.pick.fairOdds)}</em>
+            <em>IA ${formatPct(solid.pick.probability)} · ${qualityLabel(solid.pick.dataQuality)} · ${formatFair(solid.pick.fairOdds)}</em>
           </button>
         ` : `<p class="note">No hay pick que pase los filtros actuales.</p>`
       }
@@ -1115,7 +1231,7 @@ function renderHome() {
             <div class="mini-ticket-row">
               <div>
                 <strong>${index + 1}. ${leg.pick.text}</strong>
-                <span>${matchName(leg.match)} · IA ${formatPct(leg.pick.probability)}</span>
+                <span>${matchName(leg.match)} · IA ${formatPct(leg.pick.probability)} · ${qualityLabel(leg.pick.dataQuality)}</span>
               </div>
             </div>
           `).join("")}
@@ -1195,7 +1311,7 @@ function renderRecommended() {
             <div class="rank">${index + 1}</div>
             <div>
               <strong>${item.pick.emoji} ${item.pick.text}</strong>
-              <span>${matchName(item.match)} · IA ${formatPct(item.pick.probability)} · Riesgo ${item.pick.risk}</span>
+              <span>${matchName(item.match)} · IA ${formatPct(item.pick.probability)} · ${qualityLabel(item.pick.dataQuality)}</span>
             </div>
             <em>${formatFair(item.pick.fairOdds)}</em>
           </button>
@@ -1231,7 +1347,12 @@ function renderRecommended() {
 
         <div class="insight-card">
           <span>🚩 Córners esperados</span>
-          <strong>${displayName(match.home)} ${prediction.corners.home} / ${displayName(match.away)} ${prediction.corners.away}</strong>
+          <strong>Total ${prediction.expectedCorners.total} · ${displayName(match.home)} ${prediction.corners.home} / ${displayName(match.away)} ${prediction.corners.away}</strong>
+        </div>
+
+        <div class="insight-card">
+          <span>🟨 Tarjetas estimadas</span>
+          <strong>Total ${prediction.expectedCards}</strong>
         </div>
 
         <div class="insight-card">
@@ -1258,8 +1379,25 @@ function renderRecommended() {
         return `
           <div class="pick ${pick.type}">
             <div class="pick-title">${pick.emoji} ${pick.label}</div>
-            <strong>${pick.text}</strong>
-            <p class="pick-meta">IA ${formatPct(pick.probability)} · Riesgo ${pick.risk} · Momio justo ${formatFair(pick.fairOdds)}</p>
+            <strong class="pick-main">${pick.text}</strong>
+
+            <div class="market-line">
+              <div>
+                <span>Mercado</span>
+                <strong>${pick.market}</strong>
+              </div>
+              <div>
+                <span>Línea</span>
+                <strong>${pick.line || "—"}</strong>
+              </div>
+            </div>
+
+            <span class="quality-pill ${qualityClass(pick.dataQuality)}">${qualityLabel(pick.dataQuality)}</span>
+
+            <p class="pick-meta">
+              IA ${formatPct(pick.probability)} · Riesgo ${pick.risk} · Momio justo ${formatFair(pick.fairOdds)}
+              <br>${pick.rationale || ""}
+            </p>
 
             <button class="primary-btn ${inTicket ? "in-ticket" : ""}" ${inTicket ? "disabled" : ""} onclick="addToTicket('${match.id}', '${pick.type}')">
               ${inTicket ? "✅ En ticket" : "Agregar al ticket"}
@@ -1268,7 +1406,7 @@ function renderRecommended() {
         `;
       }).join("")}
 
-      <p class="tiny-note">La IA ayuda a filtrar riesgo, pero ningún pick es seguro.</p>
+      <p class="tiny-note">La IA ayuda a filtrar riesgo, pero ningún pick es seguro. Córners, tarjetas y jugadores son mercados proxy hasta conectar API real.</p>
     </section>
   `;
 }
@@ -1371,8 +1509,11 @@ function renderTicket() {
         cart.length ? cart.map(item => `
           <div class="cart-item">
             <div>
-              <strong>${item.emoji} ${item.text}</strong>
-              <span>${item.match} · IA ${formatPct(item.probability)} · Riesgo ${item.risk}</span>
+              <strong>${item.emoji || "🎟️"} ${item.text}</strong>
+              <span>
+                ${item.match} · IA ${formatPct(item.probability)} · Riesgo ${item.risk || "—"}
+                <br>${item.market || "Mercado"} ${item.line || ""} · ${qualityLabel(item.dataQuality)}
+              </span>
             </div>
             <button onclick="removeFromTicket('${item.id}')">✕</button>
           </div>
@@ -1415,6 +1556,10 @@ function renderTicket() {
         <span>${evaluation.text} · Riesgo: ${evaluation.risk} · Stake sugerido: ${formatMoney(evaluation.suggestedStake[0])} - ${formatMoney(evaluation.suggestedStake[1])}</span>
       </div>
 
+      <div id="ticketLiveWarnings">
+        ${renderWarnings(evaluation.warnings)}
+      </div>
+
       <button class="primary-btn ${cart.length ? "" : "disabled"}" ${cart.length ? "" : "disabled"} onclick="saveCurrentTicket()">
         ${cart.length ? "Guardar ticket" : "Agrega picks para guardar"}
       </button>
@@ -1444,19 +1589,22 @@ function renderHistory() {
 
       ${
         tickets.length ? tickets.map(ticket => `
-          <div class="ticket-card ticket-${ticket.status}">
+          <div class="ticket-card ticket-${ticket.status || "pending"}">
             <div class="ticket-head">
-              <strong>${ticket.book} · +${formatOdds(ticket.odds)}</strong>
+              <strong>${ticket.book || "Casa"} · +${formatOdds(ticket.odds)}</strong>
               <span>${statusLabel(ticket.status)}</span>
             </div>
 
-            <p class="note">${new Date(ticket.createdAt).toLocaleDateString("es-MX")} · ${formatMoney(ticket.stake)} apostados · ${ticket.selections.length} picks</p>
+            <p class="note">${ticket.createdAt ? new Date(ticket.createdAt).toLocaleDateString("es-MX") : "Sin fecha"} · ${formatMoney(ticket.stake)} apostados · ${(ticket.selections || []).length} picks</p>
 
-            ${ticket.selections.map(sel => `
+            ${(ticket.selections || []).map(sel => `
               <div class="ticket-selection">
                 <div>
                   <strong>${sel.text}</strong>
-                  <span>${sel.match} · IA ${formatPct(sel.probability)}</span>
+                  <span>
+                    ${sel.match} · IA ${formatPct(sel.probability)}
+                    <br>${sel.market || sel.typeLabel || "Mercado"} ${sel.line || ""} · ${qualityLabel(sel.dataQuality)}
+                  </span>
                 </div>
               </div>
             `).join("")}
@@ -1596,7 +1744,7 @@ async function init() {
     screen.innerHTML = `
       <section class="glass panel">
         <h2>Cargando...</h2>
-        <p class="note">Conectando con datos y preparando modelo ensemble.</p>
+        <p class="note">Conectando con datos y preparando Market Engine.</p>
       </section>
     `;
   });

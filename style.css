@@ -896,3 +896,28 @@ button.active {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
 }
+.switch-row {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 24px 1fr;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+  color: rgba(255,255,255,.82);
+  line-height: 1.25;
+}
+
+.switch-row input {
+  width: 22px;
+  height: 22px;
+  margin: 0;
+}
+
+.switch-row {
+  font-size: 15px;
+  word-break: normal;
+}
+
+.panel {
+  overflow: hidden;
+}

@@ -501,3 +501,181 @@ button {
   color: rgba(255,255,255,.58);
   font-size: 11px;
 }
+.settings-box,
+.parlay-box,
+.avoid-box,
+.volatility-box {
+  margin: 16px 0;
+  padding: 16px;
+  border-radius: 24px;
+  background: rgba(0,0,0,.22);
+  border: 1px solid rgba(255,255,255,.12);
+}
+
+.settings-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.settings-head strong {
+  font-size: 16px;
+}
+
+.settings-head span {
+  color: #c7d2fe;
+  font-size: 12px;
+  text-align: right;
+}
+
+.switch-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+  color: rgba(255,255,255,.78);
+}
+
+.switch-row input {
+  width: 18px;
+  height: 18px;
+}
+
+.parlay-leg {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 32px 1fr;
+  gap: 10px;
+  align-items: center;
+  text-align: left;
+  padding: 13px;
+  margin-top: 10px;
+  border-radius: 18px;
+  background: rgba(255,255,255,.10);
+  color: white;
+  border: 1px solid rgba(255,255,255,.12);
+}
+
+.parlay-leg span {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: rgba(255,255,255,.14);
+  font-weight: 900;
+}
+
+.parlay-leg strong {
+  display: block;
+  font-size: 13px;
+}
+
+.parlay-leg small {
+  display: block;
+  margin-top: 4px;
+  color: rgba(255,255,255,.62);
+  font-size: 12px;
+}
+
+.parlay-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 9px;
+  margin-top: 14px;
+}
+
+.parlay-summary div {
+  padding: 12px;
+  border-radius: 16px;
+  background: rgba(255,255,255,.10);
+  text-align: center;
+}
+
+.parlay-summary strong {
+  display: block;
+  font-size: 18px;
+}
+
+.parlay-summary span {
+  display: block;
+  margin-top: 4px;
+  font-size: 11px;
+  color: rgba(255,255,255,.62);
+}
+
+.avoid-row {
+  padding: 12px;
+  margin-top: 9px;
+  border-radius: 16px;
+  background: rgba(239,68,68,.12);
+  border: 1px solid rgba(239,68,68,.25);
+}
+
+.avoid-row strong {
+  display: block;
+  font-size: 13px;
+}
+
+.avoid-row span {
+  display: block;
+  margin-top: 4px;
+  font-size: 12px;
+  color: rgba(255,255,255,.62);
+}
+
+.volatility-box strong {
+  display: block;
+  font-size: 16px;
+}
+
+.volatility-box span {
+  display: block;
+  margin-top: 4px;
+  color: #c7d2fe;
+  font-size: 13px;
+}
+
+.volatility-box small {
+  display: block;
+  margin-top: 6px;
+  color: rgba(255,255,255,.64);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.pick.registered {
+  opacity: .72;
+  filter: grayscale(.25);
+}
+
+.pick.is-win {
+  border-left-color: #22c55e;
+}
+
+.pick.is-loss {
+  border-left-color: #ef4444;
+}
+
+.result-status {
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 14px;
+  background: rgba(255,255,255,.10);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.result-status small {
+  display: block;
+  margin-top: 4px;
+  font-size: 11px;
+  font-weight: 400;
+  color: rgba(255,255,255,.62);
+}
+
+button.active {
+  outline: 2px solid rgba(255,255,255,.75);
+  transform: scale(.98);
+}

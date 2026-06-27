@@ -26,159 +26,6 @@ function probabilityUnder(expected, line, slope = 1.05) {
   return clamp(sigmoid((line - expected) * slope), 0.04, 0.96);
 }
 
-function getGlobalAverages(results) {
-  if (!results.length) {
-    return {
-      goalsFor: 1.35,
-      goalsAgainst: 1.35,
-      totalGoals: 2.7
-    };
-  }
-
-  let goals = 0;
-  let matches = 0;
-
-  results.forEach(match => {
-    if (typeof match.homeScore === "number" && typeof match.awayScore === "number") {
-      goals += match.homeScore + match.awayScore;
-      matches++;
-    }
-  });
-
-  const totalGoals = matches ? goals / matches : 2.7;
-
-  return {
-    goalsFor: totalGoals / 2,
-    goalsAgainst: totalGoals / 2,
-    totalGoals
-  };
-}
-
-function tournamentWeight(match) {
-  const name = String(match.tournament || "").toLowerCase();
-
-  if (name.includes("world cup")) return 1.22;
-  if (name.includes("euro")) return 1.14;
-  if (name.includes("copa")) return 1.14;
-  if (name.includes("africa")) return 1.12;
-  if (name.includes("asian")) return 1.10;
-  if (name.includes("qualif")) return 1.08;
-  if (name.includes("friendly")) return 0.78;
-
-  return 1;
-}
-
-function getWeightedTeamStats(results, team, limit = 34) {
-  const matches = results
-    .filter(match => match.home === team || match.away === team)
-    .sort((a, b) => new Date(b.date) - new Date(a.date))
-    .slice(0, limit);
-
-  if (!matches.length) {
-    return {
-      played: 0,
-      goalsFor: 1.18,
-      goalsAgainst: 1.18,
-      goalDiff: 0,
-      pointsPerGame: 1.25,
-      winRate: 0.34,
-      drawRate: 0.28,
-      lossRate: 0.38,
-      cleanSheetRate: 0.23,
-      failedScoreRate: 0.24,
-      formScore: 0
-    };
-  }
-
-  let weightSum = 0;
-  let goalsFor = 0;
-  let goalsAgainst = 0;
-  let points = 0;
-  let wins = 0;
-  let draws = 0;
-  let losses = 0;
-  let cleanSheets = 0;
-  let failedScore = 0;
-
-  matches.forEach((match, index) => {
-    const isHome = match.home === team;
-    const gf = isHome ? match.homeScore : match.awayScore;
-    const ga = isHome ? match.awayScore : match.homeScore;
-
-    const recency = Math.pow(0.925, index);
-    const weight = recency * tournamentWeight(match);
-
-    weightSum += weight;
-    goalsFor += gf * weight;
-    goalsAgainst += ga * weight;
-
-    if (gf > ga) {
-      points += 3 * weight;
-      wins += weight;
-    } else if (gf === ga) {
-      points += 1 * weight;
-      draws += weight;
-    } else {
-      losses += weight;
-    }
-
-    if (ga === 0) cleanSheets += weight;
-    if (gf === 0) failedScore += weight;
-  });
-
-  const avgFor = goalsFor / weightSum;
-  const avgAgainst = goalsAgainst / weightSum;
-  const ppg = points / weightSum;
-
-  return {
-    played: matches.length,
-    goalsFor: avgFor,
-    goalsAgainst: avgAgainst,
-    goalDiff: avgFor - avgAgainst,
-    pointsPerGame: ppg,
-    winRate: wins / weightSum,
-    drawRate: draws / weightSum,
-    lossRate: losses / weightSum,
-    cleanSheetRate: cleanSheets / weightSum,
-    failedScoreRate: failedScore / weightSum,
-    formScore: (ppg - 1.25) + (avgFor - avgAgainst) * 0.42
-  };
-}
-
-function buildEloRatings(results) {
-  const ratings = {};
-
-  function getRating(team) {
-    if (!ratings[team]) ratings[team] = 1500;
-    return ratings[team];
-  }
-
-  results
-    .slice()
-    .sort((a, b) => new Date(a.date) - new Date(b.date))
-    .forEach(match => {
-      if (!match.home || !match.away) return;
-
-      const homeRating = getRating(match.home);
-      const awayRating = getRating(match.away);
-
-      const expectedHome = 1 / (1 + Math.pow(10, (awayRating - homeRating) / 400));
-
-      let actualHome = 0.5;
-      if (match.homeScore > match.awayScore) actualHome = 1;
-      if (match.homeScore < match.awayScore) actualHome = 0;
-
-      const margin = Math.abs(match.homeScore - match.awayScore);
-      const marginMultiplier = margin <= 1 ? 1 : Math.log(margin + 1) * 0.95;
-      const k = 20 * tournamentWeight(match) * marginMultiplier;
-
-      ratings[match.home] = homeRating + k * (actualHome - expectedHome);
-      ratings[match.away] = awayRating + k * ((1 - actualHome) - (1 - expectedHome));
-    });
-
-  return ratings;
-}
-
 function normalizeOutcome(probs) {
   const total = probs.home + probs.draw + probs.away;
 
@@ -241,6 +88,41 @@ function outcomeFromMatrix(matrix) {
   return normalizeOutcome({ home, draw, away });
 }
 
+function blendOutcomes(models, weights) {
+  const blended = { home: 0, draw: 0, away: 0 };
+
+  Object.entries(models).forEach(([key, probs]) => {
+    const weight = weights[key] || 0;
+    blended.home += probs.home * weight;
+    blended.draw += probs.draw * weight;
+    blended.away += probs.away * weight;
+  });
+
+  return normalizeOutcome(blended);
+}
+
+function roundProbs(probs) {
+  let home = Math.round(probs.home * 100);
+  let draw = Math.round(probs.draw * 100);
+  let away = Math.round(probs.away * 100);
+
+  const diff = 100 - (home + draw + away);
+
+  if (diff !== 0) {
+    const maxKey = [
+      ["home", home],
+      ["draw", draw],
+      ["away", away]
+    ].sort((a, b) => b[1] - a[1])[0][0];
+
+    if (maxKey === "home") home += diff;
+    if (maxKey === "draw") draw += diff;
+    if (maxKey === "away") away += diff;
+  }
+
+  return { home, draw, away };
+}
+
 function modelDisagreement(models, ensemble) {
   const values = Object.values(models);
   if (!values.length) return 0;
@@ -272,28 +154,6 @@ function confidenceFromPrediction(models, ensemble) {
   if (score < 56) label = "Baja";
 
   return { score, label, disagreement };
-}
-
-function roundProbs(probs) {
-  let home = Math.round(probs.home * 100);
-  let draw = Math.round(probs.draw * 100);
-  let away = Math.round(probs.away * 100);
-
-  const diff = 100 - (home + draw + away);
-
-  if (diff !== 0) {
-    const maxKey = [
-      ["home", home],
-      ["draw", draw],
-      ["away", away]
-    ].sort((a, b) => b[1] - a[1])[0][0];
-
-    if (maxKey === "home") home += diff;
-    if (maxKey === "draw") draw += diff;
-    if (maxKey === "away") away += diff;
-  }
-
-  return { home, draw, away };
 }
 
 function applyContextToLambdas(homeLambda, awayLambda, context) {
@@ -362,19 +222,6 @@ function applyContextToOutcome(outcome, context) {
     draw: Math.max(0.02, draw),
     away: Math.max(0.02, away)
   });
-}
-
-function blendOutcomes(models, weights) {
-  const blended = { home: 0, draw: 0, away: 0 };
-
-  Object.entries(models).forEach(([key, probs]) => {
-    const weight = weights[key] || 0;
-    blended.home += probs.home * weight;
-    blended.draw += probs.draw * weight;
-    blended.away += probs.away * weight;
-  });
-
-  return normalizeOutcome(blended);
 }
 
 function chooseBestLine(options, minimumProbability = 0.58) {
@@ -452,7 +299,6 @@ function calculateMarketPack(prediction, matrix) {
   });
 
   const favoriteOver05 = 1 - poisson(0, favoriteLambda);
-
   const cornersExpected = prediction.expectedCorners.total;
   const cardsExpected = prediction.expectedCards;
 
@@ -586,29 +432,25 @@ function calculateMarketPack(prediction, matrix) {
 }
 
 function predictMatch(results, home, away, context = {}) {
-  const global = getGlobalAverages(results);
-  const homeStats = getWeightedTeamStats(results, home);
-  const awayStats = getWeightedTeamStats(results, away);
-  const ratings = buildEloRatings(results);
+  const features = buildMatchFeatures(results, home, away, context);
+  const global = features.global;
 
-  const homeElo = ratings[home] || 1500;
-  const awayElo = ratings[away] || 1500;
-  const eloDiff = homeElo - awayElo;
+  const homeAttack = clamp(features.homeAttackIndex, 0.45, 2.25);
+  const awayAttack = clamp(features.awayAttackIndex, 0.45, 2.25);
+  const homeDefenseLeak = clamp(features.homeDefenseLeakIndex, 0.45, 2.25);
+  const awayDefenseLeak = clamp(features.awayDefenseLeakIndex, 0.45, 2.25);
 
-  const homeAttack = clamp(homeStats.goalsFor / global.goalsFor, 0.45, 2.20);
-  const awayAttack = clamp(awayStats.goalsFor / global.goalsFor, 0.45, 2.20);
-  const homeDefenseLeak = clamp(homeStats.goalsAgainst / global.goalsAgainst, 0.45, 2.20);
-  const awayDefenseLeak = clamp(awayStats.goalsAgainst / global.goalsAgainst, 0.45, 2.20);
+  const eloHomeScale = Math.exp(clamp(features.eloDiff, -420, 420) / 980);
+  const eloAwayScale = Math.exp(clamp(-features.eloDiff, -420, 420) / 980);
 
-  const eloHomeScale = Math.exp(clamp(eloDiff, -420, 420) / 980);
-  const eloAwayScale = Math.exp(clamp(-eloDiff, -420, 420) / 980);
+  const formHomeScale = Math.exp(clamp(features.formDiff, -1.4, 1.4) / 5.2);
+  const formAwayScale = Math.exp(clamp(-features.formDiff, -1.4, 1.4) / 5.2);
 
-  const formDiff = homeStats.formScore - awayStats.formScore;
-  const formHomeScale = Math.exp(clamp(formDiff, -1.4, 1.4) / 5.2);
-  const formAwayScale = Math.exp(clamp(-formDiff, -1.4, 1.4) / 5.2);
+  const recentHomeBoost = 1 + clamp(features.momentumEdge, -0.35, 0.35) * 0.12;
+  const recentAwayBoost = 1 - clamp(features.momentumEdge, -0.35, 0.35) * 0.12;
 
-  let homeLambda = global.goalsFor * homeAttack * awayDefenseLeak * eloHomeScale * formHomeScale;
-  let awayLambda = global.goalsFor * awayAttack * homeDefenseLeak * eloAwayScale * formAwayScale;
+  let homeLambda = global.goalsFor * homeAttack * awayDefenseLeak * eloHomeScale * formHomeScale * recentHomeBoost;
+  let awayLambda = global.goalsFor * awayAttack * homeDefenseLeak * eloAwayScale * formAwayScale * recentAwayBoost;
 
   const adjusted = applyContextToLambdas(homeLambda, awayLambda, context);
   homeLambda = adjusted.homeLambda;
@@ -618,28 +460,30 @@ function predictMatch(results, home, away, context = {}) {
   const matrix = buildScoreMatrix(homeLambda, awayLambda, 8);
 
   const poissonModel = outcomeFromMatrix(matrix);
-  const eloModel = threeWayFromStrength(eloDiff / 390, expectedGoals);
-  const formModel = threeWayFromStrength(formDiff / 1.75, expectedGoals);
+  const eloModel = threeWayFromStrength(features.eloDiff / 390, expectedGoals);
+  const recentModel = threeWayFromStrength(features.formDiff / 1.75, expectedGoals);
 
   const logisticDiff =
-    (eloDiff / 420) * 0.58 +
-    (formDiff / 1.6) * 0.23 +
-    ((homeAttack - awayAttack) + (awayDefenseLeak - homeDefenseLeak)) * 0.22;
+    (features.eloDiff / 420) * 0.52 +
+    (features.formDiff / 1.6) * 0.24 +
+    features.attackEdge * 0.16 +
+    features.defenseEdge * 0.18 +
+    features.momentumEdge * 0.14;
 
   const logisticModel = threeWayFromStrength(logisticDiff, expectedGoals);
 
   const models = {
     poisson: poissonModel,
     elo: eloModel,
-    form: formModel,
+    recent: recentModel,
     logistic: logisticModel
   };
 
   const weights = {
-    poisson: 0.44,
-    elo: 0.24,
-    form: 0.17,
-    logistic: 0.15
+    poisson: 0.42,
+    elo: 0.22,
+    recent: 0.20,
+    logistic: 0.16
   };
 
   let ensemble = blendOutcomes(models, weights);
@@ -680,13 +524,13 @@ function predictMatch(results, home, away, context = {}) {
   const balance = 1 - Math.abs(ensemble.home - ensemble.away);
 
   const cornersHome = clamp(
-    3.35 + homeLambda * 0.9 + (homeAttack - 1) * 0.55 + Math.max(0, homeStats.formScore) * 0.22,
+    3.35 + homeLambda * 0.9 + (homeAttack - 1) * 0.55 + Math.max(0, features.homeStats.formScore) * 0.22,
     2.2,
     7.2
   );
 
   const cornersAway = clamp(
-    3.35 + awayLambda * 0.9 + (awayAttack - 1) * 0.55 + Math.max(0, awayStats.formScore) * 0.22,
+    3.35 + awayLambda * 0.9 + (awayAttack - 1) * 0.55 + Math.max(0, features.awayStats.formScore) * 0.22,
     2.2,
     7.2
   );
@@ -711,15 +555,16 @@ function predictMatch(results, home, away, context = {}) {
   const confidence = confidenceFromPrediction(models, ensemble);
 
   const prediction = {
-    modelLabel: "MatchIQ Engine v1.8",
+    modelLabel: "MatchIQ ML Foundation v1.9.1",
     homeTeam: home,
     awayTeam: away,
     homeLambda,
     awayLambda,
-    homeElo,
-    awayElo,
-    homeStats,
-    awayStats,
+    homeElo: features.homeElo,
+    awayElo: features.awayElo,
+    homeStats: features.homeStats,
+    awayStats: features.awayStats,
+    features,
     rawProbs: ensemble,
     probs: rounded,
     models,
@@ -742,7 +587,8 @@ function predictMatch(results, home, away, context = {}) {
       home: Number(cornersHome.toFixed(1)),
       away: Number(cornersAway.toFixed(1))
     },
-    expectedCards: Number(expectedCards.toFixed(1))
+    expectedCards: Number(expectedCards.toFixed(1)),
+    factors: features.factors
   };
 
   const marketPack = calculateMarketPack(prediction, matrix);
@@ -774,7 +620,7 @@ function generatePicks(prediction) {
         marketKey: "favoriteOver05",
         dataQuality: "strong",
         noBet: false,
-        rationale: "Mercado basado directamente en goles esperados y producción ofensiva."
+        rationale: "Mercado basado en goles esperados, forma ofensiva reciente y Poisson."
       }
     : {
         id: "safe",
@@ -788,7 +634,7 @@ function generatePicks(prediction) {
         marketKey: "under45",
         dataQuality: "strong",
         noBet: false,
-        rationale: "Mercado basado directamente en distribución de goles del modelo."
+        rationale: "Mercado basado en distribución de goles y estabilidad histórica."
       };
 
   return [
@@ -835,7 +681,7 @@ function generatePicks(prediction) {
       noBet: Boolean(cornerBest.noBet),
       rationale: cornerBest.noBet
         ? cornerBest.reason
-        : `${cornerBest.reason} Estimación proxy: no usa datos reales de córners.`
+        : `${cornerBest.reason} Estimación proxy: aún no usa datos reales de córners.`
     },
     {
       id: "cards",
@@ -851,7 +697,7 @@ function generatePicks(prediction) {
       noBet: Boolean(cardBest.noBet),
       rationale: cardBest.noBet
         ? cardBest.reason
-        : `${cardBest.reason} Estimación proxy: no usa árbitro ni tarjetas reales.`
+        : `${cardBest.reason} Estimación proxy: aún no usa árbitro ni tarjetas reales.`
     },
     {
       id: "score",

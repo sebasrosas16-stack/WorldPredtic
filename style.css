@@ -9,9 +9,9 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Arial, sans-serif;
   color: white;
   background:
-    radial-gradient(circle at 20% 10%, #3b82f6 0%, transparent 30%),
-    radial-gradient(circle at 80% 0%, #a855f7 0%, transparent 28%),
-    radial-gradient(circle at 50% 100%, #14b8a6 0%, transparent 35%),
+    radial-gradient(circle at 18% 8%, #3b82f6 0%, transparent 31%),
+    radial-gradient(circle at 82% 0%, #a855f7 0%, transparent 28%),
+    radial-gradient(circle at 50% 100%, #14b8a6 0%, transparent 34%),
     #050510;
 }
 
@@ -23,7 +23,7 @@ body {
 
 .glass {
   background: rgba(255,255,255,.13);
-  border: 1px solid rgba(255,255,255,.25);
+  border: 1px solid rgba(255,255,255,.24);
   box-shadow: 0 20px 60px rgba(0,0,0,.35);
   backdrop-filter: blur(22px);
   -webkit-backdrop-filter: blur(22px);
@@ -33,7 +33,7 @@ body {
 .hero {
   padding: 26px;
   margin-bottom: 16px;
-  transition: all .28s ease;
+  transition: all .25s ease;
 }
 
 .hero-compact {
@@ -114,17 +114,25 @@ label {
   margin-top: 12px;
   margin-bottom: 8px;
   color: rgba(255,255,255,.75);
+  font-size: 14px;
 }
 
 select,
-input {
+input,
+textarea {
   width: 100%;
   padding: 14px;
   border-radius: 18px;
   border: none;
+  outline: none;
   font-size: 16px;
   color: white;
   background: rgba(0,0,0,.35);
+}
+
+textarea {
+  resize: vertical;
+  min-height: 72px;
 }
 
 button {
@@ -138,12 +146,13 @@ button {
 
 button:disabled {
   cursor: default;
+  opacity: .55;
 }
 
 .primary-btn {
   width: 100%;
   margin-top: 12px;
-  background: rgba(255,255,255,.90);
+  background: rgba(255,255,255,.92);
   color: #111827;
 }
 
@@ -162,6 +171,11 @@ button:disabled {
   background: rgba(255,255,255,.14);
   color: white;
   margin-top: 14px;
+}
+
+.ghost-small {
+  background: rgba(255,255,255,.13);
+  color: white;
 }
 
 .win {
@@ -421,6 +435,10 @@ button:disabled {
   border-left: 5px solid #f59e0b;
 }
 
+.manual {
+  border-left: 5px solid #a78bfa;
+}
+
 .nobet {
   opacity: .72;
 }
@@ -529,7 +547,8 @@ button:disabled {
 }
 
 .model-box,
-.volatility-box {
+.volatility-box,
+.manual-box {
   margin: 16px 0;
   padding: 16px;
   border-radius: 24px;
@@ -538,13 +557,15 @@ button:disabled {
 }
 
 .model-box strong,
-.volatility-box strong {
+.volatility-box strong,
+.manual-box strong {
   display: block;
   font-size: 16px;
 }
 
 .model-box span,
-.volatility-box span {
+.volatility-box span,
+.manual-box span {
   display: block;
   margin-top: 4px;
   color: #c7d2fe;
@@ -552,7 +573,8 @@ button:disabled {
 }
 
 .model-box small,
-.volatility-box small {
+.volatility-box small,
+.manual-box small {
   display: block;
   margin-top: 6px;
   color: rgba(255,255,255,.64);
@@ -831,11 +853,6 @@ button:disabled {
   grid-template-columns: repeat(2, 1fr);
   gap: 9px;
   margin-top: 12px;
-}
-
-.ghost-small {
-  background: rgba(255,255,255,.13);
-  color: white;
 }
 
 .switch-row {

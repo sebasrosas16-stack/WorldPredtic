@@ -1,12 +1,4 @@
-const PICK_TYPES = [
-  { key: "safe", name: "Conservadores", emoji: "🛡️" },
-  { key: "balanced", name: "Equilibrados", emoji: "⚖️" },
-  { key: "aggressive", name: "Agresivos", emoji: "🔥" },
-  { key: "corners", name: "Córners", emoji: "🚩" },
-  { key: "cards", name: "Tarjetas", emoji: "🟨" },
-  { key: "player", name: "Jugadores", emoji: "⚽" },
-  { key: "score", name: "Marcadores", emoji: "🎯" }
-];
+const APP_VERSION = "1.8";
 
 const BOOKS = ["Draftea", "Caliente", "Codere", "Bet365", "Betcris", "Otra"];
 
@@ -53,7 +45,7 @@ const DISPLAY_NAMES = {
 const DATE_LABELS = {
   "2026-06-24": "24 junio",
   "2026-06-25": "25 junio",
-  "2026-06-26": "26 junio · v1.7.3",
+  "2026-06-26": "26 junio",
   "2026-06-27": "27 junio"
 };
 
@@ -162,7 +154,7 @@ const STORAGE_KEYS = {
   cart: "matchiq_cart_master",
   tickets: "matchiq_tickets_master",
   draft: "matchiq_ticket_draft_master",
-  migration: "matchiq_migration_done_v173"
+  migration: "matchiq_migration_v18_done"
 };
 
 const LEGACY_KEYS = {
@@ -263,7 +255,14 @@ let tickets = loadJSON(STORAGE_KEYS.tickets, []);
 let ticketDraft = loadJSON(STORAGE_KEYS.draft, {
   book: settings.favoriteBook || "Draftea",
   odds: "",
-  stake: ""
+  stake: "",
+  manualMatch: "",
+  manualPick: "",
+  manualMarket: "Goles",
+  manualLine: "+0.5",
+  manualType: "manual",
+  manualQuality: "proxy",
+  manualProbability: ""
 });
 
 const screens = {
@@ -273,6 +272,15 @@ const screens = {
   history: document.getElementById("historyScreen"),
   profile: document.getElementById("profileScreen")
 };
+
+function escapeHTML(value) {
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
 
 function displayName(team) {
   return DISPLAY_NAMES[team] || team;
@@ -358,6 +366,7 @@ function marketBucket(selection) {
   if (type === "player") return "Jugadores";
   if (type === "score") return "Marcador";
   if (type === "aggressive" || market.includes("combo")) return "Combo";
+  if (type === "manual") return selection.market || "Manual";
 
   return selection.typeLabel || type || "Otro";
 }
@@ -425,25 +434,6 @@ function getVolatility(prediction, match) {
   return { score, label: "Baja", emoji: "🟢", context };
 }
 
-function scoreProbability(score, prediction) {
-  const [h, a] = String(score || "0-0").split("-").map(Number);
-  return poisson(h, prediction.homeLambda) * poisson(a, prediction.awayLambda);
-}
-
-function winAndUnder45Probability(prediction) {
-  let total = 0;
-
-  for (let h = 0; h <= 7; h++) {
-    for (let a = 0; a <= 7; a++) {
-      const p = poisson(h, prediction.homeLambda) * poisson(a, prediction.awayLambda);
-      const favWins = prediction.favorite.side === "home" ? h > a : a > h;
-      if (favWins && h + a <= 4) total += p;
-    }
-  }
-
-  return total;
-}
-
 function getPickProbability(pick, prediction, match) {
   if (pick.noBet) return 0;
 
@@ -454,8 +444,7 @@ function getPickProbability(pick, prediction, match) {
     probability = prediction.markets[pick.marketKey];
   } else {
     if (pick.type === "player") probability = 0.54 + (prediction.favorite.prob - 0.50) * 0.25;
-    if (pick.type === "score") probability = scoreProbability(prediction.score, prediction);
-    if (pick.type === "aggressive") probability = winAndUnder45Probability(prediction);
+    if (pick.type === "score") probability = prediction.markets.topScore || 0.08;
   }
 
   if (volatility.label === "Alta" && ["balanced", "aggressive", "score", "player", "cards"].includes(pick.type)) {
@@ -592,6 +581,7 @@ function getFullPicks(prediction, match) {
   const players = getPlayerSuggestions(prediction.favorite);
 
   basePicks.push({
+    id: "player",
     type: "player",
     label: "Jugador",
     emoji: "⚽",
@@ -607,38 +597,39 @@ function getFullPicks(prediction, match) {
 
   const volatility = getVolatility(prediction, match);
 
-  return basePicks.map(pick => {
-    const probability = getPickProbability(pick, prediction, match);
-    const fairOdds = pick.noBet ? 0 : 1 / probability;
+  return basePicks
+    .map(pick => {
+      const probability = getPickProbability(pick, prediction, match);
+      const fairOdds = pick.noBet ? 0 : 1 / probability;
 
-    const translatedPick = {
-      ...pick,
-      text: displayPickText(pick.text),
-      market: displayPickText(pick.market),
-      probability,
-      fairOdds,
-      valueOdds: pick.noBet ? 0 : 1.08 / probability,
-      confidence: confidenceLabel(probability),
-      risk: riskLabel(probability),
-      volatility
-    };
+      const translatedPick = {
+        ...pick,
+        text: displayPickText(pick.text),
+        market: displayPickText(pick.market),
+        probability,
+        fairOdds,
+        confidence: confidenceLabel(probability),
+        risk: riskLabel(probability),
+        volatility
+      };
 
-    const clarity = getPickClarity(translatedPick, volatility);
+      const clarity = getPickClarity(translatedPick, volatility);
 
-    return {
-      ...translatedPick,
-      clarity: clarity.label,
-      clarityClass: clarity.className,
-      clarityNote: clarity.note,
-      rankScore: 0
-    };
-  }).map(pick => {
-    const item = { match, prediction, volatility, pick };
-    return {
-      ...pick,
-      rankScore: rankScore(item)
-    };
-  });
+      return {
+        ...translatedPick,
+        clarity: clarity.label,
+        clarityClass: clarity.className,
+        clarityNote: clarity.note,
+        rankScore: 0
+      };
+    })
+    .map(pick => {
+      const item = { match, prediction, volatility, pick };
+      return {
+        ...pick,
+        rankScore: rankScore(item)
+      };
+    });
 }
 
 function getMatchesByDate(date) {
@@ -783,7 +774,7 @@ function showToast(message) {
 
 function makeCartItem(match, pick) {
   return {
-    id: `${match.id}__${pick.type}__${normalizeKey(pick.text)}`,
+    id: `${match.id}__${pick.id || pick.type}__${normalizeKey(pick.text)}`,
     matchId: match.id,
     match: matchName(match),
     date: match.date,
@@ -801,7 +792,7 @@ function makeCartItem(match, pick) {
     probability: pick.probability,
     fairOdds: pick.fairOdds,
     risk: pick.risk,
-    volatility: pick.volatility.label
+    volatility: pick.volatility?.label || "Media"
   };
 }
 
@@ -810,13 +801,13 @@ function isPickInCart(match, pick) {
   return cart.some(cartItem => cartItem.id === item.id);
 }
 
-function addToTicket(matchId, pickType) {
+function addToTicket(matchId, pickId) {
   const match = currentMatches.find(item => item.id === matchId);
   if (!match) return;
 
   const prediction = getPredictionForMatch(match);
   const picks = getFullPicks(prediction, match);
-  const pick = picks.find(item => item.type === pickType);
+  const pick = picks.find(item => item.id === pickId || item.type === pickId);
 
   if (!pick || pick.noBet) {
     showToast("No hay ventaja clara");
@@ -859,6 +850,55 @@ function addParlayToTicket(date) {
   renderAll();
 }
 
+function addManualPick() {
+  const probabilityInput = Number(ticketDraft.manualProbability || 0);
+  const probability = probabilityInput > 1 ? probabilityInput / 100 : probabilityInput;
+
+  if (!ticketDraft.manualPick || !ticketDraft.manualPick.trim()) {
+    alert("Escribe el pick manual.");
+    return;
+  }
+
+  if (!Number.isFinite(probability) || probability <= 0 || probability >= 1) {
+    alert("Escribe una probabilidad válida. Ejemplo: 65 o 0.65.");
+    return;
+  }
+
+  const pick = {
+    id: `manual_${Date.now()}`,
+    matchId: "manual",
+    match: ticketDraft.manualMatch || "Entrada manual",
+    date: new Date().toISOString().slice(0, 10),
+    type: "manual",
+    typeLabel: "Manual",
+    emoji: "✍️",
+    text: ticketDraft.manualPick.trim(),
+    market: ticketDraft.manualMarket || "Manual",
+    line: ticketDraft.manualLine || "",
+    direction: "",
+    dataQuality: ticketDraft.manualQuality || "proxy",
+    clarityClass: probability >= 0.66 ? "good" : probability >= 0.50 ? "mid" : "bad",
+    clarity: probability >= 0.66 ? "🟢 Claro" : probability >= 0.50 ? "🟡 Dudoso" : "🔴 Evitar",
+    rationale: "Entrada agregada manualmente por el usuario.",
+    probability,
+    fairOdds: 1 / probability,
+    risk: riskLabel(probability),
+    volatility: "Manual"
+  };
+
+  cart.push(pick);
+
+  ticketDraft.manualMatch = "";
+  ticketDraft.manualPick = "";
+  ticketDraft.manualLine = "";
+  ticketDraft.manualProbability = "";
+
+  saveCart();
+  saveDraft();
+  showToast("Entrada manual agregada");
+  renderAll();
+}
+
 function removeFromTicket(id) {
   cart = cart.filter(item => item.id !== id);
   saveCart();
@@ -880,7 +920,7 @@ function updateDraft(key, value) {
   ticketDraft[key] = value;
   saveDraft();
 
-  if (key === "odds" || key === "stake") {
+  if (["odds", "stake"].includes(key)) {
     updateTicketLivePreview();
     return;
   }
@@ -907,7 +947,7 @@ function getTicketEvaluation() {
 
   const highVolatility = cart.filter(item => item.volatility === "Alta").length;
   const proxyCount = cart.filter(item => item.dataQuality === "proxy").length;
-  const riskyTypes = cart.filter(item => ["aggressive", "score", "player", "cards"].includes(item.type)).length;
+  const riskyTypes = cart.filter(item => ["aggressive", "score", "player", "cards", "manual"].includes(item.type)).length;
   const badClarity = cart.filter(item => item.clarityClass === "bad").length;
 
   let score = probability * 100;
@@ -950,7 +990,7 @@ function getTicketEvaluation() {
   if (edge < 0 && odds > 1) warnings.push("Tiene value negativo frente al momio de la casa.");
   if (cart.length >= 4) warnings.push("Tiene muchas selecciones; considera bajarlo a 2 o 3 picks.");
   if (highVolatility) warnings.push(`Incluye ${highVolatility} pick(s) de alta volatilidad.`);
-  if (proxyCount) warnings.push(`Incluye ${proxyCount} mercado(s) proxy: córners, tarjetas o jugadores.`);
+  if (proxyCount) warnings.push(`Incluye ${proxyCount} mercado(s) proxy/manual.`);
   if (riskyTypes >= 2) warnings.push("Combina varios mercados de alta varianza.");
   if (badClarity) warnings.push("Incluye picks marcados como Evitar.");
 
@@ -978,7 +1018,7 @@ function renderWarnings(warnings) {
     <div class="warning-list">
       <strong>Alertas del ticket</strong>
       <ul>
-        ${warnings.map(warning => `<li>${warning}</li>`).join("")}
+        ${warnings.map(warning => `<li>${escapeHTML(warning)}</li>`).join("")}
       </ul>
     </div>
   `;
@@ -1067,13 +1107,15 @@ function saveCurrentTicket() {
     selections: [...cart],
     combinedProbability: cartProbability(),
     fairOdds: cartFairOdds(),
-    evaluation
+    evaluation,
+    appVersion: APP_VERSION
   };
 
   tickets.unshift(ticket);
 
   cart = [];
   ticketDraft = {
+    ...ticketDraft,
     book: settings.favoriteBook || "Draftea",
     odds: "",
     stake: ""
@@ -1191,14 +1233,14 @@ function groupMarketStats() {
 }
 
 function renderStatRows(rows, emptyText) {
-  if (!rows.length) return `<p class="note">${emptyText}</p>`;
+  if (!rows.length) return `<p class="note">${escapeHTML(emptyText)}</p>`;
 
   return `
     <div class="stat-list">
       ${rows.slice(0, 6).map(row => `
         <div class="stat-row">
           <div>
-            <strong>${row.name}</strong>
+            <strong>${escapeHTML(row.name)}</strong>
             <span>${row.count} registros · ${formatMoney(row.staked)} apostado</span>
           </div>
           <div>
@@ -1223,17 +1265,17 @@ function updateHero(tab) {
     home: {
       eyebrow: "IA Football Lab",
       title: "Hola, Sebas",
-      subtitle: "Tu panel de predicciones, tickets y bankroll."
+      subtitle: `MatchIQ v${APP_VERSION} · Predicciones, tickets y bankroll.`
     },
     recommended: {
       eyebrow: "Recomendaciones",
       title: "Picks",
-      subtitle: "Predicciones ordenadas por seguridad, contexto y volatilidad."
+      subtitle: "Predicciones ordenadas por perfil, valor y claridad."
     },
     ticket: {
       eyebrow: "Ticket Builder",
       title: "Ticket",
-      subtitle: "Arma tus entradas y mide value antes de guardar."
+      subtitle: "Arma tus entradas, agrega picks manuales y mide value."
     },
     history: {
       eyebrow: "Bankroll",
@@ -1243,7 +1285,7 @@ function updateHero(tab) {
     profile: {
       eyebrow: "Ajustes",
       title: "Perfil",
-      subtitle: "Configura tu bankroll, riesgo y casa favorita."
+      subtitle: "Configura bankroll, riesgo y casa favorita."
     }
   };
 
@@ -1296,7 +1338,7 @@ function renderHome() {
   screens.home.innerHTML = `
     <section class="glass panel">
       <h2>Inicio</h2>
-      <p class="note">Resumen de tu bankroll y recomendaciones principales.</p>
+      <p class="note">Base limpia v${APP_VERSION}. Los errores nuevos se corregirán sobre esta versión.</p>
 
       <div class="home-stats">
         <div><strong>${formatMoney(stats.bankroll)}</strong><span>Bankroll actual</span></div>
@@ -1311,9 +1353,9 @@ function renderHome() {
       ${
         solid ? `
           <button class="daily-card" onclick="selectMatchFromHome('${solid.match.id}')">
-            <span>${getProfileRules().label} · v1.7.3</span>
-            <strong>${solid.pick.text}</strong>
-            <small>${matchName(solid.match)}</small>
+            <span>${getProfileRules().label} · v${APP_VERSION}</span>
+            <strong>${escapeHTML(solid.pick.text)}</strong>
+            <small>${escapeHTML(matchName(solid.match))}</small>
             <em>IA ${formatPct(solid.pick.probability)} · ${solid.pick.clarity} · ${formatFair(solid.pick.fairOdds)}</em>
           </button>
         ` : `<p class="note">No hay pick que pase los filtros actuales.</p>`
@@ -1328,8 +1370,8 @@ function renderHome() {
           ${parlay.legs.map((leg, index) => `
             <div class="mini-ticket-row">
               <div>
-                <strong>${index + 1}. ${leg.pick.text}</strong>
-                <span>${matchName(leg.match)} · IA ${formatPct(leg.pick.probability)} · ${leg.pick.clarity}</span>
+                <strong>${index + 1}. ${escapeHTML(leg.pick.text)}</strong>
+                <span>${escapeHTML(matchName(leg.match))} · IA ${formatPct(leg.pick.probability)} · ${leg.pick.clarity}</span>
               </div>
             </div>
           `).join("")}
@@ -1417,8 +1459,8 @@ function renderRecommended() {
           <button class="top-pick-row" onclick="selectMatchFromRecommended('${item.match.id}')">
             <div class="rank">${index + 1}</div>
             <div>
-              <strong>${item.pick.emoji} ${item.pick.text}</strong>
-              <span>${matchName(item.match)} · IA ${formatPct(item.pick.probability)} · ${item.pick.clarity}</span>
+              <strong>${item.pick.emoji} ${escapeHTML(item.pick.text)}</strong>
+              <span>${escapeHTML(matchName(item.match))} · IA ${formatPct(item.pick.probability)} · ${item.pick.clarity}</span>
             </div>
             <em>${formatFair(item.pick.fairOdds)}</em>
           </button>
@@ -1429,21 +1471,21 @@ function renderRecommended() {
     </section>
 
     <section class="glass card">
-      <h2 class="match-title">${matchName(match)}</h2>
-      <p class="note">Predicción con <strong>${prediction.modelLabel}</strong>. Favorito estadístico: <strong>${displayName(prediction.favorite.team)}</strong>.</p>
+      <h2 class="match-title">${escapeHTML(matchName(match))}</h2>
+      <p class="note">Predicción con <strong>${prediction.modelLabel}</strong>. Favorito estadístico: <strong>${escapeHTML(displayName(prediction.favorite.team))}</strong>.</p>
 
       <div class="prob-grid">
-        <div class="prob"><strong>${prediction.probs.home}%</strong><span>${displayName(match.home)}</span></div>
+        <div class="prob"><strong>${prediction.probs.home}%</strong><span>${escapeHTML(displayName(match.home))}</span></div>
         <div class="prob"><strong>${prediction.probs.draw}%</strong><span>Empate</span></div>
-        <div class="prob"><strong>${prediction.probs.away}%</strong><span>${displayName(match.away)}</span></div>
+        <div class="prob"><strong>${prediction.probs.away}%</strong><span>${escapeHTML(displayName(match.away))}</span></div>
       </div>
 
       ${renderModelPanel(prediction)}
 
       <div class="volatility-box">
         <strong>${volatility.emoji} Volatilidad ${volatility.label}</strong>
-        <span>${volatility.context.importance}</span>
-        ${volatility.context.notes.map(note => `<small>${note}</small>`).join("")}
+        <span>${escapeHTML(volatility.context.importance)}</span>
+        ${volatility.context.notes.map(note => `<small>${escapeHTML(note)}</small>`).join("")}
         <small>Riesgo de partido roto: ${Math.round(prediction.brokenRisk * 100)}%</small>
       </div>
 
@@ -1455,7 +1497,7 @@ function renderRecommended() {
 
         <div class="insight-card">
           <span>🚩 Córners esperados</span>
-          <strong>Total ${prediction.expectedCorners.total} · ${displayName(match.home)} ${prediction.corners.home} / ${displayName(match.away)} ${prediction.corners.away}</strong>
+          <strong>Total ${prediction.expectedCorners.total} · ${escapeHTML(displayName(match.home))} ${prediction.corners.home} / ${escapeHTML(displayName(match.away))} ${prediction.corners.away}</strong>
         </div>
 
         <div class="insight-card">
@@ -1475,7 +1517,7 @@ function renderRecommended() {
 
         <div class="insight-card full">
           <span>⚽ Jugadores sugeridos</span>
-          <strong>${players.join(" · ")}</strong>
+          <strong>${players.map(escapeHTML).join(" · ")}</strong>
         </div>
       </div>
 
@@ -1497,17 +1539,17 @@ function renderPickCard(match, pick) {
 
   return `
     <div class="pick ${pick.type} ${pick.noBet ? "nobet" : ""}">
-      <div class="pick-title">${pick.emoji} ${pick.label}</div>
-      <strong class="pick-main">${pick.text}</strong>
+      <div class="pick-title">${pick.emoji} ${escapeHTML(pick.label)}</div>
+      <strong class="pick-main">${escapeHTML(pick.text)}</strong>
 
       <div class="market-line">
         <div>
           <span>Mercado</span>
-          <strong>${pick.market}</strong>
+          <strong>${escapeHTML(pick.market)}</strong>
         </div>
         <div>
           <span>Línea</span>
-          <strong>${pick.line || "—"}</strong>
+          <strong>${escapeHTML(pick.line || "—")}</strong>
         </div>
       </div>
 
@@ -1516,10 +1558,10 @@ function renderPickCard(match, pick) {
 
       <p class="pick-meta">
         ${pick.noBet ? "Sin recomendación de entrada" : `IA ${formatPct(pick.probability)} · Riesgo ${pick.risk} · Momio justo ${formatFair(pick.fairOdds)}`}
-        <br>${pick.rationale || pick.clarityNote || ""}
+        <br>${escapeHTML(pick.rationale || pick.clarityNote || "")}
       </p>
 
-      <button class="primary-btn ${inTicket ? "in-ticket" : ""} ${pick.noBet ? "disabled" : ""}" ${inTicket || pick.noBet ? "disabled" : ""} onclick="addToTicket('${match.id}', '${pick.type}')">
+      <button class="primary-btn ${inTicket ? "in-ticket" : ""} ${pick.noBet ? "disabled" : ""}" ${inTicket || pick.noBet ? "disabled" : ""} onclick="addToTicket('${match.id}', '${pick.id}')">
         ${pick.noBet ? "No entrar" : inTicket ? "✅ En ticket" : "Agregar al ticket"}
       </button>
     </div>
@@ -1533,15 +1575,14 @@ function renderModelPanel(prediction) {
     poisson: "Poisson",
     elo: "Elo",
     form: "Forma",
-    logistic: "Logística",
-    monteCarlo: "Monte Carlo"
+    logistic: "Logística"
   };
 
   return `
     <div class="model-box">
       <strong>🧠 Modelo ensemble</strong>
       <span>Confianza ${prediction.confidence.label} · ${prediction.confidence.score}/100</span>
-      <small>Combina goles esperados, Elo, forma reciente, simulación Monte Carlo y contexto del partido.</small>
+      <small>Combina goles esperados, Elo, forma reciente, modelo logístico y contexto del partido.</small>
 
       <div class="model-bars">
         ${Object.entries(prediction.models).map(([key, model]) => {
@@ -1618,24 +1659,56 @@ function renderTicket() {
   screens.ticket.innerHTML = `
     <section class="glass panel">
       <h2>Ticket actual</h2>
-      <p class="note">Agrega picks desde Recomendados y luego escribe el momio real de la casa.</p>
+      <p class="note">Agrega picks desde Recomendados o crea una entrada manual.</p>
 
       ${
         cart.length ? cart.map(item => `
           <div class="cart-item">
             <div>
-              <strong>${item.emoji || "🎟️"} ${item.text}</strong>
+              <strong>${item.emoji || "🎟️"} ${escapeHTML(item.text)}</strong>
               <span>
-                ${item.match} · IA ${formatPct(item.probability)} · Riesgo ${item.risk || "—"}
-                <br>${item.market || "Mercado"} ${item.line || ""} · ${qualityLabel(item.dataQuality)} · ${item.clarity || "🟡 Dudoso"}
+                ${escapeHTML(item.match)} · IA ${formatPct(item.probability)} · Riesgo ${item.risk || "—"}
+                <br>${escapeHTML(item.market || "Mercado")} ${escapeHTML(item.line || "")} · ${qualityLabel(item.dataQuality)} · ${item.clarity || "🟡 Dudoso"}
               </span>
             </div>
             <button onclick="removeFromTicket('${item.id}')">✕</button>
           </div>
-        `).join("") : `<p class="note">Tu ticket está vacío. Ve a Picks y agrega selecciones para construir tu entrada.</p>`
+        `).join("") : `<p class="note">Tu ticket está vacío.</p>`
       }
 
       ${cart.length ? `<button class="ghost" onclick="clearTicket()">Vaciar ticket</button>` : ""}
+    </section>
+
+    <section class="glass panel">
+      <h2>Entrada manual</h2>
+      <p class="note">Usa esto para copiar un pick externo y evaluarlo dentro de MatchIQ.</p>
+
+      <label>Partido o descripción</label>
+      <input value="${escapeHTML(ticketDraft.manualMatch || "")}" placeholder="Ejemplo: México vs Brasil" oninput="updateDraft('manualMatch', this.value)" />
+
+      <label>Pick</label>
+      <input value="${escapeHTML(ticketDraft.manualPick || "")}" placeholder="Ejemplo: México córners +3.5" oninput="updateDraft('manualPick', this.value)" />
+
+      <label>Mercado</label>
+      <select onchange="updateDraft('manualMarket', this.value)">
+        ${["Goles", "Handicap", "Córners", "Tarjetas", "Jugador", "Marcador", "Combo", "Otro"].map(item => `
+          <option value="${item}" ${ticketDraft.manualMarket === item ? "selected" : ""}>${item}</option>
+        `).join("")}
+      </select>
+
+      <label>Línea</label>
+      <input value="${escapeHTML(ticketDraft.manualLine || "")}" placeholder="Ejemplo: +0.5, -4.5, +8.5" oninput="updateDraft('manualLine', this.value)" />
+
+      <label>Calidad del dato</label>
+      <select onchange="updateDraft('manualQuality', this.value)">
+        <option value="proxy" ${ticketDraft.manualQuality === "proxy" ? "selected" : ""}>Proxy</option>
+        <option value="strong" ${ticketDraft.manualQuality === "strong" ? "selected" : ""}>Modelo fuerte</option>
+      </select>
+
+      <label>Probabilidad estimada</label>
+      <input type="number" step="0.01" value="${escapeHTML(ticketDraft.manualProbability || "")}" placeholder="Ejemplo: 65 o 0.65" oninput="updateDraft('manualProbability', this.value)" />
+
+      <button class="primary-btn" onclick="addManualPick()">Agregar entrada manual</button>
     </section>
 
     <section class="glass panel">
@@ -1649,10 +1722,10 @@ function renderTicket() {
       </select>
 
       <label>Momio total de la casa</label>
-      <input type="number" step="0.01" min="1.01" placeholder="Ejemplo: 2.35" value="${ticketDraft.odds}" oninput="updateDraft('odds', this.value)" />
+      <input type="number" step="0.01" min="1.01" placeholder="Ejemplo: 2.35" value="${escapeHTML(ticketDraft.odds || "")}" oninput="updateDraft('odds', this.value)" />
 
       <label>Importe apostado</label>
-      <input type="number" step="1" min="1" placeholder="Ejemplo: 500" value="${ticketDraft.stake}" oninput="updateDraft('stake', this.value)" />
+      <input type="number" step="1" min="1" placeholder="Ejemplo: 500" value="${escapeHTML(ticketDraft.stake || "")}" oninput="updateDraft('stake', this.value)" />
 
       <div id="ticketLiveSummary" class="ticket-summary">
         <div><strong>${formatPct(probability)}</strong><span>Prob. IA</span></div>
@@ -1736,7 +1809,7 @@ function renderHistory() {
         filteredTickets.length ? filteredTickets.map(ticket => `
           <div class="ticket-card ticket-${ticket.status || "pending"}">
             <div class="ticket-head">
-              <strong>${ticket.book || "Casa"} · +${formatOdds(ticket.odds)}</strong>
+              <strong>${escapeHTML(ticket.book || "Casa")} · ${formatOdds(ticket.odds)}</strong>
               <span>${statusLabel(ticket.status)}</span>
             </div>
 
@@ -1745,10 +1818,10 @@ function renderHistory() {
             ${(ticket.selections || []).map(sel => `
               <div class="ticket-selection">
                 <div>
-                  <strong>${sel.text}</strong>
+                  <strong>${escapeHTML(sel.text)}</strong>
                   <span>
-                    ${sel.match} · IA ${formatPct(sel.probability)}
-                    <br>${sel.market || sel.typeLabel || "Mercado"} ${sel.line || ""} · ${qualityLabel(sel.dataQuality)} · ${sel.clarity || "🟡 Dudoso"}
+                    ${escapeHTML(sel.match)} · IA ${formatPct(sel.probability)}
+                    <br>${escapeHTML(sel.market || sel.typeLabel || "Mercado")} ${escapeHTML(sel.line || "")} · ${qualityLabel(sel.dataQuality)} · ${sel.clarity || "🟡 Dudoso"}
                   </span>
                 </div>
               </div>
@@ -1779,7 +1852,7 @@ function renderProfile() {
   screens.profile.innerHTML = `
     <section class="glass panel">
       <h2>Perfil</h2>
-      <p class="note">Ajusta tu bankroll, riesgo y casa favorita para que las recomendaciones se adapten a ti.</p>
+      <p class="note">Ajusta tu bankroll, riesgo y casa favorita.</p>
 
       <label>Bankroll inicial</label>
       <input type="number" min="0" step="1" value="${settings.initialBankroll}" oninput="updateSetting('initialBankroll', Number(this.value))" />
@@ -1984,7 +2057,7 @@ async function init() {
     screen.innerHTML = `
       <section class="glass panel">
         <h2>Cargando...</h2>
-        <p class="note">Conectando con datos y preparando Market Engine.</p>
+        <p class="note">Preparando MatchIQ v${APP_VERSION}.</p>
       </section>
     `;
   });
@@ -2015,7 +2088,7 @@ async function init() {
       screen.innerHTML = `
         <section class="glass panel">
           <h2>Error al cargar</h2>
-          <p class="note">No se pudo cargar la app. Revisa que data.js, model.js y app.js estén completos.</p>
+          <p class="note">No se pudo iniciar MatchIQ v${APP_VERSION}. Revisa que los 5 archivos estén completos y guardados.</p>
         </section>
       `;
     });

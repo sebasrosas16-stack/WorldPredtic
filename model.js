@@ -426,19 +426,50 @@ function confidenceFromPrediction(models, ensemble) {
   return { score, label, disagreement };
 }
 
-function chooseBestLine(options) {
-  return options
+function chooseBestLine(options, minimumProbability = 0.57) {
+  const ranked = options
     .map(option => {
       let score = option.probability * 100;
 
       if (option.dataQuality === "proxy") score -= 8;
-      if (option.direction === "UNDER" && option.lineValue >= 11.5) score -= 4;
-      if (option.direction === "UNDER" && option.lineValue >= 6.5 && option.market === "Total tarjetas") score -= 4;
-      if (option.probability > 0.84) score -= 6;
+      if (option.direction === "UNDER" && option.lineValue >= 11.5 && option.market === "Total córners") score -= 5;
+      if (option.direction === "UNDER" && option.lineValue >= 6.5 && option.market === "Total tarjetas") score -= 5;
+      if (option.probability > 0.86) score -= 6;
 
       return { ...option, score };
     })
-    .sort((a, b) => b.score - a.score)[0];
+    .sort((a, b) => b.score - a.score);
+
+  const best = ranked[0];
+  const second = ranked[1];
+
+  if (!best || best.probability < minimumProbability) {
+    return {
+      ...best,
+      text: `${best?.market || "Mercado"}: NO BET`,
+      direction: "NO BET",
+      noBet: true,
+      reason: "El modelo no ve ventaja suficiente en este mercado."
+    };
+  }
+
+  if (second && Math.abs(best.probability - second.probability) < 0.018 && best.probability < 0.63) {
+    return {
+      ...best,
+      text: `${best.market}: NO BET`,
+      direction: "NO BET",
+      noBet: true,
+      reason: "Las líneas están demasiado parejas; no hay lectura clara."
+    };
+  }
+
+  return {
+    ...best,
+    noBet: false,
+    reason: best.direction === "OVER"
+      ? "La señal favorece un partido con ritmo, presión o empuje ofensivo."
+      : "La señal favorece un partido más controlado o con línea alta."
+  };
 }
 
 function calculateMarketProbabilities(prediction, matrix, context) {
@@ -565,8 +596,8 @@ function calculateMarketProbabilities(prediction, matrix, context) {
     }
   ];
 
-  const bestCorners = chooseBestLine(cornerOptions);
-  const bestCards = chooseBestLine(cardOptions);
+  const bestCorners = chooseBestLine(cornerOptions, 0.58);
+  const bestCards = chooseBestLine(cardOptions, 0.58);
 
   const markets = {
     favoriteWin: favWinProb,
@@ -685,6 +716,14 @@ function predictMatch(results, home, away, context = {}) {
     Math.abs(model.motivationHome || 0) +
     Math.abs(model.motivationAway || 0);
 
+  const brokenRisk = clamp(
+    (model.openLateRisk || 0) * 5 +
+    urgency * 4 +
+    (context.volatilityBoost || 0) / 35,
+    0,
+    1
+  );
+
   const balance = 1 - Math.abs(ensemble.home - ensemble.away);
 
   const cornersHome = clamp(
@@ -700,7 +739,7 @@ function predictMatch(results, home, away, context = {}) {
   );
 
   const expectedCornersTotal = clamp(
-    cornersHome + cornersAway + (model.openLateRisk || 0) * 2.6 + urgency * 2.8 - (model.underBias || 0) * 1.4,
+    cornersHome + cornersAway + brokenRisk * 1.6 + urgency * 1.4 - (model.underBias || 0) * 1.4,
     5.5,
     13.5
   );
@@ -709,8 +748,8 @@ function predictMatch(results, home, away, context = {}) {
     3.1 +
       balance * 0.9 +
       (context.volatilityBoost || 0) * 0.018 +
-      (model.openLateRisk || 0) * 4.5 +
-      urgency * 7.2 +
+      brokenRisk * 1.1 +
+      urgency * 5.4 +
       (model.drawBoost || 0) * 2.2,
     2.4,
     7.3
@@ -719,7 +758,7 @@ function predictMatch(results, home, away, context = {}) {
   const confidence = confidenceFromPrediction(modelsBeforeContext, ensemble);
 
   const prediction = {
-    modelLabel: "Ensemble ML v1.7.2",
+    modelLabel: "Ensemble ML v1.7.3",
     homeTeam: home,
     awayTeam: away,
     homeLambda,
@@ -732,6 +771,7 @@ function predictMatch(results, home, away, context = {}) {
     probs: rounded,
     models: modelsBeforeContext,
     confidence,
+    brokenRisk,
     favorite: {
       side,
       team: favoriteTeam,
@@ -831,24 +871,30 @@ function generatePicks(prediction) {
       label: "Córners",
       emoji: "🚩",
       market: cornerBest.market,
-      line: cornerBest.line,
+      line: cornerBest.noBet ? "NO BET" : cornerBest.line,
       direction: cornerBest.direction,
-      text: cornerBest.text,
+      text: cornerBest.noBet ? "Córners: NO BET" : cornerBest.text,
       marketKey: cornerBest.key,
       dataQuality: "proxy",
-      rationale: "Estimación proxy: usa ritmo, goles esperados, urgencia y contexto; no usa datos reales de córners."
+      noBet: cornerBest.noBet,
+      rationale: cornerBest.noBet
+        ? cornerBest.reason
+        : `${cornerBest.reason} Estimación proxy: no usa datos reales de córners.`
     },
     {
       type: "cards",
       label: "Tarjetas",
       emoji: "🟨",
       market: cardBest.market,
-      line: cardBest.line,
+      line: cardBest.noBet ? "NO BET" : cardBest.line,
       direction: cardBest.direction,
-      text: cardBest.text,
+      text: cardBest.noBet ? "Tarjetas: NO BET" : cardBest.text,
       marketKey: cardBest.key,
       dataQuality: "proxy",
-      rationale: "Estimación proxy: usa presión, paridad, urgencia y volatilidad; no usa árbitro ni tarjetas reales."
+      noBet: cardBest.noBet,
+      rationale: cardBest.noBet
+        ? cardBest.reason
+        : `${cardBest.reason} Estimación proxy: no usa árbitro ni tarjetas reales.`
     },
     {
       type: "score",

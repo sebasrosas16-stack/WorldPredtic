@@ -1,4 +1,4 @@
-const APP_VERSION = "1.8";
+const APP_VERSION = "1.9.1";
 
 const BOOKS = ["Draftea", "Caliente", "Codere", "Bet365", "Betcris", "Otra"];
 
@@ -154,7 +154,7 @@ const STORAGE_KEYS = {
   cart: "matchiq_cart_master",
   tickets: "matchiq_tickets_master",
   draft: "matchiq_ticket_draft_master",
-  migration: "matchiq_migration_v18_done"
+  migration: "matchiq_migration_v191_done"
 };
 
 const LEGACY_KEYS = {
@@ -260,7 +260,6 @@ let ticketDraft = loadJSON(STORAGE_KEYS.draft, {
   manualPick: "",
   manualMarket: "Goles",
   manualLine: "+0.5",
-  manualType: "manual",
   manualQuality: "proxy",
   manualProbability: ""
 });
@@ -698,8 +697,8 @@ function buildParlay(date) {
     })
     .slice(0, Number(settings.maxParlay));
 
-  const combinedProbability = legs.reduce((acc, item) => acc * item.pick.probability, 1);
-  const fairOdds = legs.length ? 1 / combinedProbability : 0;
+  const combinedProbability = legs.length ? legs.reduce((acc, item) => acc * item.pick.probability, 1) : 0;
+  const fairOdds = combinedProbability ? 1 / combinedProbability : 0;
 
   let risk = "Alto";
   if (combinedProbability >= 0.55) risk = "Bajo";
@@ -709,6 +708,7 @@ function buildParlay(date) {
 }
 
 function cartProbability() {
+  if (!cart.length) return 0;
   return cart.reduce((acc, item) => acc * Number(item.probability || 0), 1);
 }
 
@@ -916,16 +916,35 @@ function clearTicket() {
   renderAll();
 }
 
-function updateDraft(key, value) {
+function updateDraftSilent(key, value, refreshPreview = false) {
   ticketDraft[key] = value;
   saveDraft();
 
-  if (["odds", "stake"].includes(key)) {
-    updateTicketLivePreview();
-    return;
+  if (refreshPreview) updateTicketLivePreview();
+}
+
+function updateDraftSelect(key, value) {
+  ticketDraft[key] = value;
+  saveDraft();
+}
+
+function updateSettingSilent(key, value) {
+  settings[key] = value;
+  saveSettings();
+
+  if (key === "initialBankroll") updateTicketLivePreview();
+}
+
+function updateSetting(key, value) {
+  settings[key] = value;
+
+  if (key === "favoriteBook") {
+    ticketDraft.book = value;
+    saveDraft();
   }
 
-  renderTicket();
+  saveSettings();
+  renderAll();
 }
 
 function getTicketEvaluation() {
@@ -1241,16 +1260,25 @@ function renderStatRows(rows, emptyText) {
         <div class="stat-row">
           <div>
             <strong>${escapeHTML(row.name)}</strong>
-            <span>${row.count} registros · ${formatMoney(row.staked)} apostado</span>
+            <span>${row.count || row.sample || 0} registros · ${row.staked !== undefined ? `${formatMoney(row.staked)} apostado` : `Confiabilidad ${row.reliability}`}</span>
           </div>
           <div>
-            <strong>${formatPct(row.roi)}</strong>
-            <span>${formatMoney(row.profit)}</span>
+            <strong>${row.roi !== undefined ? formatPct(row.roi) : formatPct(row.accuracy)}</strong>
+            <span>${row.profit !== undefined ? formatMoney(row.profit) : "Backtest"}</span>
           </div>
         </div>
       `).join("")}
     </div>
   `;
+}
+
+function renderBacktestRows() {
+  const rows = getBacktestSummary(resultsData);
+
+  return renderStatRows(
+    rows,
+    "Todavía no hay suficientes datos para backtesting."
+  );
 }
 
 function updateHero(tab) {
@@ -1265,7 +1293,7 @@ function updateHero(tab) {
     home: {
       eyebrow: "IA Football Lab",
       title: "Hola, Sebas",
-      subtitle: `MatchIQ v${APP_VERSION} · Predicciones, tickets y bankroll.`
+      subtitle: `MatchIQ v${APP_VERSION} · ML Foundation + Backtesting.`
     },
     recommended: {
       eyebrow: "Recomendaciones",
@@ -1338,7 +1366,7 @@ function renderHome() {
   screens.home.innerHTML = `
     <section class="glass panel">
       <h2>Inicio</h2>
-      <p class="note">Base limpia v${APP_VERSION}. Los errores nuevos se corregirán sobre esta versión.</p>
+      <p class="note">v${APP_VERSION}: variables recientes, recency weighting, backtesting básico y teclado estable.</p>
 
       <div class="home-stats">
         <div><strong>${formatMoney(stats.bankroll)}</strong><span>Bankroll actual</span></div>
@@ -1360,6 +1388,12 @@ function renderHome() {
           </button>
         ` : `<p class="note">No hay pick que pase los filtros actuales.</p>`
       }
+    </section>
+
+    <section class="glass panel">
+      <h2>Backtesting básico</h2>
+      <p class="note">Lectura histórica rápida para saber qué mercados suelen ser más estables.</p>
+      ${renderBacktestRows()}
     </section>
 
     <section class="glass panel">
@@ -1489,6 +1523,14 @@ function renderRecommended() {
         <small>Riesgo de partido roto: ${Math.round(prediction.brokenRisk * 100)}%</small>
       </div>
 
+      <div class="model-box">
+        <strong>🧩 Factores que empujan la predicción</strong>
+        <span>Variables recientes y contexto</span>
+        <div class="factor-list">
+          ${prediction.factors.map(factor => `<div class="factor-row">${escapeHTML(displayPickText(factor))}</div>`).join("")}
+        </div>
+      </div>
+
       <div class="insight-grid">
         <div class="insight-card">
           <span>🎯 Marcador IA</span>
@@ -1574,7 +1616,7 @@ function renderModelPanel(prediction) {
   const labels = {
     poisson: "Poisson",
     elo: "Elo",
-    form: "Forma",
+    recent: "Reciente",
     logistic: "Logística"
   };
 
@@ -1582,7 +1624,7 @@ function renderModelPanel(prediction) {
     <div class="model-box">
       <strong>🧠 Modelo ensemble</strong>
       <span>Confianza ${prediction.confidence.label} · ${prediction.confidence.score}/100</span>
-      <small>Combina goles esperados, Elo, forma reciente, modelo logístico y contexto del partido.</small>
+      <small>Combina goles esperados, Elo, forma reciente, modelo logístico, variables recientes y contexto del partido.</small>
 
       <div class="model-bars">
         ${Object.entries(prediction.models).map(([key, model]) => {
@@ -1681,32 +1723,32 @@ function renderTicket() {
 
     <section class="glass panel">
       <h2>Entrada manual</h2>
-      <p class="note">Usa esto para copiar un pick externo y evaluarlo dentro de MatchIQ.</p>
+      <p class="note">Usa esto para copiar un pick externo y evaluarlo dentro de MatchIQ. Keyboard Safe: no se cierra el teclado al escribir.</p>
 
       <label>Partido o descripción</label>
-      <input value="${escapeHTML(ticketDraft.manualMatch || "")}" placeholder="Ejemplo: México vs Brasil" oninput="updateDraft('manualMatch', this.value)" />
+      <input value="${escapeHTML(ticketDraft.manualMatch || "")}" placeholder="Ejemplo: México vs Brasil" oninput="updateDraftSilent('manualMatch', this.value)" />
 
       <label>Pick</label>
-      <input value="${escapeHTML(ticketDraft.manualPick || "")}" placeholder="Ejemplo: México córners +3.5" oninput="updateDraft('manualPick', this.value)" />
+      <input value="${escapeHTML(ticketDraft.manualPick || "")}" placeholder="Ejemplo: México córners +3.5" oninput="updateDraftSilent('manualPick', this.value)" />
 
       <label>Mercado</label>
-      <select onchange="updateDraft('manualMarket', this.value)">
+      <select onchange="updateDraftSelect('manualMarket', this.value)">
         ${["Goles", "Handicap", "Córners", "Tarjetas", "Jugador", "Marcador", "Combo", "Otro"].map(item => `
           <option value="${item}" ${ticketDraft.manualMarket === item ? "selected" : ""}>${item}</option>
         `).join("")}
       </select>
 
       <label>Línea</label>
-      <input value="${escapeHTML(ticketDraft.manualLine || "")}" placeholder="Ejemplo: +0.5, -4.5, +8.5" oninput="updateDraft('manualLine', this.value)" />
+      <input value="${escapeHTML(ticketDraft.manualLine || "")}" placeholder="Ejemplo: +0.5, -4.5, +8.5" oninput="updateDraftSilent('manualLine', this.value)" />
 
       <label>Calidad del dato</label>
-      <select onchange="updateDraft('manualQuality', this.value)">
+      <select onchange="updateDraftSelect('manualQuality', this.value)">
         <option value="proxy" ${ticketDraft.manualQuality === "proxy" ? "selected" : ""}>Proxy</option>
         <option value="strong" ${ticketDraft.manualQuality === "strong" ? "selected" : ""}>Modelo fuerte</option>
       </select>
 
       <label>Probabilidad estimada</label>
-      <input type="number" step="0.01" value="${escapeHTML(ticketDraft.manualProbability || "")}" placeholder="Ejemplo: 65 o 0.65" oninput="updateDraft('manualProbability', this.value)" />
+      <input type="number" step="0.01" value="${escapeHTML(ticketDraft.manualProbability || "")}" placeholder="Ejemplo: 65 o 0.65" oninput="updateDraftSilent('manualProbability', this.value)" />
 
       <button class="primary-btn" onclick="addManualPick()">Agregar entrada manual</button>
     </section>
@@ -1715,17 +1757,17 @@ function renderTicket() {
       <h2>Datos del ticket</h2>
 
       <label>Casa de apuesta</label>
-      <select onchange="updateDraft('book', this.value)">
+      <select onchange="updateDraftSelect('book', this.value)">
         ${BOOKS.map(book => `
           <option value="${book}" ${ticketDraft.book === book ? "selected" : ""}>${book}</option>
         `).join("")}
       </select>
 
       <label>Momio total de la casa</label>
-      <input type="number" step="0.01" min="1.01" placeholder="Ejemplo: 2.35" value="${escapeHTML(ticketDraft.odds || "")}" oninput="updateDraft('odds', this.value)" />
+      <input type="number" step="0.01" min="1.01" placeholder="Ejemplo: 2.35" value="${escapeHTML(ticketDraft.odds || "")}" oninput="updateDraftSilent('odds', this.value, true)" />
 
       <label>Importe apostado</label>
-      <input type="number" step="1" min="1" placeholder="Ejemplo: 500" value="${escapeHTML(ticketDraft.stake || "")}" oninput="updateDraft('stake', this.value)" />
+      <input type="number" step="1" min="1" placeholder="Ejemplo: 500" value="${escapeHTML(ticketDraft.stake || "")}" oninput="updateDraftSilent('stake', this.value, true)" />
 
       <div id="ticketLiveSummary" class="ticket-summary">
         <div><strong>${formatPct(probability)}</strong><span>Prob. IA</span></div>
@@ -1852,10 +1894,10 @@ function renderProfile() {
   screens.profile.innerHTML = `
     <section class="glass panel">
       <h2>Perfil</h2>
-      <p class="note">Ajusta tu bankroll, riesgo y casa favorita.</p>
+      <p class="note">Ajusta tu bankroll, riesgo y casa favorita. El bankroll usa escritura segura para no cerrar el teclado.</p>
 
       <label>Bankroll inicial</label>
-      <input type="number" min="0" step="1" value="${settings.initialBankroll}" oninput="updateSetting('initialBankroll', Number(this.value))" />
+      <input type="number" min="0" step="1" value="${settings.initialBankroll}" oninput="updateSettingSilent('initialBankroll', Number(this.value))" />
 
       <label>Casa favorita</label>
       <select onchange="updateSetting('favoriteBook', this.value)">
@@ -1891,6 +1933,12 @@ function renderProfile() {
     </section>
 
     <section class="glass panel">
+      <h2>Backtesting del modelo</h2>
+      <p class="note">Sirve para ver qué mercados son más estables históricamente. No es garantía, pero ayuda a calibrar riesgo.</p>
+      ${renderBacktestRows()}
+    </section>
+
+    <section class="glass panel">
       <h2>Zona de cuidado</h2>
       <button class="ghost" onclick="clearAllTickets()">Borrar tickets e historial</button>
     </section>
@@ -1902,18 +1950,6 @@ function statusLabel(status) {
   if (status === "loss") return "❌ Perdido";
   if (status === "void") return "🚫 Anulado";
   return "⏳ Pendiente";
-}
-
-function updateSetting(key, value) {
-  settings[key] = value;
-
-  if (key === "favoriteBook") {
-    ticketDraft.book = value;
-    saveDraft();
-  }
-
-  saveSettings();
-  renderAll();
 }
 
 function clearAllTickets() {
@@ -2088,7 +2124,7 @@ async function init() {
       screen.innerHTML = `
         <section class="glass panel">
           <h2>Error al cargar</h2>
-          <p class="note">No se pudo iniciar MatchIQ v${APP_VERSION}. Revisa que los 5 archivos estén completos y guardados.</p>
+          <p class="note">No se pudo iniciar MatchIQ v${APP_VERSION}. Revisa que los 6 archivos estén completos y guardados.</p>
         </section>
       `;
     });

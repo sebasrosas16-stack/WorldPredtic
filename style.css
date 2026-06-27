@@ -611,6 +611,21 @@ button:disabled {
   background: rgba(255,255,255,.70);
 }
 
+.factor-list {
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.factor-row {
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: rgba(255,255,255,.09);
+  color: rgba(255,255,255,.76);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
 .heatmap-box {
   margin: 16px 0;
   padding: 16px;

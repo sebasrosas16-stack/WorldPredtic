@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MatchIQ v1.9.1</title>
+  <title>MatchIQ v2.0</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <main class="app">
     <section id="appHero" class="hero glass">
-      <p class="eyebrow" id="heroEyebrow">IA Football Lab</p>
-      <h1 id="heroTitle">Hola, Sebas</h1>
-      <p class="subtitle" id="heroSubtitle">MatchIQ v1.9.1 · ML Foundation.</p>
+      <p class="eyebrow" id="heroEyebrow">Dieciseisavos Test Lab</p>
+      <h1 id="heroTitle">MatchIQ v2.0</h1>
+      <p class="subtitle" id="heroSubtitle">Mapa de calor, sesión de prueba y recency weighting fuerte.</p>
     </section>
 
     <section id="homeScreen" class="screen active"></section>
@@ -23,16 +23,18 @@
 
   <nav class="bottom-nav">
     <button class="nav-btn active" onclick="switchTab('home')">🏠<span>Inicio</span></button>
-    <button class="nav-btn" onclick="switchTab('recommended')">⭐<span>Picks</span></button>
+    <button class="nav-btn" onclick="switchTab('recommended')">🔥<span>Mapa</span></button>
     <button class="nav-btn" onclick="switchTab('ticket')">🧾<span>Ticket</span><em id="cartBadge">0</em></button>
-    <button class="nav-btn" onclick="switchTab('history')">📊<span>Historial</span></button>
-    <button class="nav-btn" onclick="switchTab('profile')">👤<span>Perfil</span></button>
+    <button class="nav-btn" onclick="switchTab('history')">📊<span>Sesión</span></button>
+    <button class="nav-btn" onclick="switchTab('profile')">⚙️<span>Ajustes</span></button>
   </nav>
 
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
   <script src="data.js"></script>
+  <script src="phase-data.js"></script>
   <script src="features.js"></script>
   <script src="model.js"></script>
+  <script src="pick-parser.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

@@ -185,3 +185,28 @@ button:disabled { cursor: default; opacity: .55; }
   h1 { font-size: 36px; }
   .prob strong { font-size: 19px; }
 }
+
+.leg-actions {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.leg-actions button {
+  padding: 8px 6px;
+  border-radius: 12px;
+  font-size: 11px;
+  background: rgba(255,255,255,.12);
+  color: rgba(255,255,255,.78);
+}
+
+.leg-actions button.active {
+  background: rgba(255,255,255,.88);
+  color: #111827;
+}
+
+.ticket-selection.leg-win { border-left: 4px solid #22c55e; }
+.ticket-selection.leg-loss { border-left: 4px solid #ef4444; }
+.ticket-selection.leg-void { border-left: 4px solid #94a3b8; }
+.ticket-selection.leg-pending { border-left: 4px solid #facc15; }

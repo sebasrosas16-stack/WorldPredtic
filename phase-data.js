@@ -1,4 +1,4 @@
-const APP_VERSION = "2.0";
+const APP_VERSION = "2.0.1";
 
 const DISPLAY_NAMES = {
   "South Africa": "Sudáfrica",
@@ -80,6 +80,110 @@ const TEAM_ALIASES = {
   "inglaterra": "England",
   "bosnia": "Bosnia and Herzegovina",
   "bosnia y herzegovina": "Bosnia and Herzegovina"
+};
+
+const PLAYER_PROFILES = {
+  "Argentina": [
+    { name: "Messi", role: "creator", popularity: 0.99, goalPick: true },
+    { name: "Lautaro Martínez", role: "striker", popularity: 0.88, goalPick: true },
+    { name: "Julián Álvarez", role: "striker", popularity: 0.86, goalPick: true }
+  ],
+  "France": [
+    { name: "Mbappé", role: "striker", popularity: 0.99, goalPick: true },
+    { name: "Griezmann", role: "creator", popularity: 0.88 },
+    { name: "Dembélé", role: "winger", popularity: 0.82 }
+  ],
+  "Brazil": [
+    { name: "Vinícius Jr.", role: "winger", popularity: 0.96, goalPick: true },
+    { name: "Rodrygo", role: "winger", popularity: 0.87, goalPick: true },
+    { name: "Raphinha", role: "winger", popularity: 0.82 }
+  ],
+  "Portugal": [
+    { name: "Cristiano Ronaldo", role: "striker", popularity: 0.98, goalPick: true },
+    { name: "Bruno Fernandes", role: "creator", popularity: 0.90 },
+    { name: "Bernardo Silva", role: "creator", popularity: 0.84 }
+  ],
+  "Norway": [
+    { name: "Haaland", role: "striker", popularity: 0.98, goalPick: true },
+    { name: "Ødegaard", role: "creator", popularity: 0.88 }
+  ],
+  "Egypt": [
+    { name: "Salah", role: "winger", popularity: 0.97, goalPick: true },
+    { name: "Marmoush", role: "forward", popularity: 0.82, goalPick: true }
+  ],
+  "England": [
+    { name: "Harry Kane", role: "striker", popularity: 0.96, goalPick: true },
+    { name: "Bellingham", role: "creator", popularity: 0.94, goalPick: true },
+    { name: "Saka", role: "winger", popularity: 0.88 }
+  ],
+  "Spain": [
+    { name: "Lamine Yamal", role: "winger", popularity: 0.93 },
+    { name: "Pedri", role: "creator", popularity: 0.84 },
+    { name: "Morata", role: "striker", popularity: 0.82, goalPick: true }
+  ],
+  "Germany": [
+    { name: "Musiala", role: "creator", popularity: 0.92, goalPick: true },
+    { name: "Wirtz", role: "creator", popularity: 0.90 },
+    { name: "Havertz", role: "forward", popularity: 0.84, goalPick: true }
+  ],
+  "Belgium": [
+    { name: "De Bruyne", role: "creator", popularity: 0.94 },
+    { name: "Lukaku", role: "striker", popularity: 0.88, goalPick: true },
+    { name: "Doku", role: "winger", popularity: 0.82 }
+  ],
+  "Netherlands": [
+    { name: "Gakpo", role: "winger", popularity: 0.88, goalPick: true },
+    { name: "Memphis Depay", role: "forward", popularity: 0.86, goalPick: true },
+    { name: "Xavi Simons", role: "creator", popularity: 0.84 }
+  ],
+  "Colombia": [
+    { name: "Luis Díaz", role: "winger", popularity: 0.93, goalPick: true },
+    { name: "James Rodríguez", role: "creator", popularity: 0.86 },
+    { name: "Jhon Arias", role: "creator", popularity: 0.78 }
+  ],
+  "United States": [
+    { name: "Pulisic", role: "winger", popularity: 0.92, goalPick: true },
+    { name: "Balogun", role: "striker", popularity: 0.80, goalPick: true },
+    { name: "Reyna", role: "creator", popularity: 0.78 }
+  ],
+  "Canada": [
+    { name: "Jonathan David", role: "striker", popularity: 0.88, goalPick: true },
+    { name: "Alphonso Davies", role: "winger", popularity: 0.86 },
+    { name: "Tajon Buchanan", role: "winger", popularity: 0.74 }
+  ],
+  "Mexico": [
+    { name: "Santiago Giménez", role: "striker", popularity: 0.88, goalPick: true },
+    { name: "Lozano", role: "winger", popularity: 0.84, goalPick: true },
+    { name: "Alexis Vega", role: "winger", popularity: 0.76 }
+  ],
+  "Japan": [
+    { name: "Kubo", role: "creator", popularity: 0.86 },
+    { name: "Mitoma", role: "winger", popularity: 0.84 }
+  ],
+  "Morocco": [
+    { name: "Hakimi", role: "wingback", popularity: 0.88 },
+    { name: "Ziyech", role: "creator", popularity: 0.84 }
+  ],
+  "Croatia": [
+    { name: "Modrić", role: "creator", popularity: 0.90 },
+    { name: "Kramarić", role: "forward", popularity: 0.76, goalPick: true }
+  ],
+  "Senegal": [
+    { name: "Mané", role: "winger", popularity: 0.92, goalPick: true },
+    { name: "Nicolas Jackson", role: "striker", popularity: 0.78, goalPick: true }
+  ],
+  "Sweden": [
+    { name: "Isak", role: "striker", popularity: 0.88, goalPick: true },
+    { name: "Kulusevski", role: "winger", popularity: 0.82 }
+  ],
+  "Ecuador": [
+    { name: "Enner Valencia", role: "striker", popularity: 0.80, goalPick: true },
+    { name: "Caicedo", role: "midfielder", popularity: 0.78 }
+  ],
+  "Ghana": [
+    { name: "Kudus", role: "creator", popularity: 0.86, goalPick: true },
+    { name: "Iñaki Williams", role: "forward", popularity: 0.80, goalPick: true }
+  ]
 };
 
 const PHASE_MATCHES = [

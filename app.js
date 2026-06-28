@@ -220,6 +220,24 @@ function statusLabel(status) {
   return "⏳ Pendiente";
 }
 
+function legStatusLabel(status) {
+  if (status === "win") return "✅ Cumplido";
+  if (status === "loss") return "❌ Falló";
+  if (status === "void") return "🚫 Anulado";
+  return "⏳ En juego";
+}
+
+function deriveTicketStatusFromLegs(selections) {
+  const statuses = (selections || []).map(selection => selection.legStatus || "pending");
+
+  if (!statuses.length) return "pending";
+  if (statuses.includes("loss")) return "loss";
+  if (statuses.every(status => status === "void")) return "void";
+  if (statuses.every(status => status === "win" || status === "void")) return "win";
+
+  return "pending";
+}
+
 function qualityLabel(value) {
   if (value === "proxy") return "⚠️ Proxy";
   return "🧠 Fuerte";
@@ -650,7 +668,7 @@ function saveCurrentTicket() {
     book: draft.book || settings.favoriteBook || "Draftea",
     odds,
     stake,
-    selections: cart.map(item => ({ ...item })),
+    selections: cart.map(item => ({ ...item, legStatus: item.legStatus || "pending" })),
     combinedProbability: probability,
     fairOdds: cartFairOdds(),
     edge,
@@ -671,9 +689,46 @@ function saveCurrentTicket() {
 }
 
 function settleTicket(id, status) {
-  tickets = tickets.map(ticket => ticket.id === id ? { ...ticket, status, settledAt: new Date().toISOString() } : ticket);
+  tickets = tickets.map(ticket => {
+    if (ticket.id !== id) return ticket;
+
+    const legStatus = status === "pending" ? "pending" : status === "void" ? "void" : status === "loss" ? "loss" : "win";
+    const selections = (ticket.selections || []).map(selection => ({ ...selection, legStatus }));
+
+    return {
+      ...ticket,
+      selections,
+      status,
+      settledAt: status === "pending" ? null : new Date().toISOString()
+    };
+  });
+
   saveTickets();
   showToast("Saldo recalculado");
+  renderAll();
+}
+
+function settleLeg(ticketId, selectionId, status) {
+  tickets = tickets.map(ticket => {
+    if (ticket.id !== ticketId) return ticket;
+
+    const selections = (ticket.selections || []).map(selection => {
+      if (selection.id !== selectionId) return selection;
+      return { ...selection, legStatus: status };
+    });
+
+    const derivedStatus = deriveTicketStatusFromLegs(selections);
+
+    return {
+      ...ticket,
+      selections,
+      status: derivedStatus,
+      settledAt: derivedStatus === "pending" ? null : new Date().toISOString()
+    };
+  });
+
+  saveTickets();
+  showToast("Pierna actualizada");
   renderAll();
 }
 
@@ -871,6 +926,7 @@ function renderRecommended() {
       ${renderScenario(match, prediction)}
       ${renderBTTSBar(prediction)}
       ${renderHeatMap(match, prediction)}
+      ${renderPlayerPicks(match, prediction)}
       ${renderScoreHeatmap(prediction)}
       ${renderModelFactors(prediction)}
     </section>
@@ -935,6 +991,25 @@ function renderHeatMap(match, prediction) {
     <div class="heatmap-section">
       <strong>🔥 Mapa de Calor IA</strong>
       <p class="note">Heat IA sin momio real. El value real se calcula en el ticket cuando escribes la cuota.</p>
+      <div class="heat-grid">
+        ${picks.map(pick => renderHeatCard(match, pick)).join("")}
+      </div>
+    </div>
+  `;
+}
+
+function renderPlayerPicks(match, prediction) {
+  const picks = prediction.heatMap
+    .filter(pick => pick.type === "player")
+    .filter(pick => settings.showProxy || pick.dataQuality !== "proxy")
+    .slice(0, 6);
+
+  if (!picks.length) return "";
+
+  return `
+    <div class="heatmap-section">
+      <strong>⭐ Picks populares de jugador</strong>
+      <p class="note">Solo estrellas y jugadores populares. Mercado proxy: confirma alineación y minutos antes de jugarlo.</p>
       <div class="heat-grid">
         ${picks.map(pick => renderHeatCard(match, pick)).join("")}
       </div>
@@ -1136,14 +1211,26 @@ function renderTicketCard(ticket) {
         <span>${statusLabel(ticket.status)}</span>
       </div>
       <p class="note">${new Date(ticket.createdAt).toLocaleDateString("es-MX")} · Stake ${formatMoney(ticket.stake)} · Utilidad ${formatMoney(ticketProfit(ticket))} · Heat prom. ${Math.round(ticket.heatAverage || 0)}</p>
-      ${(ticket.selections || []).map(selection => `
-        <div class="ticket-selection">
-          <div>
-            <strong>${escapeHTML(selection.text)}</strong>
-            <span>${escapeHTML(selection.match)} · Prob. ${formatPct(selection.probability)} · Heat ${selection.heatScore}<br>${escapeHTML(selection.market)} ${escapeHTML(selection.line || "")} · ${qualityLabel(selection.dataQuality)}</span>
+      ${(ticket.selections || []).map(selection => {
+        const legStatus = selection.legStatus || "pending";
+        return `
+          <div class="ticket-selection leg-${legStatus}">
+            <div>
+              <strong>${escapeHTML(selection.text)}</strong>
+              <span>
+                ${escapeHTML(selection.match)} · Prob. ${formatPct(selection.probability)} · Heat ${selection.heatScore}<br>
+                ${escapeHTML(selection.market)} ${escapeHTML(selection.line || "")} · ${qualityLabel(selection.dataQuality)} · ${legStatusLabel(legStatus)}
+              </span>
+              <div class="leg-actions">
+                <button class="${legStatus === "win" ? "active win" : ""}" onclick="settleLeg('${ticket.id}', '${selection.id}', 'win')">✅ Sí</button>
+                <button class="${legStatus === "loss" ? "active lose" : ""}" onclick="settleLeg('${ticket.id}', '${selection.id}', 'loss')">❌ No</button>
+                <button class="${legStatus === "void" ? "active" : ""}" onclick="settleLeg('${ticket.id}', '${selection.id}', 'void')">🚫 Anul.</button>
+                <button class="${legStatus === "pending" ? "active" : ""}" onclick="settleLeg('${ticket.id}', '${selection.id}', 'pending')">⏳ Pend.</button>
+              </div>
+            </div>
           </div>
-        </div>
-      `).join("")}
+        `;
+      }).join("")}
       <div class="ticket-actions">
         <button class="win" onclick="settleTicket('${ticket.id}', 'win')">✅ Ganado</button>
         <button class="lose" onclick="settleTicket('${ticket.id}', 'loss')">❌ Perdido</button>
@@ -1160,7 +1247,7 @@ function renderProfile() {
 
   screens.profile.innerHTML = `
     <section class="glass panel">
-      <h2>Ajustes v2.0</h2>
+      <h2>Ajustes v2.0.1</h2>
       <p class="note">Configuración de sesión y filtros del mapa.</p>
 
       <label>Sesión activa</label>
@@ -1298,7 +1385,7 @@ function updateHero(tab) {
   if (!hero || !title || !eyebrow || !subtitle) return;
 
   const data = {
-    home: ["Dieciseisavos Test Lab", "MatchIQ v2.0", "Prueba final con mapa de calor y bankroll por sesión."],
+    home: ["Dieciseisavos Test Lab", "MatchIQ v2.0.1", "Jugadores populares, control por pierna y bankroll por sesión."],
     recommended: ["Mapa de Calor IA", "Mercados", "Probabilidad, heat, ambos anotan y escenarios probables."],
     ticket: ["Ticket Builder", "Ticket", "Detector manual, edge real y value frente al momio."],
     history: ["Sesión de prueba", "Resultados", "Bankroll, ROI por mercado y tickets cerrados."],

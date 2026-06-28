@@ -227,7 +227,7 @@ function marketRiskPenalty(type, quality, match) {
 
   if (quality === "proxy") penalty += 8;
   if (type === "exactScore") penalty += 34;
-  if (type === "player") penalty += 17;
+  if (type === "player") penalty += 12;
   if (type === "cards") penalty += 10;
   if (type === "corners") penalty += 8;
   if (type === "winner" && match.trap) penalty += 12;
@@ -278,6 +278,127 @@ function makeMarketPick(input) {
   };
 }
 
+function slugifyMarket(value) {
+  return String(value || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
+function getRoleShotBoost(role) {
+  if (role === "striker") return 0.060;
+  if (role === "winger") return 0.045;
+  if (role === "forward") return 0.050;
+  if (role === "creator") return 0.030;
+  if (role === "wingback") return 0.018;
+  return 0.020;
+}
+
+function getRoleGoalBoost(role) {
+  if (role === "striker") return 0.075;
+  if (role === "forward") return 0.058;
+  if (role === "winger") return 0.047;
+  if (role === "creator") return 0.030;
+  return 0.018;
+}
+
+function buildPopularPlayerInputs(prediction, match, confidence) {
+  const profiles = typeof PLAYER_PROFILES !== "undefined" ? PLAYER_PROFILES : {};
+  const candidates = [
+    ...(profiles[match.home] || []).map(player => ({ ...player, team: match.home, side: "home" })),
+    ...(profiles[match.away] || []).map(player => ({ ...player, team: match.away, side: "away" }))
+  ];
+
+  if (!candidates.length) return [];
+
+  const favoriteTeam = prediction.favorite.team;
+  const ranked = candidates
+    .map(player => ({
+      ...player,
+      rank: player.popularity + (player.team === favoriteTeam ? 0.060 : 0) + (player.goalPick ? 0.025 : 0)
+    }))
+    .sort((a, b) => b.rank - a.rank)
+    .slice(0, 4);
+
+  const inputs = [];
+
+  ranked.forEach((player, index) => {
+    const teamLambda = player.side === "home" ? prediction.homeLambda : prediction.awayLambda;
+    const teamWinProb = player.side === "home" ? prediction.rawProbs.home : prediction.rawProbs.away;
+    const teamScores = 1 - poisson(0, teamLambda);
+    const roleShotBoost = getRoleShotBoost(player.role);
+    const roleGoalBoost = getRoleGoalBoost(player.role);
+    const popularity = clamp(player.popularity || 0.75, 0.65, 1.0);
+    const koPenalty = (match.koRisk || 0.5) * 0.035;
+    const trapPenalty = match.trap ? 0.025 : 0;
+
+    const shotProbability = clamp(
+      0.315 +
+      teamLambda * 0.105 +
+      teamScores * 0.100 +
+      popularity * 0.110 +
+      roleShotBoost +
+      Math.max(0, teamWinProb - 0.34) * 0.070 -
+      koPenalty -
+      trapPenalty,
+      0.26,
+      0.78
+    );
+
+    inputs.push({
+      id: `player-${slugifyMarket(player.name)}-sot`,
+      type: "player",
+      label: "Jugador",
+      market: "Jugador tiro a puerta",
+      text: `${player.name} tiro a puerta +0.5`,
+      line: "+0.5",
+      direction: "OVER",
+      probability: shotProbability,
+      confidence,
+      match,
+      quality: "proxy",
+      category: "proxy",
+      marketBoost: 24 + (popularity >= 0.92 ? 4 : 0) - index,
+      minimum: 0.40,
+      rationale: "Pick popular de jugador. Proxy: requiere alineación confirmada y minutos esperados."
+    });
+
+    if (player.goalPick && index <= 2) {
+      const goalProbability = clamp(
+        0.130 +
+        teamLambda * 0.075 +
+        popularity * 0.100 +
+        roleGoalBoost +
+        Math.max(0, teamWinProb - 0.42) * 0.075 -
+        (match.koRisk || 0.5) * 0.030,
+        0.12,
+        0.54
+      );
+
+      inputs.push({
+        id: `player-${slugifyMarket(player.name)}-goal`,
+        type: "player",
+        label: "Jugador",
+        market: "Jugador anota gol",
+        text: `${player.name} anota gol`,
+        direction: "OVER",
+        probability: goalProbability,
+        confidence,
+        match,
+        quality: "proxy",
+        category: "agresivo",
+        marketBoost: 26 + (popularity >= 0.94 ? 7 : 0) - index,
+        minimum: 0.22,
+        rationale: "Mercado popular pero de alta varianza. No usar sin alineación confirmada."
+      });
+    }
+  });
+
+  return inputs;
+}
+
 function buildMarkets(prediction, matrix, match, confidence) {
   const home = prediction.homeTeam;
   const away = prediction.awayTeam;
@@ -310,6 +431,7 @@ function buildMarkets(prediction, matrix, match, confidence) {
   const cardsOver45 = probabilityOver(expectedCards, 4.5, 1.03);
   const cardsUnder55 = probabilityUnder(expectedCards, 5.5, 1.03);
   const extraTime = clamp(prediction.rawProbs.draw + (match.koRisk || 0) * 0.08, 0.08, 0.48);
+  const playerInputs = buildPopularPlayerInputs(prediction, match, confidence);
 
   const marketInputs = [
     {
@@ -612,7 +734,8 @@ function buildMarkets(prediction, matrix, match, confidence) {
       marketBoost: 0,
       minimum: 0.14,
       rationale: "Alta varianza. No sirve para medir el modelo principal."
-    }
+    },
+    ...playerInputs
   ];
 
   return marketInputs
@@ -711,7 +834,7 @@ function predictMatch(results, match) {
   expectedCards = clamp(expectedCards, 2.2, 7.2);
 
   const prediction = {
-    modelLabel: "MatchIQ v2.0 Recency KO Engine",
+    modelLabel: "MatchIQ v2.0.1 Recency KO Engine",
     homeTeam: match.home,
     awayTeam: match.away,
     homeLambda,

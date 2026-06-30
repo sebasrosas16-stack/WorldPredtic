@@ -1,0 +1,44 @@
+MATCHIQ CLEAN WORLDCUP CORNER MODEL
+========================================
+Partidos crudos: 148
+Partidos limpios: 146
+Promedio global corners: 9.27
+Over 8.5 histórico limpio: 56.85%
+
+Round32 equipos encontrados ordenados por corners a favor:
+
+Germany: 7.78 a favor | 4.56 en contra | 9 partidos | muestra medium
+Brazil: 7.4 a favor | 4.0 en contra | 20 partidos | muestra strong
+Switzerland: 5.75 a favor | 4.62 en contra | 8 partidos | muestra medium
+Spain: 5.62 a favor | 2.0 en contra | 8 partidos | muestra medium
+Portugal: 5.56 a favor | 3.67 en contra | 9 partidos | muestra medium
+USA: 5.5 a favor | 2.75 en contra | 4 partidos | muestra thin
+Argentina: 5.31 a favor | 3.69 en contra | 16 partidos | muestra strong
+England: 5.29 a favor | 3.14 en contra | 14 partidos | muestra strong
+Belgium: 5.18 a favor | 4.18 en contra | 11 partidos | muestra strong
+Croatia: 5.0 a favor | 4.36 en contra | 14 partidos | muestra strong
+Netherlands: 4.8 a favor | 4.4 en contra | 10 partidos | muestra strong
+Mexico: 4.62 a favor | 5.12 en contra | 8 partidos | muestra medium
+Japan: 4.5 a favor | 4.5 en contra | 8 partidos | muestra medium
+Ghana: 4.33 a favor | 5.67 en contra | 3 partidos | muestra thin
+Senegal: 4.29 a favor | 3.86 en contra | 7 partidos | muestra medium
+France: 4.27 a favor | 4.07 en contra | 15 partidos | muestra strong
+Canada: 4.0 a favor | 3.67 en contra | 3 partidos | muestra thin
+Sweden: 3.71 a favor | 7.43 en contra | 7 partidos | muestra medium
+Ecuador: 3.67 a favor | 3.0 en contra | 3 partidos | muestra thin
+Colombia: 3.25 a favor | 5.25 en contra | 4 partidos | muestra thin
+Australia: 3.14 a favor | 4.43 en contra | 7 partidos | muestra medium
+Morocco: 2.5 a favor | 5.9 en contra | 10 partidos | muestra strong
+Egypt: 1.67 a favor | 6.0 en contra | 3 partidos | muestra thin
+
+Round32 equipos SIN muestra en StatsBomb:
+
+- Algeria
+- Austria
+- Bosnia and Herzegovina
+- Cape Verde
+- Congo DR
+- Cote d'Ivoire
+- Norway
+- Paraguay
+- South Africa

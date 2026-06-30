@@ -1,0 +1,38 @@
+MATCHIQ WORLDCUP CORNER MODEL
+==================================
+Partidos usados: 148
+Promedio global corners: 9.28
+Over 8.5 histórico: 57.43%
+
+Top equipos por corners a favor:
+
+Argentina U20: 8.0 a favor | 2.0 en contra | 1 partidos
+Germany: 7.78 a favor | 4.56 en contra | 9 partidos
+Brazil: 7.19 a favor | 4.1 en contra | 21 partidos
+Italy: 6.0 a favor | 4.0 en contra | 1 partidos
+Czechoslovakia: 6.0 a favor | 3.0 en contra | 1 partidos
+Switzerland: 5.75 a favor | 4.62 en contra | 8 partidos
+Iceland: 5.67 a favor | 7.0 en contra | 3 partidos
+Spain: 5.62 a favor | 2.0 en contra | 8 partidos
+Denmark: 5.57 a favor | 4.57 en contra | 7 partidos
+South Korea: 5.57 a favor | 5.14 en contra | 7 partidos
+Portugal: 5.56 a favor | 3.67 en contra | 9 partidos
+United States: 5.5 a favor | 2.75 en contra | 4 partidos
+
+Ejemplo Francia vs Suecia:
+{
+  "home": "France",
+  "away": "Sweden",
+  "stage": "Round of 16",
+  "quality": "team_data",
+  "expected_total_corners": 9.55,
+  "expected_home_corners": 5.53,
+  "expected_away_corners": 3.85,
+  "markets": {
+    "over_7_5": 74,
+    "over_8_5": 61,
+    "over_9_5": 51,
+    "over_10_5": 39,
+    "under_10_5": 61
+  }
+}

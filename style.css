@@ -210,3 +210,107 @@ button:disabled { cursor: default; opacity: .55; }
 .ticket-selection.leg-loss { border-left: 4px solid #ef4444; }
 .ticket-selection.leg-void { border-left: 4px solid #94a3b8; }
 .ticket-selection.leg-pending { border-left: 4px solid #facc15; }
+.ml-predictions-section {
+  padding: 18px;
+  margin: 16px 0;
+}
+
+.ml-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.ml-header h2 {
+  margin: 0;
+  font-size: 22px;
+}
+
+.ml-header p {
+  margin: 4px 0 0;
+  color: #6b7280;
+}
+
+.ml-badge {
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #111827;
+  color: white;
+  font-size: 12px;
+}
+
+.ml-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 12px;
+}
+
+.ml-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 14px;
+  background: white;
+}
+
+.ml-card-top {
+  display: grid;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.ml-card-top span {
+  color: #6b7280;
+  font-size: 12px;
+}
+
+.ml-lines {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.ml-lines div {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 8px;
+}
+
+.ml-lines small,
+.ml-lines span,
+.ml-pick small {
+  display: block;
+  color: #6b7280;
+  font-size: 12px;
+}
+
+.ml-picks {
+  display: grid;
+  gap: 8px;
+}
+
+.ml-pick {
+  border-radius: 8px;
+  padding: 9px;
+  background: #f3f4f6;
+}
+
+.ml-pick.strong {
+  background: #dcfce7;
+}
+
+.ml-pick.lean {
+  background: #fef9c3;
+}
+
+.ml-pick span {
+  font-size: 11px;
+  color: #374151;
+}
+
+.ml-no-bet {
+  margin: 0;
+  color: #6b7280;
+}

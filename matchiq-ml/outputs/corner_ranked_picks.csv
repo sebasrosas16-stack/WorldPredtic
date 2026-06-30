@@ -1,0 +1,13 @@
+match_id,date,home,away,expected_total_corners,expected_range,quality,risk,main_pick,probability,fair_odds,strength,reason
+77,2026-06-30,France,Sweden,9.23,8 a 10 corners,medium,medio,Total corners over 7.5,67,1.49,lean,"Pick elegido por probabilidad, calidad de muestra y cercanía al rango esperado."
+78,2026-06-30,Cote d'Ivoire,Norway,9.86,9 a 11 corners,fallback,alto,Total corners over 7.5,74,1.35,lean,"Pick elegido por probabilidad, calidad de muestra y cercanía al rango esperado."
+79,2026-06-30,Mexico,Ecuador,8.07,7 a 9 corners,thin,medio-alto,Total corners under 10.5,69,1.45,lean,"Pick elegido por probabilidad, calidad de muestra y cercanía al rango esperado."
+80,2026-07-01,England,Congo DR,8.93,8 a 10 corners,partial_fallback,alto,NO BET,,,no_bet,La calidad de muestra o la probabilidad no alcanzan filtro.
+82,2026-07-01,Belgium,Senegal,8.75,8 a 10 corners,medium,medio,Total corners under 10.5,69,1.45,lean,"Pick elegido por probabilidad, calidad de muestra y cercanía al rango esperado."
+81,2026-07-01,USA,Bosnia and Herzegovina,8.96,8 a 10 corners,partial_fallback,alto,NO BET,,,no_bet,La calidad de muestra o la probabilidad no alcanzan filtro.
+84,2026-07-02,Spain,Austria,9.21,8 a 10 corners,partial_fallback,alto,NO BET,,,no_bet,La calidad de muestra o la probabilidad no alcanzan filtro.
+83,2026-07-02,Portugal,Croatia,9.4,8 a 10 corners,medium,medio,Total corners over 7.5,67,1.49,lean,"Pick elegido por probabilidad, calidad de muestra y cercanía al rango esperado."
+85,2026-07-02,Switzerland,Algeria,9.9,9 a 11 corners,partial_fallback,alto,Total corners over 7.5,74,1.35,lean,"Pick elegido por probabilidad, calidad de muestra y cercanía al rango esperado."
+86,2026-07-03,Argentina,Cape Verde,8.71,8 a 10 corners,partial_fallback,alto,NO BET,,,no_bet,La calidad de muestra o la probabilidad no alcanzan filtro.
+87,2026-07-03,Colombia,Ghana,8.77,8 a 10 corners,thin,medio-alto,Total corners under 10.5,69,1.45,lean,"Pick elegido por probabilidad, calidad de muestra y cercanía al rango esperado."
+88,2026-07-03,Australia,Egypt,6.9,6 a 8 corners,thin,medio-alto,Total corners under 9.5,69,1.45,lean,"Pick elegido por probabilidad, calidad de muestra y cercanía al rango esperado."

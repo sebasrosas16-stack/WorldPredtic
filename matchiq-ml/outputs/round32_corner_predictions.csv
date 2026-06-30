@@ -1,0 +1,49 @@
+match_id,date,home,away,expected_total_corners,quality,market,probability,fair_odds,pick_grade
+77,2026-06-30,France,Sweden,9.23,medium,Total corners over 7.5,67,1.49,strong
+77,2026-06-30,France,Sweden,9.23,medium,Total corners over 8.5,61,1.64,lean
+77,2026-06-30,France,Sweden,9.23,medium,Total corners under 10.5,61,1.64,lean
+77,2026-06-30,France,Sweden,9.23,medium,Total corners over 9.5,51,1.96,no_bet
+78,2026-06-30,Cote d'Ivoire,Norway,9.86,fallback,Total corners over 7.5,74,1.35,lean
+78,2026-06-30,Cote d'Ivoire,Norway,9.86,fallback,Total corners over 8.5,67,1.49,lean
+78,2026-06-30,Cote d'Ivoire,Norway,9.86,fallback,Total corners under 8.5,33,3.03,lean
+78,2026-06-30,Cote d'Ivoire,Norway,9.86,fallback,Total corners under 7.5,26,3.85,lean
+79,2026-06-30,Mexico,Ecuador,8.07,thin,Total corners under 10.5,69,1.45,strong
+79,2026-06-30,Mexico,Ecuador,8.07,thin,Total corners under 9.5,61,1.64,lean
+79,2026-06-30,Mexico,Ecuador,8.07,thin,Total corners over 7.5,56,1.79,no_bet
+79,2026-06-30,Mexico,Ecuador,8.07,thin,Total corners under 8.5,54,1.85,no_bet
+80,2026-07-01,England,Congo DR,8.93,partial_fallback,Total corners under 10.5,69,1.45,strong
+80,2026-07-01,England,Congo DR,8.93,partial_fallback,Total corners over 7.5,67,1.49,strong
+80,2026-07-01,England,Congo DR,8.93,partial_fallback,Total corners over 8.5,56,1.79,no_bet
+80,2026-07-01,England,Congo DR,8.93,partial_fallback,Total corners under 9.5,54,1.85,no_bet
+82,2026-07-01,Belgium,Senegal,8.75,medium,Total corners under 10.5,69,1.45,strong
+82,2026-07-01,Belgium,Senegal,8.75,medium,Total corners over 7.5,67,1.49,strong
+82,2026-07-01,Belgium,Senegal,8.75,medium,Total corners over 8.5,56,1.79,no_bet
+82,2026-07-01,Belgium,Senegal,8.75,medium,Total corners under 9.5,54,1.85,no_bet
+81,2026-07-01,USA,Bosnia and Herzegovina,8.96,partial_fallback,Total corners under 10.5,69,1.45,strong
+81,2026-07-01,USA,Bosnia and Herzegovina,8.96,partial_fallback,Total corners over 7.5,67,1.49,strong
+81,2026-07-01,USA,Bosnia and Herzegovina,8.96,partial_fallback,Total corners over 8.5,56,1.79,no_bet
+81,2026-07-01,USA,Bosnia and Herzegovina,8.96,partial_fallback,Total corners under 9.5,54,1.85,no_bet
+84,2026-07-02,Spain,Austria,9.21,partial_fallback,Total corners over 7.5,67,1.49,strong
+84,2026-07-02,Spain,Austria,9.21,partial_fallback,Total corners over 8.5,61,1.64,lean
+84,2026-07-02,Spain,Austria,9.21,partial_fallback,Total corners under 10.5,61,1.64,lean
+84,2026-07-02,Spain,Austria,9.21,partial_fallback,Total corners over 9.5,51,1.96,no_bet
+83,2026-07-02,Portugal,Croatia,9.4,medium,Total corners over 7.5,67,1.49,strong
+83,2026-07-02,Portugal,Croatia,9.4,medium,Total corners over 8.5,61,1.64,lean
+83,2026-07-02,Portugal,Croatia,9.4,medium,Total corners under 10.5,61,1.64,lean
+83,2026-07-02,Portugal,Croatia,9.4,medium,Total corners over 9.5,51,1.96,no_bet
+85,2026-07-02,Switzerland,Algeria,9.9,partial_fallback,Total corners over 7.5,74,1.35,strong
+85,2026-07-02,Switzerland,Algeria,9.9,partial_fallback,Total corners over 8.5,67,1.49,strong
+85,2026-07-02,Switzerland,Algeria,9.9,partial_fallback,Total corners over 9.5,56,1.79,no_bet
+85,2026-07-02,Switzerland,Algeria,9.9,partial_fallback,Total corners under 10.5,54,1.85,no_bet
+86,2026-07-03,Argentina,Cape Verde,8.71,partial_fallback,Total corners under 10.5,69,1.45,strong
+86,2026-07-03,Argentina,Cape Verde,8.71,partial_fallback,Total corners over 7.5,67,1.49,strong
+86,2026-07-03,Argentina,Cape Verde,8.71,partial_fallback,Total corners over 8.5,56,1.79,no_bet
+86,2026-07-03,Argentina,Cape Verde,8.71,partial_fallback,Total corners under 9.5,54,1.85,no_bet
+87,2026-07-03,Colombia,Ghana,8.77,thin,Total corners under 10.5,69,1.45,strong
+87,2026-07-03,Colombia,Ghana,8.77,thin,Total corners over 7.5,67,1.49,strong
+87,2026-07-03,Colombia,Ghana,8.77,thin,Total corners over 8.5,56,1.79,no_bet
+87,2026-07-03,Colombia,Ghana,8.77,thin,Total corners under 9.5,54,1.85,no_bet
+88,2026-07-03,Australia,Egypt,6.9,thin,Total corners under 8.5,69,1.45,strong
+88,2026-07-03,Australia,Egypt,6.9,thin,Total corners under 9.5,69,1.45,strong
+88,2026-07-03,Australia,Egypt,6.9,thin,Total corners under 10.5,69,1.45,strong
+88,2026-07-03,Australia,Egypt,6.9,thin,Total corners under 7.5,54,1.85,no_bet

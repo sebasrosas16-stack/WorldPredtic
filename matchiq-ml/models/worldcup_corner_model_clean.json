@@ -1,0 +1,389 @@
+{
+  "name": "MatchIQ Clean WorldCup Corner Model",
+  "version": "0.2",
+  "source": "StatsBomb Open Data",
+  "raw_matches": 148,
+  "clean_matches": 146,
+  "global_avg_total_corners": 9.27,
+  "global_over_8_5_rate": 0.5685,
+  "teams": {
+    "Canada": {
+      "matches": 3,
+      "round32_team": true,
+      "avg_for": 4.0,
+      "avg_against": 3.67,
+      "avg_total": 7.67,
+      "sample_quality": "thin"
+    },
+    "Morocco": {
+      "matches": 10,
+      "round32_team": true,
+      "avg_for": 2.5,
+      "avg_against": 5.9,
+      "avg_total": 8.4,
+      "sample_quality": "strong"
+    },
+    "England": {
+      "matches": 14,
+      "round32_team": true,
+      "avg_for": 5.29,
+      "avg_against": 3.14,
+      "avg_total": 8.43,
+      "sample_quality": "strong"
+    },
+    "Iran": {
+      "matches": 6,
+      "round32_team": false,
+      "avg_for": 2.0,
+      "avg_against": 5.17,
+      "avg_total": 7.17,
+      "sample_quality": "medium"
+    },
+    "Croatia": {
+      "matches": 14,
+      "round32_team": true,
+      "avg_for": 5.0,
+      "avg_against": 4.36,
+      "avg_total": 9.36,
+      "sample_quality": "strong"
+    },
+    "Belgium": {
+      "matches": 11,
+      "round32_team": true,
+      "avg_for": 5.18,
+      "avg_against": 4.18,
+      "avg_total": 9.36,
+      "sample_quality": "strong"
+    },
+    "Netherlands": {
+      "matches": 10,
+      "round32_team": true,
+      "avg_for": 4.8,
+      "avg_against": 4.4,
+      "avg_total": 9.2,
+      "sample_quality": "strong"
+    },
+    "Ecuador": {
+      "matches": 3,
+      "round32_team": true,
+      "avg_for": 3.67,
+      "avg_against": 3.0,
+      "avg_total": 6.67,
+      "sample_quality": "thin"
+    },
+    "Japan": {
+      "matches": 8,
+      "round32_team": true,
+      "avg_for": 4.5,
+      "avg_against": 4.5,
+      "avg_total": 9.0,
+      "sample_quality": "medium"
+    },
+    "Spain": {
+      "matches": 8,
+      "round32_team": true,
+      "avg_for": 5.62,
+      "avg_against": 2.0,
+      "avg_total": 7.62,
+      "sample_quality": "medium"
+    },
+    "USA": {
+      "matches": 4,
+      "round32_team": true,
+      "avg_for": 5.5,
+      "avg_against": 2.75,
+      "avg_total": 8.25,
+      "sample_quality": "thin"
+    },
+    "Wales": {
+      "matches": 3,
+      "round32_team": false,
+      "avg_for": 2.0,
+      "avg_against": 6.0,
+      "avg_total": 8.0,
+      "sample_quality": "thin"
+    },
+    "Tunisia": {
+      "matches": 6,
+      "round32_team": false,
+      "avg_for": 5.17,
+      "avg_against": 5.17,
+      "avg_total": 10.33,
+      "sample_quality": "medium"
+    },
+    "France": {
+      "matches": 15,
+      "round32_team": true,
+      "avg_for": 4.27,
+      "avg_against": 4.07,
+      "avg_total": 8.33,
+      "sample_quality": "strong"
+    },
+    "Switzerland": {
+      "matches": 8,
+      "round32_team": true,
+      "avg_for": 5.75,
+      "avg_against": 4.62,
+      "avg_total": 10.38,
+      "sample_quality": "medium"
+    },
+    "Cameroon": {
+      "matches": 3,
+      "round32_team": false,
+      "avg_for": 4.0,
+      "avg_against": 8.33,
+      "avg_total": 12.33,
+      "sample_quality": "thin"
+    },
+    "Portugal": {
+      "matches": 9,
+      "round32_team": true,
+      "avg_for": 5.56,
+      "avg_against": 3.67,
+      "avg_total": 9.22,
+      "sample_quality": "medium"
+    },
+    "Ghana": {
+      "matches": 3,
+      "round32_team": true,
+      "avg_for": 4.33,
+      "avg_against": 5.67,
+      "avg_total": 10.0,
+      "sample_quality": "thin"
+    },
+    "Senegal": {
+      "matches": 7,
+      "round32_team": true,
+      "avg_for": 4.29,
+      "avg_against": 3.86,
+      "avg_total": 8.14,
+      "sample_quality": "medium"
+    },
+    "Poland": {
+      "matches": 7,
+      "round32_team": false,
+      "avg_for": 4.0,
+      "avg_against": 5.57,
+      "avg_total": 9.57,
+      "sample_quality": "medium"
+    },
+    "Saudi Arabia": {
+      "matches": 6,
+      "round32_team": false,
+      "avg_for": 3.0,
+      "avg_against": 5.17,
+      "avg_total": 8.17,
+      "sample_quality": "medium"
+    },
+    "Qatar": {
+      "matches": 3,
+      "round32_team": false,
+      "avg_for": 3.0,
+      "avg_against": 4.33,
+      "avg_total": 7.33,
+      "sample_quality": "thin"
+    },
+    "Denmark": {
+      "matches": 7,
+      "round32_team": false,
+      "avg_for": 5.57,
+      "avg_against": 4.57,
+      "avg_total": 10.14,
+      "sample_quality": "medium"
+    },
+    "Germany": {
+      "matches": 9,
+      "round32_team": true,
+      "avg_for": 7.78,
+      "avg_against": 4.56,
+      "avg_total": 12.33,
+      "sample_quality": "medium"
+    },
+    "Mexico": {
+      "matches": 8,
+      "round32_team": true,
+      "avg_for": 4.62,
+      "avg_against": 5.12,
+      "avg_total": 9.75,
+      "sample_quality": "medium"
+    },
+    "Brazil": {
+      "matches": 20,
+      "round32_team": true,
+      "avg_for": 7.4,
+      "avg_against": 4.0,
+      "avg_total": 11.4,
+      "sample_quality": "strong"
+    },
+    "Argentina": {
+      "matches": 16,
+      "round32_team": true,
+      "avg_for": 5.31,
+      "avg_against": 3.69,
+      "avg_total": 9.0,
+      "sample_quality": "strong"
+    },
+    "Costa Rica": {
+      "matches": 6,
+      "round32_team": false,
+      "avg_for": 1.67,
+      "avg_against": 7.33,
+      "avg_total": 9.0,
+      "sample_quality": "medium"
+    },
+    "Serbia": {
+      "matches": 6,
+      "round32_team": false,
+      "avg_for": 3.5,
+      "avg_against": 4.83,
+      "avg_total": 8.33,
+      "sample_quality": "medium"
+    },
+    "Australia": {
+      "matches": 7,
+      "round32_team": true,
+      "avg_for": 3.14,
+      "avg_against": 4.43,
+      "avg_total": 7.57,
+      "sample_quality": "medium"
+    },
+    "Uruguay": {
+      "matches": 9,
+      "round32_team": false,
+      "avg_for": 3.11,
+      "avg_against": 3.89,
+      "avg_total": 7.0,
+      "sample_quality": "medium"
+    },
+    "South Korea": {
+      "matches": 7,
+      "round32_team": false,
+      "avg_for": 5.57,
+      "avg_against": 5.14,
+      "avg_total": 10.71,
+      "sample_quality": "medium"
+    },
+    "Panama": {
+      "matches": 3,
+      "round32_team": false,
+      "avg_for": 1.67,
+      "avg_against": 6.0,
+      "avg_total": 7.67,
+      "sample_quality": "thin"
+    },
+    "Sweden": {
+      "matches": 7,
+      "round32_team": true,
+      "avg_for": 3.71,
+      "avg_against": 7.43,
+      "avg_total": 11.14,
+      "sample_quality": "medium"
+    },
+    "Peru": {
+      "matches": 4,
+      "round32_team": false,
+      "avg_for": 3.5,
+      "avg_against": 7.0,
+      "avg_total": 10.5,
+      "sample_quality": "thin"
+    },
+    "Colombia": {
+      "matches": 4,
+      "round32_team": true,
+      "avg_for": 3.25,
+      "avg_against": 5.25,
+      "avg_total": 8.5,
+      "sample_quality": "thin"
+    },
+    "Iceland": {
+      "matches": 3,
+      "round32_team": false,
+      "avg_for": 5.67,
+      "avg_against": 7.0,
+      "avg_total": 12.67,
+      "sample_quality": "thin"
+    },
+    "Russia": {
+      "matches": 5,
+      "round32_team": false,
+      "avg_for": 5.2,
+      "avg_against": 4.8,
+      "avg_total": 10.0,
+      "sample_quality": "medium"
+    },
+    "Egypt": {
+      "matches": 3,
+      "round32_team": true,
+      "avg_for": 1.67,
+      "avg_against": 6.0,
+      "avg_total": 7.67,
+      "sample_quality": "thin"
+    },
+    "Nigeria": {
+      "matches": 3,
+      "round32_team": false,
+      "avg_for": 4.33,
+      "avg_against": 5.33,
+      "avg_total": 9.67,
+      "sample_quality": "thin"
+    },
+    "German DR": {
+      "matches": 2,
+      "round32_team": false,
+      "avg_for": 3.5,
+      "avg_against": 8.0,
+      "avg_total": 11.5,
+      "sample_quality": "fallback"
+    },
+    "Romania": {
+      "matches": 1,
+      "round32_team": false,
+      "avg_for": 4.0,
+      "avg_against": 8.0,
+      "avg_total": 12.0,
+      "sample_quality": "fallback"
+    },
+    "Italy": {
+      "matches": 1,
+      "round32_team": false,
+      "avg_for": 6.0,
+      "avg_against": 4.0,
+      "avg_total": 10.0,
+      "sample_quality": "fallback"
+    }
+  },
+  "current_round32_teams": [
+    "Algeria",
+    "Argentina",
+    "Australia",
+    "Austria",
+    "Belgium",
+    "Bosnia and Herzegovina",
+    "Brazil",
+    "Canada",
+    "Cape Verde",
+    "Colombia",
+    "Congo DR",
+    "Cote d'Ivoire",
+    "Croatia",
+    "Ecuador",
+    "Egypt",
+    "England",
+    "France",
+    "Germany",
+    "Ghana",
+    "Japan",
+    "Mexico",
+    "Morocco",
+    "Netherlands",
+    "Norway",
+    "Paraguay",
+    "Portugal",
+    "Senegal",
+    "South Africa",
+    "Spain",
+    "Sweden",
+    "Switzerland",
+    "USA"
+  ]
+}

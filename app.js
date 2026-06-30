@@ -1500,5 +1500,89 @@ async function init() {
     });
   }
 }
+async function loadMlPredictions() {
+  try {
+    const response = await fetch("matchiq-predictions-final.json", { cache: "no-store" });
+    if (!response.ok) throw new Error("No se pudo cargar matchiq-predictions-final.json");
 
+    const predictions = await response.json();
+    renderMlPredictions(predictions);
+  } catch (error) {
+    console.warn("ML predictions error:", error);
+  }
+}
+
+function renderMlPredictions(predictions) {
+  const target = document.querySelector("main") || document.querySelector("#app") || document.body;
+
+  let section = document.querySelector("#ml-predictions-section");
+  if (!section) {
+    section = document.createElement("section");
+    section.id = "ml-predictions-section";
+    section.className = "ml-predictions-section";
+    target.appendChild(section);
+  }
+
+  section.innerHTML = `
+    <div class="ml-header">
+      <div>
+        <h2>Predicciones ML</h2>
+        <p>Goles, ambos anotan y córners generados con el motor Python.</p>
+      </div>
+      <span class="ml-badge">v2.2</span>
+    </div>
+    <div class="ml-grid">
+      ${predictions.map(renderMlMatchCard).join("")}
+    </div>
+  `;
+}
+
+function renderMlMatchCard(match) {
+  const goals = match.goals || {};
+  const corners = match.corners || {};
+  const picks = match.top_picks || [];
+
+  return `
+    <article class="ml-card">
+      <div class="ml-card-top">
+        <span>${match.date}</span>
+        <strong>${match.home} vs ${match.away}</strong>
+      </div>
+
+      <div class="ml-lines">
+        ${goals.expected_total_goals !== undefined ? `
+          <div>
+            <small>Goles esperados</small>
+            <b>${goals.expected_home_goals} - ${goals.expected_away_goals}</b>
+            <span>${goals.score_zone || ""}</span>
+          </div>
+        ` : ""}
+
+        ${corners.expected_total_corners !== undefined ? `
+          <div>
+            <small>Córners esperados</small>
+            <b>${corners.expected_total_corners}</b>
+            <span>${corners.expected_range || ""}</span>
+          </div>
+        ` : ""}
+      </div>
+
+      <div class="ml-picks">
+        ${picks.length ? picks.map(renderMlPick).join("") : `<p class="ml-no-bet">NO BET</p>`}
+      </div>
+    </article>
+  `;
+}
+
+function renderMlPick(pick) {
+  return `
+    <div class="ml-pick ${pick.strength}">
+      <span>${pick.type.toUpperCase()}</span>
+      <b>${pick.market}</b>
+      <small>${pick.probability}% | Momio justo ${pick.fair_odds} | Riesgo ${pick.risk}</small>
+    </div>
+  `;
+}
+
+document.addEventListener("DOMContentLoaded", loadMlPredictions);
 init();

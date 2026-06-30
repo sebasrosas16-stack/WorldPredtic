@@ -1,0 +1,1346 @@
+[
+  {
+    "match_id": 77,
+    "date": "2026-06-30",
+    "home": "France",
+    "away": "Sweden",
+    "expected_total_corners": 9.23,
+    "expected_home_corners": 5.53,
+    "expected_away_corners": 3.85,
+    "quality": "medium",
+    "home_source": "direct_team_data",
+    "away_source": "direct_team_data",
+    "markets": [
+      {
+        "market": "Total corners over 7.5",
+        "line": 7.5,
+        "direction": "over",
+        "probability": 67,
+        "fair_odds": 1.49,
+        "pick_grade": "strong"
+      },
+      {
+        "market": "Total corners under 7.5",
+        "line": 7.5,
+        "direction": "under",
+        "probability": 33,
+        "fair_odds": 3.03,
+        "pick_grade": "lean_under"
+      },
+      {
+        "market": "Total corners over 8.5",
+        "line": 8.5,
+        "direction": "over",
+        "probability": 61,
+        "fair_odds": 1.64,
+        "pick_grade": "lean"
+      },
+      {
+        "market": "Total corners under 8.5",
+        "line": 8.5,
+        "direction": "under",
+        "probability": 39,
+        "fair_odds": 2.56,
+        "pick_grade": "no_bet"
+      },
+      {
+        "market": "Total corners over 9.5",
+        "line": 9.5,
+        "direction": "over",
+        "probability": 51,
+        "fair_odds": 1.96,
+        "pick_grade": "no_bet"
+      },
+      {
+        "market": "Total corners under 9.5",
+        "line": 9.5,
+        "direction": "under",
+        "probability": 49,
+        "fair_odds": 2.04,
+        "pick_grade": "no_bet"
+      },
+      {
+        "market": "Total corners over 10.5",
+        "line": 10.5,
+        "direction": "over",
+        "probability": 39,
+        "fair_odds": 2.56,
+        "pick_grade": "no_bet"
+      },
+      {
+        "market": "Total corners under 10.5",
+        "line": 10.5,
+        "direction": "under",
+        "probability": 61,
+        "fair_odds": 1.64,
+        "pick_grade": "lean"
+      }
+    ],
+    "best_markets": [
+      {
+        "market": "Total corners over 7.5",
+        "line": 7.5,
+        "direction": "over",
+        "probability": 67,
+        "fair_odds": 1.49,
+        "pick_grade": "strong"
+      },
+      {
+        "market": "Total corners over 8.5",
+        "line": 8.5,
+        "direction": "over",
+        "probability": 61,
+        "fair_odds": 1.64,
+        "pick_grade": "lean"
+      },
+      {
+        "market": "Total corners under 10.5",
+        "line": 10.5,
+        "direction": "under",
+        "probability": 61,
+        "fair_odds": 1.64,
+        "pick_grade": "lean"
+      },
+      {
+        "market": "Total corners over 9.5",
+        "line": 9.5,
+        "direction": "over",
+        "probability": 51,
+        "fair_odds": 1.96,
+        "pick_grade": "no_bet"
+      }
+    ]
+  },
+  {
+    "match_id": 78,
+    "date": "2026-06-30",
+    "home": "Cote d'Ivoire",
+    "away": "Norway",
+    "expected_total_corners": 9.86,
+    "expected_home_corners": 4.93,
+    "expected_away_corners": 5.08,
+    "quality": "fallback",
+    "home_source": "global_only",
+    "away_source": "global_only",
+    "markets": [
+      {
+        "market": "Total corners over 7.5",
+        "line": 7.5,
+        "direction": "over",
+        "probability": 74,
+        "fair_odds": 1.35,
+        "pick_grade": "lean"
+      },
+      {
+        "market": "Total corners under 7.5",
+        "line": 7.5,
+        "direction": "under",
+        "probability": 26,
+        "fair_odds": 3.85,
+        "pick_grade": "lean"
+      },
+      {
+        "market": "Total corners over 8.5",
+        "line": 8.5,
+        "direction": "over",
+        "probability": 67,
+        "fair_odds": 1.49,
+        "pick_grade": "lean"
+      },
+      {
+        "market": "Total corners under 8.5",
+        "line": 8.5,
+        "direction": "under",
+        "probability": 33,
+        "fair_odds": 3.03,
+        "pick_grade": "lean"
+      },
+      {
+        "market": "Total corners over 9.5",
+        "line": 9.5,
+        "direction": "over",
+        "probability": 56,
+        "fair_odds": 1.79,
+        "pick_grade": "no_bet"
+      },
+      {
+        "market": "Total corners under 9.5",
+        "line": 9.5,
+        "direction": "under",
+        "probability": 44,
+        "fair_odds": 2.27,
+        "pick_grade": "no_bet"
+      },
+      {
+        "market": "Total corners over 10.5",
+        "line": 10.5,
+        "direction": "over",
+        "probability": 46,
+        "fair_odds": 2.17,
+        "pick_grade": "no_bet"
+      },
+      {
+        "market": "Total corners under 10.5",
+        "line": 10.5,
+        "direction": "under",
+        "probability": 54,
+        "fair_odds": 1.85,
+        "pick_grade": "no_bet"
+      }
+    ],
+    "best_markets": [
+      {
+        "market": "Total corners over 7.5",
+        "line": 7.5,
+        "direction": "over",
+        "probability": 74,
+        "fair_odds": 1.35,
+        "pick_grade": "lean"
+      },
+      {
+        "market": "Total corners over 8.5",
+        "line": 8.5,
+        "direction": "over",
+        "probability": 67,
+        "fair_odds": 1.49,
+        "pick_grade": "lean"
+      },
+      {
+        "market": "Total corners under 8.5",
+        "line": 8.5,
+        "direction": "under",
+        "probability": 33,
+        "fair_odds": 3.03,
+        "pick_grade": "lean"
+      },
+      {
+        "market": "Total corners under 7.5",
+        "line": 7.5,
+        "direction": "under",
+        "probability": 26,
+        "fair_odds": 3.85,
+        "pick_grade": "lean"
+      }
+    ]
+  },
+  {
+    "match_id": 79,
+    "date": "2026-06-30",
+    "home": "Mexico",
+    "away": "Ecuador",
+    "expected_total_corners": 8.07,
+    "expected_home_corners": 3.97,
+    "expected_away_corners": 4.25,
+    "quality": "thin",
+    "home_source": "direct_team_data",
+    "away_source": "direct_team_data",
+    "markets": [
+      {
+        "market": "Total corners over 7.5",
+        "line": 7.5,
+        "direction": "over",
+        "probability": 56,
+        "fair_odds": 1.79,
+        "pick_grade": "no_bet"
+      },
+      {
+        "market": "Total corners under 7.5",
+        "line": 7.5,
+        "direction": "under",
+        "probability": 44,
+        "fair_odds": 2.27,
+        "pick_grade": "no_bet"
+      },
+      {
+        "market": "Total corners over 8.5",
+        "line": 8.5,
+        "direction": "over",
+        "probability": 46,
+        "fair_odds": 2.17,
+        "pick_grade": "no_bet"
+      },
+      {
+        "market": "Total corners under 8.5",
+        "line": 8.5,
+        "direction": "under",
+        "probability": 54,
+        "fair_odds": 1.85,
+        "pick_grade": "no_bet"
+      },
+      {
+        "market": "Total corners over 9.5",
+        "line": 9.5,
+        "direction": "over",
+        "probability": 39,
+        "fair_odds": 2.56,
+        "pick_grade": "no_bet"
+      },
+      {
+        "market": "Total corners under 9.5",
+        "line": 9.5,
+        "direction": "under",
+        "probability": 61,
+        "fair_odds": 1.64,
+        "pick_grade": "lean"
+      },
+      {
+        "market": "Total corners over 10.5",
+        "line": 10.5,
+        "direction": "over",
+        "probability": 31,
+        "fair_odds": 3.23,
+        "pick_grade": "lean_under"
+      },
+      {
+        "market": "Total corners under 10.5",
+        "line": 10.5,
+        "direction": "under",
+        "probability": 69,
+        "fair_odds": 1.45,
+        "pick_grade": "strong"
+      }
+    ],
+    "best_markets": [
+      {
+        "market": "Total corners under 10.5",
+        "line": 10.5,
+        "direction": "under",
+        "probability": 69,
+        "fair_odds": 1.45,
+        "pick_grade": "strong"
+      },
+      {
+        "market": "Total corners under 9.5",
+        "line": 9.5,
+        "direction": "under",
+        "probability": 61,
+        "fair_odds": 1.64,
+        "pick_grade": "lean"
+      },
+      {
+        "market": "Total corners over 7.5",
+        "line": 7.5,
+        "direction": "over",
+        "probability": 56,
+        "fair_odds": 1.79,
+        "pick_grade": "no_bet"
+      },
+      {
+        "market": "Total corners under 8.5",
+        "line": 8.5,
+        "direction": "under",
+        "probability": 54,
+        "fair_odds": 1.85,
+        "pick_grade": "no_bet"
+      }
+    ]
+  },
+  {
+    "match_id": 80,
+    "date": "2026-07-01",
+    "home": "England",
+    "away": "Congo DR",
+    "expected_total_corners": 8.93,
+    "expected_home_corners": 4.99,
+    "expected_away_corners": 4.09,
+    "quality": "partial_fallback",
+    "home_source": "team_plus_global",
+    "away_source": "global_plus_opponent",
+    "markets": [
+      {
+        "market": "Total corners over 7.5",
+        "line": 7.5,
+        "direction": "over",
+        "probability": 67,
+        "fair_odds": 1.49,
+        "pick_grade": "strong"
+      },
+      {
+        "market": "Total corners under 7.5",
+        "line": 7.5,
+        "direction": "under",
+        "probability": 33,
+        "fair_odds": 3.03,
+        "pick_grade": "lean_under"
+      },
+      {
+        "market": "Total corners over 8.5",
+        "line": 8.5,
+        "direction": "over",
+        "probability": 56,
+        "fair_odds": 1.79,
+        "pick_grade": "no_bet"
+      },
+      {
+        "market": "Total corners under 8.5",
+        "line": 8.5,
+        "direction": "under",
+        "probability": 44,
+        "fair_odds": 2.27,
+        "pick_grade": "no_bet"
+      },
+      {
+        "market": "Total corners over 9.5",
+        "line": 9.5,
+        "direction": "over",
+        "probability": 46,
+        "fair_odds": 2.17,
+        "pick_grade": "no_bet"
+      },
+      {
+        "market": "Total corners under 9.5",
+        "line": 9.5,
+        "direction": "under",
+        "probability": 54,
+        "fair_odds": 1.85,
+        "pick_grade": "no_bet"
+      },
+      {
+        "market": "Total corners over 10.5",
+        "line": 10.5,
+        "direction": "over",
+        "probability": 31,
+        "fair_odds": 3.23,
+        "pick_grade": "lean_under"
+      },
+      {
+        "market": "Total corners under 10.5",
+        "line": 10.5,
+        "direction": "under",
+        "probability": 69,
+        "fair_odds": 1.45,
+        "pick_grade": "strong"
+      }
+    ],
+    "best_markets": [
+      {
+        "market": "Total corners under 10.5",
+        "line": 10.5,
+        "direction": "under",
+        "probability": 69,
+        "fair_odds": 1.45,
+        "pick_grade": "strong"
+      },
+      {
+        "market": "Total corners over 7.5",
+        "line": 7.5,
+        "direction": "over",
+        "probability": 67,
+        "fair_odds": 1.49,
+        "pick_grade": "strong"
+      },
+      {
+        "market": "Total corners over 8.5",
+        "line": 8.5,
+        "direction": "over",
+        "probability": 56,
+        "fair_odds": 1.79,
+        "pick_grade": "no_bet"
+      },
+      {
+        "market": "Total corners under 9.5",
+        "line": 9.5,
+        "direction": "under",
+        "probability": 54,
+        "fair_odds": 1.85,
+        "pick_grade": "no_bet"
+      }
+    ]
+  },
+  {
+    "match_id": 82,
+    "date": "2026-07-01",
+    "home": "Belgium",
+    "away": "Senegal",
+    "expected_total_corners": 8.75,
+    "expected_home_corners": 4.65,
+    "expected_away_corners": 4.25,
+    "quality": "medium",
+    "home_source": "direct_team_data",
+    "away_source": "direct_team_data",
+    "markets": [
+      {
+        "market": "Total corners over 7.5",
+        "line": 7.5,
+        "direction": "over",
+        "probability": 67,
+        "fair_odds": 1.49,
+        "pick_grade": "strong"
+      },
+      {
+        "market": "Total corners under 7.5",
+        "line": 7.5,
+        "direction": "under",
+        "probability": 33,
+        "fair_odds": 3.03,
+        "pick_grade": "lean_under"
+      },
+      {
+        "market": "Total corners over 8.5",
+        "line": 8.5,
+        "direction": "over",
+        "probability": 56,
+        "fair_odds": 1.79,
+        "pick_grade": "no_bet"
+      },
+      {
+        "market": "Total corners under 8.5",
+        "line": 8.5,
+        "direction": "under",
+        "probability": 44,
+        "fair_odds": 2.27,
+        "pick_grade": "no_bet"
+      },
+      {
+        "market": "Total corners over 9.5",
+        "line": 9.5,
+        "direction": "over",
+        "probability": 46,
+        "fair_odds": 2.17,
+        "pick_grade": "no_bet"
+      },
+      {
+        "market": "Total corners under 9.5",
+        "line": 9.5,
+        "direction": "under",
+        "probability": 54,
+        "fair_odds": 1.85,
+        "pick_grade": "no_bet"
+      },
+      {
+        "market": "Total corners over 10.5",
+        "line": 10.5,
+        "direction": "over",
+        "probability": 31,
+        "fair_odds": 3.23,
+        "pick_grade": "lean_under"
+      },
+      {
+        "market": "Total corners under 10.5",
+        "line": 10.5,
+        "direction": "under",
+        "probability": 69,
+        "fair_odds": 1.45,
+        "pick_grade": "strong"
+      }
+    ],
+    "best_markets": [
+      {
+        "market": "Total corners under 10.5",
+        "line": 10.5,
+        "direction": "under",
+        "probability": 69,
+        "fair_odds": 1.45,
+        "pick_grade": "strong"
+      },
+      {
+        "market": "Total corners over 7.5",
+        "line": 7.5,
+        "direction": "over",
+        "probability": 67,
+        "fair_odds": 1.49,
+        "pick_grade": "strong"
+      },
+      {
+        "market": "Total corners over 8.5",
+        "line": 8.5,
+        "direction": "over",
+        "probability": 56,
+        "fair_odds": 1.79,
+        "pick_grade": "no_bet"
+      },
+      {
+        "market": "Total corners under 9.5",
+        "line": 9.5,
+        "direction": "under",
+        "probability": 54,
+        "fair_odds": 1.85,
+        "pick_grade": "no_bet"
+      }
+    ]
+  },
+  {
+    "match_id": 81,
+    "date": "2026-07-01",
+    "home": "USA",
+    "away": "Bosnia and Herzegovina",
+    "expected_total_corners": 8.96,
+    "expected_home_corners": 5.14,
+    "expected_away_corners": 3.97,
+    "quality": "partial_fallback",
+    "home_source": "team_plus_global",
+    "away_source": "global_plus_opponent",
+    "markets": [
+      {
+        "market": "Total corners over 7.5",
+        "line": 7.5,
+        "direction": "over",
+        "probability": 67,
+        "fair_odds": 1.49,
+        "pick_grade": "strong"
+      },
+      {
+        "market": "Total corners under 7.5",
+        "line": 7.5,
+        "direction": "under",
+        "probability": 33,
+        "fair_odds": 3.03,
+        "pick_grade": "lean_under"
+      },
+      {
+        "market": "Total corners over 8.5",
+        "line": 8.5,
+        "direction": "over",
+        "probability": 56,
+        "fair_odds": 1.79,
+        "pick_grade": "no_bet"
+      },
+      {
+        "market": "Total corners under 8.5",
+        "line": 8.5,
+        "direction": "under",
+        "probability": 44,
+        "fair_odds": 2.27,
+        "pick_grade": "no_bet"
+      },
+      {
+        "market": "Total corners over 9.5",
+        "line": 9.5,
+        "direction": "over",
+        "probability": 46,
+        "fair_odds": 2.17,
+        "pick_grade": "no_bet"
+      },
+      {
+        "market": "Total corners under 9.5",
+        "line": 9.5,
+        "direction": "under",
+        "probability": 54,
+        "fair_odds": 1.85,
+        "pick_grade": "no_bet"
+      },
+      {
+        "market": "Total corners over 10.5",
+        "line": 10.5,
+        "direction": "over",
+        "probability": 31,
+        "fair_odds": 3.23,
+        "pick_grade": "lean_under"
+      },
+      {
+        "market": "Total corners under 10.5",
+        "line": 10.5,
+        "direction": "under",
+        "probability": 69,
+        "fair_odds": 1.45,
+        "pick_grade": "strong"
+      }
+    ],
+    "best_markets": [
+      {
+        "market": "Total corners under 10.5",
+        "line": 10.5,
+        "direction": "under",
+        "probability": 69,
+        "fair_odds": 1.45,
+        "pick_grade": "strong"
+      },
+      {
+        "market": "Total corners over 7.5",
+        "line": 7.5,
+        "direction": "over",
+        "probability": 67,
+        "fair_odds": 1.49,
+        "pick_grade": "strong"
+      },
+      {
+        "market": "Total corners over 8.5",
+        "line": 8.5,
+        "direction": "over",
+        "probability": 56,
+        "fair_odds": 1.79,
+        "pick_grade": "no_bet"
+      },
+      {
+        "market": "Total corners under 9.5",
+        "line": 9.5,
+        "direction": "under",
+        "probability": 54,
+        "fair_odds": 1.85,
+        "pick_grade": "no_bet"
+      }
+    ]
+  },
+  {
+    "match_id": 84,
+    "date": "2026-07-02",
+    "home": "Spain",
+    "away": "Austria",
+    "expected_total_corners": 9.21,
+    "expected_home_corners": 5.42,
+    "expected_away_corners": 3.94,
+    "quality": "partial_fallback",
+    "home_source": "team_plus_global",
+    "away_source": "global_plus_opponent",
+    "markets": [
+      {
+        "market": "Total corners over 7.5",
+        "line": 7.5,
+        "direction": "over",
+        "probability": 67,
+        "fair_odds": 1.49,
+        "pick_grade": "strong"
+      },
+      {
+        "market": "Total corners under 7.5",
+        "line": 7.5,
+        "direction": "under",
+        "probability": 33,
+        "fair_odds": 3.03,
+        "pick_grade": "lean_under"
+      },
+      {
+        "market": "Total corners over 8.5",
+        "line": 8.5,
+        "direction": "over",
+        "probability": 61,
+        "fair_odds": 1.64,
+        "pick_grade": "lean"
+      },
+      {
+        "market": "Total corners under 8.5",
+        "line": 8.5,
+        "direction": "under",
+        "probability": 39,
+        "fair_odds": 2.56,
+        "pick_grade": "no_bet"
+      },
+      {
+        "market": "Total corners over 9.5",
+        "line": 9.5,
+        "direction": "over",
+        "probability": 51,
+        "fair_odds": 1.96,
+        "pick_grade": "no_bet"
+      },
+      {
+        "market": "Total corners under 9.5",
+        "line": 9.5,
+        "direction": "under",
+        "probability": 49,
+        "fair_odds": 2.04,
+        "pick_grade": "no_bet"
+      },
+      {
+        "market": "Total corners over 10.5",
+        "line": 10.5,
+        "direction": "over",
+        "probability": 39,
+        "fair_odds": 2.56,
+        "pick_grade": "no_bet"
+      },
+      {
+        "market": "Total corners under 10.5",
+        "line": 10.5,
+        "direction": "under",
+        "probability": 61,
+        "fair_odds": 1.64,
+        "pick_grade": "lean"
+      }
+    ],
+    "best_markets": [
+      {
+        "market": "Total corners over 7.5",
+        "line": 7.5,
+        "direction": "over",
+        "probability": 67,
+        "fair_odds": 1.49,
+        "pick_grade": "strong"
+      },
+      {
+        "market": "Total corners over 8.5",
+        "line": 8.5,
+        "direction": "over",
+        "probability": 61,
+        "fair_odds": 1.64,
+        "pick_grade": "lean"
+      },
+      {
+        "market": "Total corners under 10.5",
+        "line": 10.5,
+        "direction": "under",
+        "probability": 61,
+        "fair_odds": 1.64,
+        "pick_grade": "lean"
+      },
+      {
+        "market": "Total corners over 9.5",
+        "line": 9.5,
+        "direction": "over",
+        "probability": 51,
+        "fair_odds": 1.96,
+        "pick_grade": "no_bet"
+      }
+    ]
+  },
+  {
+    "match_id": 83,
+    "date": "2026-07-02",
+    "home": "Portugal",
+    "away": "Croatia",
+    "expected_total_corners": 9.4,
+    "expected_home_corners": 5.08,
+    "expected_away_corners": 4.47,
+    "quality": "medium",
+    "home_source": "direct_team_data",
+    "away_source": "direct_team_data",
+    "markets": [
+      {
+        "market": "Total corners over 7.5",
+        "line": 7.5,
+        "direction": "over",
+        "probability": 67,
+        "fair_odds": 1.49,
+        "pick_grade": "strong"
+      },
+      {
+        "market": "Total corners under 7.5",
+        "line": 7.5,
+        "direction": "under",
+        "probability": 33,
+        "fair_odds": 3.03,
+        "pick_grade": "lean_under"
+      },
+      {
+        "market": "Total corners over 8.5",
+        "line": 8.5,
+        "direction": "over",
+        "probability": 61,
+        "fair_odds": 1.64,
+        "pick_grade": "lean"
+      },
+      {
+        "market": "Total corners under 8.5",
+        "line": 8.5,
+        "direction": "under",
+        "probability": 39,
+        "fair_odds": 2.56,
+        "pick_grade": "no_bet"
+      },
+      {
+        "market": "Total corners over 9.5",
+        "line": 9.5,
+        "direction": "over",
+        "probability": 51,
+        "fair_odds": 1.96,
+        "pick_grade": "no_bet"
+      },
+      {
+        "market": "Total corners under 9.5",
+        "line": 9.5,
+        "direction": "under",
+        "probability": 49,
+        "fair_odds": 2.04,
+        "pick_grade": "no_bet"
+      },
+      {
+        "market": "Total corners over 10.5",
+        "line": 10.5,
+        "direction": "over",
+        "probability": 39,
+        "fair_odds": 2.56,
+        "pick_grade": "no_bet"
+      },
+      {
+        "market": "Total corners under 10.5",
+        "line": 10.5,
+        "direction": "under",
+        "probability": 61,
+        "fair_odds": 1.64,
+        "pick_grade": "lean"
+      }
+    ],
+    "best_markets": [
+      {
+        "market": "Total corners over 7.5",
+        "line": 7.5,
+        "direction": "over",
+        "probability": 67,
+        "fair_odds": 1.49,
+        "pick_grade": "strong"
+      },
+      {
+        "market": "Total corners over 8.5",
+        "line": 8.5,
+        "direction": "over",
+        "probability": 61,
+        "fair_odds": 1.64,
+        "pick_grade": "lean"
+      },
+      {
+        "market": "Total corners under 10.5",
+        "line": 10.5,
+        "direction": "under",
+        "probability": 61,
+        "fair_odds": 1.64,
+        "pick_grade": "lean"
+      },
+      {
+        "market": "Total corners over 9.5",
+        "line": 9.5,
+        "direction": "over",
+        "probability": 51,
+        "fair_odds": 1.96,
+        "pick_grade": "no_bet"
+      }
+    ]
+  },
+  {
+    "match_id": 85,
+    "date": "2026-07-02",
+    "home": "Switzerland",
+    "away": "Algeria",
+    "expected_total_corners": 9.9,
+    "expected_home_corners": 5.42,
+    "expected_away_corners": 4.63,
+    "quality": "partial_fallback",
+    "home_source": "team_plus_global",
+    "away_source": "global_plus_opponent",
+    "markets": [
+      {
+        "market": "Total corners over 7.5",
+        "line": 7.5,
+        "direction": "over",
+        "probability": 74,
+        "fair_odds": 1.35,
+        "pick_grade": "strong"
+      },
+      {
+        "market": "Total corners under 7.5",
+        "line": 7.5,
+        "direction": "under",
+        "probability": 26,
+        "fair_odds": 3.85,
+        "pick_grade": "lean_under"
+      },
+      {
+        "market": "Total corners over 8.5",
+        "line": 8.5,
+        "direction": "over",
+        "probability": 67,
+        "fair_odds": 1.49,
+        "pick_grade": "strong"
+      },
+      {
+        "market": "Total corners under 8.5",
+        "line": 8.5,
+        "direction": "under",
+        "probability": 33,
+        "fair_odds": 3.03,
+        "pick_grade": "lean_under"
+      },
+      {
+        "market": "Total corners over 9.5",
+        "line": 9.5,
+        "direction": "over",
+        "probability": 56,
+        "fair_odds": 1.79,
+        "pick_grade": "no_bet"
+      },
+      {
+        "market": "Total corners under 9.5",
+        "line": 9.5,
+        "direction": "under",
+        "probability": 44,
+        "fair_odds": 2.27,
+        "pick_grade": "no_bet"
+      },
+      {
+        "market": "Total corners over 10.5",
+        "line": 10.5,
+        "direction": "over",
+        "probability": 46,
+        "fair_odds": 2.17,
+        "pick_grade": "no_bet"
+      },
+      {
+        "market": "Total corners under 10.5",
+        "line": 10.5,
+        "direction": "under",
+        "probability": 54,
+        "fair_odds": 1.85,
+        "pick_grade": "no_bet"
+      }
+    ],
+    "best_markets": [
+      {
+        "market": "Total corners over 7.5",
+        "line": 7.5,
+        "direction": "over",
+        "probability": 74,
+        "fair_odds": 1.35,
+        "pick_grade": "strong"
+      },
+      {
+        "market": "Total corners over 8.5",
+        "line": 8.5,
+        "direction": "over",
+        "probability": 67,
+        "fair_odds": 1.49,
+        "pick_grade": "strong"
+      },
+      {
+        "market": "Total corners over 9.5",
+        "line": 9.5,
+        "direction": "over",
+        "probability": 56,
+        "fair_odds": 1.79,
+        "pick_grade": "no_bet"
+      },
+      {
+        "market": "Total corners under 10.5",
+        "line": 10.5,
+        "direction": "under",
+        "probability": 54,
+        "fair_odds": 1.85,
+        "pick_grade": "no_bet"
+      }
+    ]
+  },
+  {
+    "match_id": 86,
+    "date": "2026-07-03",
+    "home": "Argentina",
+    "away": "Cape Verde",
+    "expected_total_corners": 8.71,
+    "expected_home_corners": 4.81,
+    "expected_away_corners": 4.05,
+    "quality": "partial_fallback",
+    "home_source": "team_plus_global",
+    "away_source": "global_plus_opponent",
+    "markets": [
+      {
+        "market": "Total corners over 7.5",
+        "line": 7.5,
+        "direction": "over",
+        "probability": 67,
+        "fair_odds": 1.49,
+        "pick_grade": "strong"
+      },
+      {
+        "market": "Total corners under 7.5",
+        "line": 7.5,
+        "direction": "under",
+        "probability": 33,
+        "fair_odds": 3.03,
+        "pick_grade": "lean_under"
+      },
+      {
+        "market": "Total corners over 8.5",
+        "line": 8.5,
+        "direction": "over",
+        "probability": 56,
+        "fair_odds": 1.79,
+        "pick_grade": "no_bet"
+      },
+      {
+        "market": "Total corners under 8.5",
+        "line": 8.5,
+        "direction": "under",
+        "probability": 44,
+        "fair_odds": 2.27,
+        "pick_grade": "no_bet"
+      },
+      {
+        "market": "Total corners over 9.5",
+        "line": 9.5,
+        "direction": "over",
+        "probability": 46,
+        "fair_odds": 2.17,
+        "pick_grade": "no_bet"
+      },
+      {
+        "market": "Total corners under 9.5",
+        "line": 9.5,
+        "direction": "under",
+        "probability": 54,
+        "fair_odds": 1.85,
+        "pick_grade": "no_bet"
+      },
+      {
+        "market": "Total corners over 10.5",
+        "line": 10.5,
+        "direction": "over",
+        "probability": 31,
+        "fair_odds": 3.23,
+        "pick_grade": "lean_under"
+      },
+      {
+        "market": "Total corners under 10.5",
+        "line": 10.5,
+        "direction": "under",
+        "probability": 69,
+        "fair_odds": 1.45,
+        "pick_grade": "strong"
+      }
+    ],
+    "best_markets": [
+      {
+        "market": "Total corners under 10.5",
+        "line": 10.5,
+        "direction": "under",
+        "probability": 69,
+        "fair_odds": 1.45,
+        "pick_grade": "strong"
+      },
+      {
+        "market": "Total corners over 7.5",
+        "line": 7.5,
+        "direction": "over",
+        "probability": 67,
+        "fair_odds": 1.49,
+        "pick_grade": "strong"
+      },
+      {
+        "market": "Total corners over 8.5",
+        "line": 8.5,
+        "direction": "over",
+        "probability": 56,
+        "fair_odds": 1.79,
+        "pick_grade": "no_bet"
+      },
+      {
+        "market": "Total corners under 9.5",
+        "line": 9.5,
+        "direction": "under",
+        "probability": 54,
+        "fair_odds": 1.85,
+        "pick_grade": "no_bet"
+      }
+    ]
+  },
+  {
+    "match_id": 87,
+    "date": "2026-07-03",
+    "home": "Colombia",
+    "away": "Ghana",
+    "expected_total_corners": 8.77,
+    "expected_home_corners": 4.22,
+    "expected_away_corners": 4.7,
+    "quality": "thin",
+    "home_source": "direct_team_data",
+    "away_source": "direct_team_data",
+    "markets": [
+      {
+        "market": "Total corners over 7.5",
+        "line": 7.5,
+        "direction": "over",
+        "probability": 67,
+        "fair_odds": 1.49,
+        "pick_grade": "strong"
+      },
+      {
+        "market": "Total corners under 7.5",
+        "line": 7.5,
+        "direction": "under",
+        "probability": 33,
+        "fair_odds": 3.03,
+        "pick_grade": "lean_under"
+      },
+      {
+        "market": "Total corners over 8.5",
+        "line": 8.5,
+        "direction": "over",
+        "probability": 56,
+        "fair_odds": 1.79,
+        "pick_grade": "no_bet"
+      },
+      {
+        "market": "Total corners under 8.5",
+        "line": 8.5,
+        "direction": "under",
+        "probability": 44,
+        "fair_odds": 2.27,
+        "pick_grade": "no_bet"
+      },
+      {
+        "market": "Total corners over 9.5",
+        "line": 9.5,
+        "direction": "over",
+        "probability": 46,
+        "fair_odds": 2.17,
+        "pick_grade": "no_bet"
+      },
+      {
+        "market": "Total corners under 9.5",
+        "line": 9.5,
+        "direction": "under",
+        "probability": 54,
+        "fair_odds": 1.85,
+        "pick_grade": "no_bet"
+      },
+      {
+        "market": "Total corners over 10.5",
+        "line": 10.5,
+        "direction": "over",
+        "probability": 31,
+        "fair_odds": 3.23,
+        "pick_grade": "lean_under"
+      },
+      {
+        "market": "Total corners under 10.5",
+        "line": 10.5,
+        "direction": "under",
+        "probability": 69,
+        "fair_odds": 1.45,
+        "pick_grade": "strong"
+      }
+    ],
+    "best_markets": [
+      {
+        "market": "Total corners under 10.5",
+        "line": 10.5,
+        "direction": "under",
+        "probability": 69,
+        "fair_odds": 1.45,
+        "pick_grade": "strong"
+      },
+      {
+        "market": "Total corners over 7.5",
+        "line": 7.5,
+        "direction": "over",
+        "probability": 67,
+        "fair_odds": 1.49,
+        "pick_grade": "strong"
+      },
+      {
+        "market": "Total corners over 8.5",
+        "line": 8.5,
+        "direction": "over",
+        "probability": 56,
+        "fair_odds": 1.79,
+        "pick_grade": "no_bet"
+      },
+      {
+        "market": "Total corners under 9.5",
+        "line": 9.5,
+        "direction": "under",
+        "probability": 54,
+        "fair_odds": 1.85,
+        "pick_grade": "no_bet"
+      }
+    ]
+  },
+  {
+    "match_id": 88,
+    "date": "2026-07-03",
+    "home": "Australia",
+    "away": "Egypt",
+    "expected_total_corners": 6.9,
+    "expected_home_corners": 4.28,
+    "expected_away_corners": 2.77,
+    "quality": "thin",
+    "home_source": "direct_team_data",
+    "away_source": "direct_team_data",
+    "markets": [
+      {
+        "market": "Total corners over 7.5",
+        "line": 7.5,
+        "direction": "over",
+        "probability": 46,
+        "fair_odds": 2.17,
+        "pick_grade": "no_bet"
+      },
+      {
+        "market": "Total corners under 7.5",
+        "line": 7.5,
+        "direction": "under",
+        "probability": 54,
+        "fair_odds": 1.85,
+        "pick_grade": "no_bet"
+      },
+      {
+        "market": "Total corners over 8.5",
+        "line": 8.5,
+        "direction": "over",
+        "probability": 31,
+        "fair_odds": 3.23,
+        "pick_grade": "lean_under"
+      },
+      {
+        "market": "Total corners under 8.5",
+        "line": 8.5,
+        "direction": "under",
+        "probability": 69,
+        "fair_odds": 1.45,
+        "pick_grade": "strong"
+      },
+      {
+        "market": "Total corners over 9.5",
+        "line": 9.5,
+        "direction": "over",
+        "probability": 31,
+        "fair_odds": 3.23,
+        "pick_grade": "lean_under"
+      },
+      {
+        "market": "Total corners under 9.5",
+        "line": 9.5,
+        "direction": "under",
+        "probability": 69,
+        "fair_odds": 1.45,
+        "pick_grade": "strong"
+      },
+      {
+        "market": "Total corners over 10.5",
+        "line": 10.5,
+        "direction": "over",
+        "probability": 31,
+        "fair_odds": 3.23,
+        "pick_grade": "lean_under"
+      },
+      {
+        "market": "Total corners under 10.5",
+        "line": 10.5,
+        "direction": "under",
+        "probability": 69,
+        "fair_odds": 1.45,
+        "pick_grade": "strong"
+      }
+    ],
+    "best_markets": [
+      {
+        "market": "Total corners under 8.5",
+        "line": 8.5,
+        "direction": "under",
+        "probability": 69,
+        "fair_odds": 1.45,
+        "pick_grade": "strong"
+      },
+      {
+        "market": "Total corners under 9.5",
+        "line": 9.5,
+        "direction": "under",
+        "probability": 69,
+        "fair_odds": 1.45,
+        "pick_grade": "strong"
+      },
+      {
+        "market": "Total corners under 10.5",
+        "line": 10.5,
+        "direction": "under",
+        "probability": 69,
+        "fair_odds": 1.45,
+        "pick_grade": "strong"
+      },
+      {
+        "market": "Total corners under 7.5",
+        "line": 7.5,
+        "direction": "under",
+        "probability": 54,
+        "fair_odds": 1.85,
+        "pick_grade": "no_bet"
+      }
+    ]
+  }
+]

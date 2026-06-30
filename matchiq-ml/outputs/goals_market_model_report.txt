@@ -1,0 +1,41 @@
+MATCHIQ GOALS MARKET MODEL
+================================
+Partidos usados: 49478
+Promedio global goles: 2.939
+BTTS global: 46.60%
+Over 2.5 global: 52.50%
+Under 3.5 global: 67.30%
+
+Ejemplo Mexico vs Ecuador:
+{
+  "home": "Mexico",
+  "away": "Ecuador",
+  "quality": "team_data",
+  "expected_home_goals": 1.5,
+  "expected_away_goals": 0.72,
+  "expected_total_goals": 2.22,
+  "markets": {
+    "over_1_5": 60,
+    "over_2_5": 43,
+    "under_3_5": 75,
+    "btts_yes": 30,
+    "btts_no": 70
+  }
+}
+
+Ejemplo France vs Sweden:
+{
+  "home": "France",
+  "away": "Sweden",
+  "quality": "team_data",
+  "expected_home_goals": 2.65,
+  "expected_away_goals": 1.63,
+  "expected_total_goals": 4.27,
+  "markets": {
+    "over_1_5": 78,
+    "over_2_5": 78,
+    "under_3_5": 40,
+    "btts_yes": 84,
+    "btts_no": 16
+  }
+}

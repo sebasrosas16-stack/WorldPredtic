@@ -1,0 +1,316 @@
+{
+  "name": "MatchIQ World Cup Corner Model",
+  "version": "0.1",
+  "source": "StatsBomb Open Data",
+  "matches": 148,
+  "global_avg_total_corners": 9.28,
+  "global_over_8_5_rate": 0.5743,
+  "teams": {
+    "Argentina U20": {
+      "matches": 1,
+      "avg_for": 8.0,
+      "avg_against": 2.0,
+      "avg_total": 10.0
+    },
+    "Soviet Union U20": {
+      "matches": 1,
+      "avg_for": 2.0,
+      "avg_against": 8.0,
+      "avg_total": 10.0
+    },
+    "Canada": {
+      "matches": 3,
+      "avg_for": 4.0,
+      "avg_against": 3.67,
+      "avg_total": 7.67
+    },
+    "Morocco": {
+      "matches": 10,
+      "avg_for": 2.5,
+      "avg_against": 5.9,
+      "avg_total": 8.4
+    },
+    "England": {
+      "matches": 14,
+      "avg_for": 5.29,
+      "avg_against": 3.14,
+      "avg_total": 8.43
+    },
+    "Iran": {
+      "matches": 6,
+      "avg_for": 2.0,
+      "avg_against": 5.17,
+      "avg_total": 7.17
+    },
+    "Croatia": {
+      "matches": 14,
+      "avg_for": 5.0,
+      "avg_against": 4.36,
+      "avg_total": 9.36
+    },
+    "Belgium": {
+      "matches": 11,
+      "avg_for": 5.18,
+      "avg_against": 4.18,
+      "avg_total": 9.36
+    },
+    "Netherlands": {
+      "matches": 10,
+      "avg_for": 4.8,
+      "avg_against": 4.4,
+      "avg_total": 9.2
+    },
+    "Ecuador": {
+      "matches": 3,
+      "avg_for": 3.67,
+      "avg_against": 3.0,
+      "avg_total": 6.67
+    },
+    "Japan": {
+      "matches": 8,
+      "avg_for": 4.5,
+      "avg_against": 4.5,
+      "avg_total": 9.0
+    },
+    "Spain": {
+      "matches": 8,
+      "avg_for": 5.62,
+      "avg_against": 2.0,
+      "avg_total": 7.62
+    },
+    "United States": {
+      "matches": 4,
+      "avg_for": 5.5,
+      "avg_against": 2.75,
+      "avg_total": 8.25
+    },
+    "Wales": {
+      "matches": 3,
+      "avg_for": 2.0,
+      "avg_against": 6.0,
+      "avg_total": 8.0
+    },
+    "Tunisia": {
+      "matches": 6,
+      "avg_for": 5.17,
+      "avg_against": 5.17,
+      "avg_total": 10.33
+    },
+    "France": {
+      "matches": 15,
+      "avg_for": 4.27,
+      "avg_against": 4.07,
+      "avg_total": 8.33
+    },
+    "Switzerland": {
+      "matches": 8,
+      "avg_for": 5.75,
+      "avg_against": 4.62,
+      "avg_total": 10.38
+    },
+    "Cameroon": {
+      "matches": 3,
+      "avg_for": 4.0,
+      "avg_against": 8.33,
+      "avg_total": 12.33
+    },
+    "Portugal": {
+      "matches": 9,
+      "avg_for": 5.56,
+      "avg_against": 3.67,
+      "avg_total": 9.22
+    },
+    "Ghana": {
+      "matches": 3,
+      "avg_for": 4.33,
+      "avg_against": 5.67,
+      "avg_total": 10.0
+    },
+    "Senegal": {
+      "matches": 7,
+      "avg_for": 4.29,
+      "avg_against": 3.86,
+      "avg_total": 8.14
+    },
+    "Poland": {
+      "matches": 7,
+      "avg_for": 4.0,
+      "avg_against": 5.57,
+      "avg_total": 9.57
+    },
+    "Saudi Arabia": {
+      "matches": 6,
+      "avg_for": 3.0,
+      "avg_against": 5.17,
+      "avg_total": 8.17
+    },
+    "Qatar": {
+      "matches": 3,
+      "avg_for": 3.0,
+      "avg_against": 4.33,
+      "avg_total": 7.33
+    },
+    "Denmark": {
+      "matches": 7,
+      "avg_for": 5.57,
+      "avg_against": 4.57,
+      "avg_total": 10.14
+    },
+    "Germany": {
+      "matches": 9,
+      "avg_for": 7.78,
+      "avg_against": 4.56,
+      "avg_total": 12.33
+    },
+    "Mexico": {
+      "matches": 8,
+      "avg_for": 4.62,
+      "avg_against": 5.12,
+      "avg_total": 9.75
+    },
+    "Brazil": {
+      "matches": 21,
+      "avg_for": 7.19,
+      "avg_against": 4.1,
+      "avg_total": 11.29
+    },
+    "Argentina": {
+      "matches": 16,
+      "avg_for": 5.31,
+      "avg_against": 3.69,
+      "avg_total": 9.0
+    },
+    "Costa Rica": {
+      "matches": 6,
+      "avg_for": 1.67,
+      "avg_against": 7.33,
+      "avg_total": 9.0
+    },
+    "Serbia": {
+      "matches": 6,
+      "avg_for": 3.5,
+      "avg_against": 4.83,
+      "avg_total": 8.33
+    },
+    "Australia": {
+      "matches": 7,
+      "avg_for": 3.14,
+      "avg_against": 4.43,
+      "avg_total": 7.57
+    },
+    "Uruguay": {
+      "matches": 9,
+      "avg_for": 3.11,
+      "avg_against": 3.89,
+      "avg_total": 7.0
+    },
+    "South Korea": {
+      "matches": 7,
+      "avg_for": 5.57,
+      "avg_against": 5.14,
+      "avg_total": 10.71
+    },
+    "Panama": {
+      "matches": 3,
+      "avg_for": 1.67,
+      "avg_against": 6.0,
+      "avg_total": 7.67
+    },
+    "Sweden": {
+      "matches": 7,
+      "avg_for": 3.71,
+      "avg_against": 7.43,
+      "avg_total": 11.14
+    },
+    "Peru": {
+      "matches": 4,
+      "avg_for": 3.5,
+      "avg_against": 7.0,
+      "avg_total": 10.5
+    },
+    "Colombia": {
+      "matches": 4,
+      "avg_for": 3.25,
+      "avg_against": 5.25,
+      "avg_total": 8.5
+    },
+    "Iceland": {
+      "matches": 3,
+      "avg_for": 5.67,
+      "avg_against": 7.0,
+      "avg_total": 12.67
+    },
+    "Russia": {
+      "matches": 5,
+      "avg_for": 5.2,
+      "avg_against": 4.8,
+      "avg_total": 10.0
+    },
+    "Egypt": {
+      "matches": 3,
+      "avg_for": 1.67,
+      "avg_against": 6.0,
+      "avg_total": 7.67
+    },
+    "Nigeria": {
+      "matches": 3,
+      "avg_for": 4.33,
+      "avg_against": 5.33,
+      "avg_total": 9.67
+    },
+    "German DR": {
+      "matches": 2,
+      "avg_for": 3.5,
+      "avg_against": 8.0,
+      "avg_total": 11.5
+    },
+    "Romania": {
+      "matches": 1,
+      "avg_for": 4.0,
+      "avg_against": 8.0,
+      "avg_total": 12.0
+    },
+    "Italy": {
+      "matches": 1,
+      "avg_for": 6.0,
+      "avg_against": 4.0,
+      "avg_total": 10.0
+    },
+    "Czechoslovakia": {
+      "matches": 1,
+      "avg_for": 6.0,
+      "avg_against": 3.0,
+      "avg_total": 9.0
+    }
+  },
+  "stages": {
+    "Final": {
+      "matches": 6,
+      "avg_total": 13.33
+    },
+    "Group Stage": {
+      "matches": 100,
+      "avg_total": 8.86
+    },
+    "Quarter-finals": {
+      "matches": 10,
+      "avg_total": 10.3
+    },
+    "3rd Place Final": {
+      "matches": 2,
+      "avg_total": 9.0
+    },
+    "Round of 16": {
+      "matches": 17,
+      "avg_total": 9.94
+    },
+    "Semi-finals": {
+      "matches": 8,
+      "avg_total": 9.62
+    },
+    "1st Group Stage": {
+      "matches": 5,
+      "avg_total": 8.0
+    }
+  }
+}

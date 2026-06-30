@@ -1,0 +1,13 @@
+match_id,date,home,away,quality,risk,expected_home_goals,expected_away_goals,expected_total_goals,score_zone,main_pick,probability,fair_odds,strength,reason
+77,2026-06-30,France,Sweden,team_data,medio-alto,2.65,1.63,4.19,2-1 / 2-2 / 3-1,Total goals over 1.5,78,1.28,strong,"Pick elegido por probabilidad, calidad de muestra y contexto KO."
+78,2026-06-30,Cote d'Ivoire,Norway,team_data,medio-alto,1.65,1.81,3.38,2-1 / 2-2 / 3-1,Total goals over 1.5,78,1.28,strong,"Pick elegido por probabilidad, calidad de muestra y contexto KO."
+79,2026-06-30,Mexico,Ecuador,team_data,medio,1.5,0.72,2.14,1-0 / 2-0 / 2-1,Total goals under 3.5,75,1.33,strong,"Pick elegido por probabilidad, calidad de muestra y contexto KO."
+80,2026-07-01,England,Congo DR,team_data,medio,1.6,0.94,2.46,2-1 / 1-1 / 2-0,Total goals under 3.5,75,1.33,strong,"Pick elegido por probabilidad, calidad de muestra y contexto KO."
+82,2026-07-01,Belgium,Senegal,team_data,medio-alto,2.15,1.62,3.69,2-1 / 2-2 / 3-1,Total goals over 1.5,78,1.28,strong,"Pick elegido por probabilidad, calidad de muestra y contexto KO."
+81,2026-07-01,USA,Bosnia and Herzegovina,team_data,medio-alto,2.1,1.5,3.51,2-1 / 2-2 / 3-1,Total goals over 1.5,78,1.28,strong,"Pick elegido por probabilidad, calidad de muestra y contexto KO."
+84,2026-07-02,Spain,Austria,team_data,medio,1.72,1.39,3.03,2-1 / 1-1 / 2-0,Total goals over 1.5,78,1.28,strong,"Pick elegido por probabilidad, calidad de muestra y contexto KO."
+83,2026-07-02,Portugal,Croatia,team_data,medio,1.88,1.26,3.06,2-1 / 1-1 / 2-0,Total goals over 1.5,78,1.28,strong,"Pick elegido por probabilidad, calidad de muestra y contexto KO."
+85,2026-07-02,Switzerland,Algeria,team_data,medio-alto,1.98,1.59,3.49,2-1 / 2-2 / 3-1,Total goals over 1.5,78,1.28,strong,"Pick elegido por probabilidad, calidad de muestra y contexto KO."
+86,2026-07-03,Argentina,Cape Verde,team_data,medio,1.98,0.7,2.6,2-1 / 1-1 / 2-0,Both teams to score NO,70,1.43,strong,"Pick elegido por probabilidad, calidad de muestra y contexto KO."
+87,2026-07-03,Colombia,Ghana,team_data,medio,1.37,0.65,1.94,1-0 / 2-0 / 2-1,Total goals under 3.5,75,1.33,strong,"Pick elegido por probabilidad, calidad de muestra y contexto KO."
+88,2026-07-03,Australia,Egypt,team_data,medio,0.86,1.23,2.01,1-1 / 1-0 / 0-1,Total goals under 3.5,75,1.33,strong,"Pick elegido por probabilidad, calidad de muestra y contexto KO."

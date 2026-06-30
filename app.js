@@ -6,6 +6,8 @@ const STORAGE_KEYS = {
   activeTab: "matchiq_v23_active_tab"
 };
 
+const APP_BUILD_VERSION = "2.3.1";
+
 const screens = {
   home: document.getElementById("homeScreen"),
   ml: document.getElementById("mlScreen"),
@@ -868,7 +870,7 @@ function renderAll() {
 
 async function loadMlPredictions() {
   try {
-    const response = await fetch("matchiq-predictions-final.json", { cache: "no-store" });
+    const response = await fetch(`matchiq-predictions-final.json?v=${APP_BUILD_VERSION}`, { cache: "no-store" });
     if (!response.ok) throw new Error("No se pudo cargar ML JSON");
     return await response.json();
   } catch (error) {

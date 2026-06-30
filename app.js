@@ -6,7 +6,7 @@ const STORAGE_KEYS = {
   activeTab: "matchiq_v23_active_tab"
 };
 
-const APP_BUILD_VERSION = "2.3.1";
+const APP_BUILD_VERSION = "2.3.2";
 
 const screens = {
   home: document.getElementById("homeScreen"),
@@ -33,6 +33,42 @@ const state = {
     defaultOdds: 1.80,
     defaultStake: 50
   })
+};
+
+
+const TEAM_FLAGS = {
+  "South Africa": "🇿🇦",
+  "Canada": "🇨🇦",
+  "Ivory Coast": "🇨🇮",
+  "United States": "🇺🇸",
+  "Bosnia and Herzegovina": "🇧🇦",
+  "DR Congo": "🇨🇩",
+  "Cape Verde": "🇨🇻",
+  "Switzerland": "🇨🇭",
+  "Algeria": "🇩🇿",
+  "Netherlands": "🇳🇱",
+  "Germany": "🇩🇪",
+  "Japan": "🇯🇵",
+  "Morocco": "🇲🇦",
+  "Paraguay": "🇵🇾",
+  "Norway": "🇳🇴",
+  "France": "🇫🇷",
+  "Sweden": "🇸🇪",
+  "Mexico": "🇲🇽",
+  "Ecuador": "🇪🇨",
+  "England": "🏴",
+  "Belgium": "🇧🇪",
+  "Senegal": "🇸🇳",
+  "Spain": "🇪🇸",
+  "Austria": "🇦🇹",
+  "Portugal": "🇵🇹",
+  "Croatia": "🇭🇷",
+  "Australia": "🇦🇺",
+  "Egypt": "🇪🇬",
+  "Argentina": "🇦🇷",
+  "Colombia": "🇨🇴",
+  "Ghana": "🇬🇭",
+  "Brazil": "🇧🇷"
 };
 
 const TEAM_CANONICAL = {
@@ -72,6 +108,14 @@ function normalizeTeam(name) {
 
 function teamLabel(name) {
   return DISPLAY_NAMES?.[normalizeTeam(name)] || name;
+}
+
+function teamFlag(name) {
+  return TEAM_FLAGS[normalizeTeam(name)] || "⚽";
+}
+
+function teamDisplay(name) {
+  return `${teamFlag(name)} ${teamLabel(name)}`;
 }
 
 function matchTitle(match) {
@@ -289,10 +333,10 @@ function ticketProfit(ticket) {
   return 0;
 }
 
-function setLegStatus(ticketId, legId, status) {
+function setPickStatus(ticketId, pickId, status) {
   const ticket = state.tickets.find(item => item.id === ticketId);
   if (!ticket) return;
-  const leg = ticket.legs.find(item => item.id === legId);
+  const leg = ticket.legs.find(item => item.id === pickId);
   if (!leg) return;
   leg.legStatus = status;
   ticket.status = deriveTicketStatus(ticket);
@@ -483,6 +527,95 @@ function renderMatchSelector(matches, selectedId, handler) {
   `;
 }
 
+function translateMarketText(text, match) {
+  const value = String(text || "Pick");
+  return value
+    .replace("Total goals over", "Total goles +")
+    .replace("Total goals under", "Total goles -")
+    .replace("Total corners over", "Total córners +")
+    .replace("Total corners under", "Total córners -")
+    .replace("BTTS yes", "Ambos anotan SÍ")
+    .replace("BTTS no", "Ambos anotan NO")
+    .replace(match?.home || "__home__", teamDisplay(match?.home))
+    .replace(match?.away || "__away__", teamDisplay(match?.away));
+}
+
+function pickDisplayTitle(pick) {
+  const raw = pick.text || pick.market || pick.pick || pick.label || "Pick";
+  const match = { home: pick.home, away: pick.away };
+  return translateMarketText(raw, match);
+}
+
+function strongestMlPick(match) {
+  const picks = match?.top_picks || [];
+  if (!picks.length) return "Sin pick fuerte todavía";
+  const top = [...picks].sort((a, b) => Number(b.probability || 0) - Number(a.probability || 0))[0];
+  return `${translateMarketText(top.market, match)} (${Math.round(top.probability || 0)}%)`;
+}
+
+function renderMlExplanation(match) {
+  const goals = match.goals || {};
+  const corners = match.corners || {};
+  const totalGoals = Number(goals.expected_total_goals || 0).toFixed(2);
+  const homeGoals = Number(goals.expected_home_goals || 0).toFixed(2);
+  const awayGoals = Number(goals.expected_away_goals || 0).toFixed(2);
+  const cornersTotal = Number(corners.expected_total_corners || 0).toFixed(2);
+  const btts = Math.round(goals.markets?.btts_yes || 0);
+  const over15 = Math.round(goals.markets?.over_1_5 || 0);
+  return `
+    <section class="panel explanation-card">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Explicación ML</p>
+          <h2>Por qué el modelo lo ve así</h2>
+        </div>
+        <span class="mini-pill">Dato ${escapeHtml(goals.quality || corners.quality || "medio")}</span>
+      </div>
+      <div class="explain-grid">
+        <article><span>${teamDisplay(match.home)}</span><strong>${homeGoals} xG</strong></article>
+        <article><span>${teamDisplay(match.away)}</span><strong>${awayGoals} xG</strong></article>
+        <article><span>Total goles</span><strong>${totalGoals}</strong></article>
+        <article><span>Total córners</span><strong>${cornersTotal}</strong></article>
+      </div>
+      <p class="explain-copy">
+        El pick principal sale de combinar goles esperados, probabilidad de mercado, riesgo KO y calidad de muestra.
+        Para este partido, el motor ve <b>${strongestMlPick(match)}</b>. Over 1.5 marca ${over15}% y BTTS Sí ${btts}%.
+      </p>
+      <p class="explain-note">Riesgo: ${escapeHtml(goals.risk || corners.risk || "medio")} · Rango córners: ${escapeHtml(corners.expected_range || "sin rango")}</p>
+    </section>
+  `;
+}
+
+function renderAiExplanation(match, prediction) {
+  const favorite = prediction.favorite?.team || match.home;
+  const favoriteProb = Math.round((prediction.favorite?.prob || 0) * 100);
+  const dcProb = clampPercent((prediction.favorite?.prob || 0) * 100 + (prediction.rawProbs?.draw || 0) * 100);
+  const qualifiesPick = prediction.heatMap?.find(pick => pick.type === "qualifies");
+  const qualifiesProb = qualifiesPick ? Math.round((qualifiesPick.probability || 0) * 100) : "-";
+  const btts = Math.round((prediction.bttsYes || 0) * 100);
+  return `
+    <section class="panel explanation-card">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Lectura IA</p>
+          <h2>Qué está interpretando</h2>
+        </div>
+        <span class="mini-pill">${teamDisplay(favorite)}</span>
+      </div>
+      <div class="explain-grid">
+        <article><span>Favorito 90 min</span><strong>${teamDisplay(favorite)} ${favoriteProb}%</strong></article>
+        <article><span>Doble oportunidad</span><strong>${teamDisplay(favorite)} / Empate ${dcProb}%</strong></article>
+        <article><span>Clasifica</span><strong>${teamDisplay(favorite)} ${qualifiesProb}%</strong></article>
+        <article><span>BTTS Sí</span><strong>${btts}%</strong></article>
+      </div>
+      <p class="explain-copy">
+        La IA separa ganador en 90 minutos de clasificar. También separa doble oportunidad, goles por equipo y mercados de ritmo.
+        Las barras ya muestran el equipo cuando el mercado depende de un lado específico.
+      </p>
+    </section>
+  `;
+}
+
 function renderMlDetail(match) {
   const markets = marketsFromMl(match);
   const picks = (match.top_picks || []).map(pick => ({
@@ -516,6 +649,8 @@ function renderMlDetail(match) {
         <small>${match.corners?.expected_range || "Rango pendiente"} · ${match.corners?.quality || "medium"}</small>
       </article>
     </section>
+
+    ${renderMlExplanation(match)}
 
     <section class="panel">
       <div class="section-head">
@@ -587,10 +722,12 @@ function renderAiDetail(match, prediction) {
     </section>
 
     <section class="three-probs">
-      ${renderOutcomeCard(teamLabel(match.home), prediction.probs.home)}
+      ${renderOutcomeCard(teamDisplay(match.home), prediction.probs.home)}
       ${renderOutcomeCard("Empate", prediction.probs.draw)}
-      ${renderOutcomeCard(teamLabel(match.away), prediction.probs.away)}
+      ${renderOutcomeCard(teamDisplay(match.away), prediction.probs.away)}
     </section>
+
+    ${renderAiExplanation(match, prediction)}
 
     <section class="panel">
       <div class="section-head">
@@ -599,7 +736,7 @@ function renderAiDetail(match, prediction) {
           <h2>BTTS</h2>
         </div>
       </div>
-      ${renderSplitBar("Sí", prediction.bttsYes * 100, "No", prediction.bttsNo * 100)}
+      ${renderSplitBar(`${teamDisplay(match.home)} y ${teamDisplay(match.away)} anotan SÍ`, prediction.bttsYes * 100, "No", prediction.bttsNo * 100)}
     </section>
 
     <section class="panel">
@@ -662,7 +799,7 @@ function renderProbabilityBar(label, value) {
 
 function renderPickCard(pick) {
   const probability = Math.round((pick.probability || pick.prob || pick.heatScore || 0) * ((pick.probability || pick.prob || 0) <= 1 ? 100 : 1));
-  const market = pick.market || pick.pick || pick.label || "Pick";
+  const market = pickDisplayTitle(pick);
   const strength = pick.strength || pick.quality || pick.dataQuality || "lean";
   const risk = pick.risk || pick.riskLabel || "medio";
   const source = pick.source || "IA";
@@ -709,7 +846,7 @@ function renderTicket() {
     <section class="page-title">
       <p class="eyebrow">Ticket</p>
       <h2>Constructor de parley</h2>
-      <p>Agrega picks desde ML o IA y evalúa cada pierna por separado.</p>
+      <p>Agrega picks desde ML o IA y evalúa cada pick por separado.</p>
     </section>
 
     <section class="panel">
@@ -774,7 +911,7 @@ function renderSavedTicket(ticket) {
             <div class="mini-actions">
               ${["pending", "win", "loss", "void"].map(statusValue => `
                 <button class="${leg.legStatus === statusValue ? "active" : ""}" type="button"
-                  onclick="setLegStatus('${ticket.id}','${leg.id}','${statusValue}')">${statusLabel(statusValue)}</button>
+                  onclick="setPickStatus('${ticket.id}','${leg.id}','${statusValue}')">${statusLabel(statusValue)}</button>
               `).join("")}
             </div>
           </div>
@@ -786,6 +923,70 @@ function renderSavedTicket(ticket) {
 
 function statusLabel(status) {
   return ({ pending: "Pend.", win: "Sí", loss: "No", void: "Nulo" })[status] || status;
+}
+
+function getReviewExportRows() {
+  const rows = [];
+  for (const [key, value] of Object.entries(state.reviews || {})) {
+    const [source, matchId, market] = key.split("|");
+    rows.push({
+      source: source || "",
+      match_id: matchId || "",
+      market: market || "",
+      status: value.status || "pending",
+      updated_at: value.updatedAt || ""
+    });
+  }
+  state.tickets.forEach(ticket => {
+    ticket.legs.forEach(item => {
+      rows.push({
+        source: item.source || "ticket",
+        match_id: item.matchId || "",
+        market: item.market || "",
+        status: item.legStatus || "pending",
+        updated_at: ticket.settledAt || ticket.createdAt || "",
+        match_title: item.matchTitle || "",
+        ticket_id: ticket.id,
+        probability: item.probability || "",
+        odds: ticket.odds || "",
+        stake: ticket.stake || ""
+      });
+    });
+  });
+  return rows;
+}
+
+function downloadText(filename, text, type = "text/plain") {
+  const blob = new Blob([text], { type });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+function toCsv(rows) {
+  const columns = ["source", "match_id", "match_title", "market", "status", "probability", "ticket_id", "odds", "stake", "updated_at"];
+  const escapeCell = value => `"${String(value ?? "").replaceAll('"', '""')}"`;
+  return [columns.join(","), ...rows.map(row => columns.map(col => escapeCell(row[col])).join(","))].join("\n");
+}
+
+function exportFeedback(format = "csv") {
+  const rows = getReviewExportRows();
+  if (!rows.length) {
+    toast("Todavía no hay feedback para exportar");
+    return;
+  }
+  const stamp = new Date().toISOString().slice(0, 10);
+  if (format === "json") {
+    downloadText(`matchiq-feedback-${stamp}.json`, JSON.stringify(rows, null, 2), "application/json");
+  } else {
+    downloadText(`matchiq-feedback-${stamp}.csv`, toCsv(rows), "text/csv;charset=utf-8");
+  }
+  toast("Feedback exportado");
 }
 
 function renderProfile() {
@@ -825,6 +1026,20 @@ function renderProfile() {
         ${renderStat("Fallos", reviews.losses)}
         ${renderStat("Nulos", reviews.voids)}
         ${renderStat("Precisión", `${reviews.hitRate.toFixed(1)}%`)}
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Retroalimentación</p>
+          <h2>Exportar para Python</h2>
+        </div>
+      </div>
+      <p class="explain-copy">Exporta los picks marcados en la app. Después se pueden meter al módulo de backtest para comparar aciertos, fallos y mercados.</p>
+      <div class="export-actions">
+        <button class="secondary-btn" type="button" onclick="exportFeedback('csv')">Exportar CSV</button>
+        <button class="ghost-btn" type="button" onclick="exportFeedback('json')">Exportar JSON</button>
       </div>
     </section>
 
@@ -899,9 +1114,10 @@ window.addPickToCartEncoded = addPickToCartEncoded;
 window.removeCartPick = removeCartPick;
 window.clearCart = clearCart;
 window.saveTicket = saveTicket;
-window.setLegStatus = setLegStatus;
+window.setPickStatus = setPickStatus;
 window.setPickReview = setPickReview;
 window.setPickReviewEncoded = setPickReviewEncoded;
 window.saveProfileSettings = saveProfileSettings;
+window.exportFeedback = exportFeedback;
 
 init();

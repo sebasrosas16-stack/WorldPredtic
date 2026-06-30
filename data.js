@@ -16,7 +16,13 @@ async function loadResults() {
       return [];
     }
 
-    const response = await fetch(RESULTS_CSV_URL, { cache: "no-store" });
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 4500);
+    const response = await fetch(RESULTS_CSV_URL, {
+      cache: "no-store",
+      signal: controller.signal
+    });
+    clearTimeout(timeoutId);
 
     if (!response.ok) {
       console.warn("No se pudo cargar el CSV. La app usará datos base.");

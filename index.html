@@ -2,32 +2,47 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MatchIQ v2.0.1</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>MatchIQ</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <main class="app">
-    <section id="appHero" class="hero glass">
-      <p class="eyebrow" id="heroEyebrow">Dieciseisavos Test Lab</p>
-      <h1 id="heroTitle">MatchIQ v2.0.1</h1>
-      <p class="subtitle" id="heroSubtitle">Mapa de calor, jugadores populares y control por pierna.</p>
-    </section>
+  <main class="app-shell">
+    <header class="topbar">
+      <button class="icon-button" type="button" aria-label="Menu">☰</button>
+      <div>
+        <p class="eyebrow">Dieciseisavos Test Lab</p>
+        <h1>MatchIQ</h1>
+      </div>
+      <span class="model-pill">v2.3</span>
+    </header>
 
     <section id="homeScreen" class="screen active"></section>
-    <section id="recommendedScreen" class="screen"></section>
+    <section id="mlScreen" class="screen"></section>
+    <section id="aiScreen" class="screen"></section>
     <section id="ticketScreen" class="screen"></section>
-    <section id="historyScreen" class="screen"></section>
     <section id="profileScreen" class="screen"></section>
   </main>
 
-  <nav class="bottom-nav">
-    <button class="nav-btn active" onclick="switchTab('home')">🏠<span>Inicio</span></button>
-    <button class="nav-btn" onclick="switchTab('recommended')">🔥<span>Mapa</span></button>
-    <button class="nav-btn" onclick="switchTab('ticket')">🧾<span>Ticket</span><em id="cartBadge">0</em></button>
-    <button class="nav-btn" onclick="switchTab('history')">📊<span>Sesión</span></button>
-    <button class="nav-btn" onclick="switchTab('profile')">⚙️<span>Ajustes</span></button>
+  <nav class="bottom-nav" aria-label="Navegación principal">
+    <button class="nav-btn active" type="button" data-tab="home" onclick="switchTab('home')">
+      <span>⌂</span><small>Inicio</small>
+    </button>
+    <button class="nav-btn" type="button" data-tab="ml" onclick="switchTab('ml')">
+      <span>◈</span><small>ML</small>
+    </button>
+    <button class="nav-btn" type="button" data-tab="ai" onclick="switchTab('ai')">
+      <span>✦</span><small>IA</small>
+    </button>
+    <button class="nav-btn" type="button" data-tab="ticket" onclick="switchTab('ticket')">
+      <span>▤</span><small>Ticket</small><em id="cartBadge">0</em>
+    </button>
+    <button class="nav-btn" type="button" data-tab="profile" onclick="switchTab('profile')">
+      <span>◷</span><small>Perfil</small>
+    </button>
   </nav>
+
+  <div id="appToast" class="toast" aria-live="polite"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
   <script src="data.js"></script>

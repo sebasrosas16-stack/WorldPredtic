@@ -1,0 +1,13 @@
+MATCHIQ BACKTEST REPORT
+
+Predicciones usadas: /workspaces/WorldPredtic/matchiq-predictions-final.json
+Resultados reales: /workspaces/WorldPredtic/matchiq-ml/data_raw/round32_actual_results.csv
+Picks evaluados: 0
+Picks saltados por falta de resultado/dato: 20
+Accuracy global: 0%
+Probabilidad promedio predicha: 0%
+Brier score promedio: 0
+
+Resumen por mercado:
+
+Calibración por rango:

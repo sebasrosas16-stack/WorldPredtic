@@ -1,0 +1,36 @@
+date,match,type,market,probability,fair_odds,strength,risk,quality,value_score,reason
+2026-07-07,Argentina vs Egypt,double_chance,Argentina o empate,90.2,1.11,strong,medio-bajo,team_data,35.2,XGBoost + calibración + capa bayesiana. xG estimado: Argentina 2.43 - Egypt 0.69. Muestra mínima: 760 partidos.
+2026-07-07,Argentina vs Egypt,team_goal,Argentina anota +0.5,87.7,1.14,strong,medio-bajo,team_data,32.7,XGBoost + calibración + capa bayesiana. xG estimado: Argentina 2.43 - Egypt 0.69. Muestra mínima: 760 partidos.
+2026-07-07,Argentina vs Egypt,goals,Total goals over 1.5,79.1,1.26,strong,medio-bajo,team_data,24.1,XGBoost + calibración + capa bayesiana. xG estimado: Argentina 2.43 - Egypt 0.69. Muestra mínima: 760 partidos.
+2026-07-07,Argentina vs Egypt,goals,Total goals under 3.5,74.0,1.35,strong,medio-bajo,team_data,19.0,XGBoost + calibración + capa bayesiana. xG estimado: Argentina 2.43 - Egypt 0.69. Muestra mínima: 760 partidos.
+2026-07-07,Argentina vs Egypt,result,Argentina gana 90 min,71.6,1.4,lean,medio,team_data,33.6,XGBoost + calibración + capa bayesiana. xG estimado: Argentina 2.43 - Egypt 0.69. Muestra mínima: 760 partidos.
+2026-07-07,Argentina vs Egypt,double_chance,No empate,81.5,1.23,watch,medio-bajo,team_data,26.5,XGBoost + calibración + capa bayesiana. xG estimado: Argentina 2.43 - Egypt 0.69. Muestra mínima: 760 partidos.
+2026-07-07,Argentina vs Egypt,corners,Total corners under 11.5,80.7,1.24,lean,medio-bajo,team_data,,Corners con suavizado bayesiano: media esperada 8.96 y rango 8 a 10 corners.
+2026-07-07,Switzerland vs Colombia,corners,Total corners under 11.5,76.9,1.3,strong,medio-bajo,team_data,,Corners con suavizado bayesiano: media esperada 9.34 y rango 8 a 11 corners.
+2026-07-07,Switzerland vs Colombia,double_chance,No empate,71.2,1.4,watch,medio,team_data,16.2,XGBoost + calibración + capa bayesiana. xG estimado: Switzerland 1.33 - Colombia 1.33. Muestra mínima: 642 partidos.
+2026-07-07,Switzerland vs Colombia,goals,Total goals over 1.5,70.9,1.41,lean,medio,team_data,15.9,XGBoost + calibración + capa bayesiana. xG estimado: Switzerland 1.33 - Colombia 1.33. Muestra mínima: 642 partidos.
+2026-07-07,Switzerland vs Colombia,team_goal,Switzerland anota +0.5,68.7,1.46,lean,medio,team_data,13.7,XGBoost + calibración + capa bayesiana. xG estimado: Switzerland 1.33 - Colombia 1.33. Muestra mínima: 642 partidos.
+2026-07-07,Switzerland vs Colombia,team_goal,Colombia anota +0.5,67.9,1.47,lean,medio,team_data,12.9,XGBoost + calibración + capa bayesiana. xG estimado: Switzerland 1.33 - Colombia 1.33. Muestra mínima: 642 partidos.
+2026-07-07,Switzerland vs Colombia,double_chance,Switzerland o empate,67.1,1.49,watch,medio,team_data,12.1,XGBoost + calibración + capa bayesiana. xG estimado: Switzerland 1.33 - Colombia 1.33. Muestra mínima: 642 partidos.
+2026-07-07,Switzerland vs Colombia,goals,Total goals under 3.5,65.9,1.52,lean,medio,team_data,10.9,XGBoost + calibración + capa bayesiana. xG estimado: Switzerland 1.33 - Colombia 1.33. Muestra mínima: 642 partidos.
+2026-07-09,France vs Morocco,team_goal,France anota +0.5,82.3,1.22,strong,medio-bajo,team_data,27.3,XGBoost + calibración + capa bayesiana. xG estimado: France 2.0 - Morocco 1.27. Muestra mínima: 622 partidos.
+2026-07-09,France vs Morocco,goals,Total goals over 1.5,74.1,1.35,strong,medio-bajo,team_data,19.1,XGBoost + calibración + capa bayesiana. xG estimado: France 2.0 - Morocco 1.27. Muestra mínima: 622 partidos.
+2026-07-09,France vs Morocco,corners,Total corners under 11.5,83.1,1.2,strong,medio-bajo,team_data,,Corners con suavizado bayesiano: media esperada 8.71 y rango 7 a 10 corners.
+2026-07-09,France vs Morocco,double_chance,France o empate,80.2,1.25,watch,medio-bajo,team_data,25.2,XGBoost + calibración + capa bayesiana. xG estimado: France 2.0 - Morocco 1.27. Muestra mínima: 622 partidos.
+2026-07-09,France vs Morocco,double_chance,No empate,73.6,1.36,watch,medio,team_data,18.6,XGBoost + calibración + capa bayesiana. xG estimado: France 2.0 - Morocco 1.27. Muestra mínima: 622 partidos.
+2026-07-09,France vs Morocco,result,France gana 90 min,53.8,1.86,watch,alto,team_data,15.8,XGBoost + calibración + capa bayesiana. xG estimado: France 2.0 - Morocco 1.27. Muestra mínima: 622 partidos.
+2026-07-09,France vs Morocco,goals,Total goals under 3.5,70.5,1.42,lean,medio,team_data,15.5,XGBoost + calibración + capa bayesiana. xG estimado: France 2.0 - Morocco 1.27. Muestra mínima: 622 partidos.
+2026-07-10,Spain vs Belgium,team_goal,Spain anota +0.5,84.7,1.18,strong,medio-bajo,team_data,29.7,XGBoost + calibración + capa bayesiana. xG estimado: Spain 1.88 - Belgium 1.46. Muestra mínima: 787 partidos.
+2026-07-10,Spain vs Belgium,goals,Total goals over 1.5,77.0,1.3,strong,medio-bajo,team_data,22.0,XGBoost + calibración + capa bayesiana. xG estimado: Spain 1.88 - Belgium 1.46. Muestra mínima: 787 partidos.
+2026-07-10,Spain vs Belgium,corners,Total corners under 11.5,81.9,1.22,strong,medio-bajo,team_data,,Corners con suavizado bayesiano: media esperada 8.83 y rango 7 a 10 corners.
+2026-07-10,Spain vs Belgium,double_chance,Spain o empate,87.6,1.14,lean,medio-bajo,team_data,32.6,XGBoost + calibración + capa bayesiana. xG estimado: Spain 1.88 - Belgium 1.46. Muestra mínima: 787 partidos.
+2026-07-10,Spain vs Belgium,result,Spain gana 90 min,61.5,1.63,watch,alto,team_data,23.5,XGBoost + calibración + capa bayesiana. xG estimado: Spain 1.88 - Belgium 1.46. Muestra mínima: 787 partidos.
+2026-07-10,Spain vs Belgium,double_chance,No empate,73.9,1.35,watch,medio,team_data,18.9,XGBoost + calibración + capa bayesiana. xG estimado: Spain 1.88 - Belgium 1.46. Muestra mínima: 787 partidos.
+2026-07-10,Spain vs Belgium,goals,Total goals under 3.5,67.1,1.49,lean,medio,team_data,12.1,XGBoost + calibración + capa bayesiana. xG estimado: Spain 1.88 - Belgium 1.46. Muestra mínima: 787 partidos.
+2026-07-11,England vs Norway,team_goal,England anota +0.5,83.9,1.19,strong,medio-bajo,team_data,28.9,XGBoost + calibración + capa bayesiana. xG estimado: England 2.1 - Norway 1.52. Muestra mínima: 877 partidos.
+2026-07-11,England vs Norway,goals,Total goals over 1.5,78.3,1.28,strong,medio-bajo,team_data,23.3,XGBoost + calibración + capa bayesiana. xG estimado: England 2.1 - Norway 1.52. Muestra mínima: 877 partidos.
+2026-07-11,England vs Norway,double_chance,England o empate,80.7,1.24,watch,medio-bajo,team_data,25.7,XGBoost + calibración + capa bayesiana. xG estimado: England 2.1 - Norway 1.52. Muestra mínima: 877 partidos.
+2026-07-11,England vs Norway,double_chance,No empate,72.3,1.38,watch,medio,team_data,17.3,XGBoost + calibración + capa bayesiana. xG estimado: England 2.1 - Norway 1.52. Muestra mínima: 877 partidos.
+2026-07-11,England vs Norway,goals,Total goals under 3.5,71.0,1.41,lean,medio,team_data,16.0,XGBoost + calibración + capa bayesiana. xG estimado: England 2.1 - Norway 1.52. Muestra mínima: 877 partidos.
+2026-07-11,England vs Norway,result,England gana 90 min,53.0,1.89,watch,alto,team_data,15.0,XGBoost + calibración + capa bayesiana. xG estimado: England 2.1 - Norway 1.52. Muestra mínima: 877 partidos.
+2026-07-11,England vs Norway,team_goal,Norway anota +0.5,66.9,1.49,lean,medio,team_data,11.9,XGBoost + calibración + capa bayesiana. xG estimado: England 2.1 - Norway 1.52. Muestra mínima: 877 partidos.

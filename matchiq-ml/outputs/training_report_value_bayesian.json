@@ -1,0 +1,96 @@
+{
+  "backend": "xgboost",
+  "markets": {
+    "over_1_5": {
+      "holdout_rows": 5999,
+      "base_rate": 0.7281,
+      "holdout_accuracy": 0.7251,
+      "holdout_brier": 0.1942,
+      "calibrated": true,
+      "holdout_auc": 0.6015
+    },
+    "over_2_5": {
+      "holdout_rows": 5999,
+      "base_rate": 0.4945,
+      "holdout_accuracy": 0.5893,
+      "holdout_brier": 0.2378,
+      "calibrated": true,
+      "holdout_auc": 0.6243
+    },
+    "under_3_5": {
+      "holdout_rows": 5999,
+      "base_rate": 0.7075,
+      "holdout_accuracy": 0.7156,
+      "holdout_brier": 0.1959,
+      "calibrated": true,
+      "holdout_auc": 0.6388
+    },
+    "btts_yes": {
+      "holdout_rows": 5999,
+      "base_rate": 0.435,
+      "holdout_accuracy": 0.5744,
+      "holdout_brier": 0.2399,
+      "calibrated": true,
+      "holdout_auc": 0.5793
+    },
+    "btts_no": {
+      "holdout_rows": 5999,
+      "base_rate": 0.565,
+      "holdout_accuracy": 0.5748,
+      "holdout_brier": 0.2399,
+      "calibrated": true,
+      "holdout_auc": 0.5793
+    },
+    "home_scores_05": {
+      "holdout_rows": 5999,
+      "base_rate": 0.7407,
+      "holdout_accuracy": 0.7615,
+      "holdout_brier": 0.1652,
+      "calibrated": true,
+      "holdout_auc": 0.7452
+    },
+    "away_scores_05": {
+      "holdout_rows": 5999,
+      "base_rate": 0.6073,
+      "holdout_accuracy": 0.6691,
+      "holdout_brier": 0.2091,
+      "calibrated": true,
+      "holdout_auc": 0.7034
+    },
+    "home_win": {
+      "holdout_rows": 5999,
+      "base_rate": 0.4852,
+      "holdout_accuracy": 0.7175,
+      "holdout_brier": 0.1855,
+      "calibrated": true,
+      "holdout_auc": 0.7967
+    },
+    "draw": {
+      "holdout_rows": 5999,
+      "base_rate": 0.2331,
+      "holdout_accuracy": 0.7691,
+      "holdout_brier": 0.1725,
+      "calibrated": true,
+      "holdout_auc": 0.6153
+    },
+    "away_win": {
+      "holdout_rows": 5999,
+      "base_rate": 0.2817,
+      "holdout_accuracy": 0.772,
+      "holdout_brier": 0.154,
+      "calibrated": true,
+      "holdout_auc": 0.807
+    }
+  },
+  "latest_result_date": "2026-07-11",
+  "training_rows_modern": 29994,
+  "upcoming_rows": 5,
+  "xgboost_available": true,
+  "bayesian_layer": "empirical_bayes_beta_shrinkage + poisson_gamma_corners",
+  "corner_rows_detected": 674,
+  "outputs": {
+    "best_value_picks": "/workspaces/WorldPredtic/matchiq-ml/outputs/best_value_picks_bayesian.csv",
+    "json_for_app": "/workspaces/WorldPredtic/matchiq-predictions-final.json",
+    "json_copy": "/workspaces/WorldPredtic/matchiq-ml/outputs/matchiq_predictions_value_bayesian.json"
+  }
+}

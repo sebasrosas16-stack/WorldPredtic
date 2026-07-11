@@ -1,0 +1,13 @@
+date,home,away,type,market,probability,probability_raw,fair_odds,strength,risk,model_disagreement_pp,reason,expected_total,expected_range
+2026-07-11,England,Norway,goals,England anota +0.5,84,0.8432,1.19,strong,bajo-medio,1.6,"Probabilidad calibrada con XGBoost, posterior Gamma-Poisson y matriz de marcadores.",,
+2026-07-11,England,Norway,result,England o empate,71,0.7084,1.41,lean,medio,3.9,El 1X2 está cerrado; el modelo reduce riesgo con doble oportunidad.,,
+2026-07-11,England,Norway,unconventional,England anota + under 4.5 goles,62,0.6249,1.6,lean,medio,6.0,Probabilidad conjunta obtenida de la matriz Dixon-Coles; no se multiplicaron probabilidades independientes.,,
+2026-07-11,England,Norway,qualifies,England clasifica,62,0.6201,1.61,lean,medio,3.9,Incluye el resultado en 90 minutos y reparte el empate según fuerza Elo reciente.,,
+2026-07-11,Switzerland,Argentina,goals,Argentina anota +0.5,86,0.8566,1.17,strong,bajo-medio,0.4,"Probabilidad calibrada con XGBoost, posterior Gamma-Poisson y matriz de marcadores.",,
+2026-07-11,Switzerland,Argentina,qualifies,Argentina clasifica,77,0.7651,1.31,strong,medio-alto,9.1,Incluye el resultado en 90 minutos y reparte el empate según fuerza Elo reciente.,,
+2026-07-11,Switzerland,Argentina,unconventional,Argentina anota + under 4.5 goles,67,0.6682,1.5,lean,medio,6.0,Probabilidad conjunta obtenida de la matriz Dixon-Coles; no se multiplicaron probabilidades independientes.,,
+2026-07-11,Switzerland,Argentina,result,Argentina gana 90 min,62,0.6206,1.61,lean,medio-alto,9.1,"Ensemble de XGBoost calibrado, simulación bayesiana y Dixon-Coles.",,
+2026-07-14,France,Spain,goals,Spain anota +0.5,75,0.7488,1.34,strong,bajo-medio,0.8,"Probabilidad calibrada con XGBoost, posterior Gamma-Poisson y matriz de marcadores.",,
+2026-07-14,France,Spain,corners,Total corners over 7.5,72,0.7211,1.39,strong,bajo-medio,1.1,XGBoost Poisson regularizado + forma por equipo + incertidumbre binomial negativa.,9.69,5 a 14 corners
+2026-07-14,France,Spain,result,Spain o empate,69,0.6941,1.44,lean,medio,8.3,El 1X2 está cerrado; el modelo reduce riesgo con doble oportunidad.,,
+2026-07-14,France,Spain,unconventional,Spain anota + under 4.5 goles,62,0.6213,1.61,lean,medio,6.0,Probabilidad conjunta obtenida de la matriz Dixon-Coles; no se multiplicaron probabilidades independientes.,,

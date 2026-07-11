@@ -344,8 +344,10 @@ def fit_team_models(
     reference = train["date"].max()
     weights = time_weights(train["date"], reference, half_life_years=6.0)
     if "is_world_cup" in train:
-        weights *= 1.0 + 0.45 * pd.to_numeric(train["is_world_cup"], errors="coerce").fillna(0).to_numpy()
+        weights = np.asarray(weights, dtype=float).copy()
+        weights *= 1.0 + 0.45 * pd.to_numeric(train["is_world_cup"], errors="coerce").fillna(0).to_numpy(dtype=float, copy=True)
     if "is_knockout" in train:
+        weights = np.asarray(weights, dtype=float).copy()
         weights *= 1.0 + 0.18 * pd.to_numeric(train["is_knockout"], errors="coerce").fillna(0).to_numpy()
 
     models: dict[str, Any] = {}
@@ -632,6 +634,7 @@ def fit_corner_model(corner_df: pd.DataFrame, upcoming_df: pd.DataFrame) -> tupl
     dates = frame["date"]
     weights = time_weights(dates, dates.max(), half_life_years=12.0)
     source_boost = frame["source"].astype(str).str.contains("FIFA_2026", case=False, na=False).to_numpy()
+    weights = np.asarray(weights, dtype=float).copy()
     weights *= 1.0 + 0.8 * source_boost
 
     models: dict[str, XGBRegressor] = {}

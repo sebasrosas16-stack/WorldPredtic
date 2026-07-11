@@ -1,0 +1,8 @@
+{
+  "version": "20260711T075531Z-precision-v3",
+  "generated_at": "2026-07-11T07:55:31.183381+00:00",
+  "predictions_file": "predictions-20260711T075531Z-precision-v3.json",
+  "fallback_file": "matchiq-predictions-final.json",
+  "model": "XGBoost + Dixon-Coles + Bayesian Gamma-Poisson/Negative-Binomial",
+  "matches": 3
+}

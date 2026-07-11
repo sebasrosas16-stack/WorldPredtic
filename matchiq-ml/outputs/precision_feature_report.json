@@ -1,0 +1,26 @@
+{
+  "status": "ok",
+  "mart_source": "matchiq-ml/data_raw/mart_results_latest.csv",
+  "mart_rows_raw": 49505,
+  "team_training_rows": 49496,
+  "team_training_from": "1872-11-30",
+  "team_training_to": "2026-07-09",
+  "recent_official_matches": 25,
+  "recent_90_minute_matches": 19,
+  "recent_120_minute_matches": 6,
+  "extra_time_corner_rows_excluded": 6,
+  "corner_history_source": "matchiq-ml/data_processed/statsbomb_worldcup_corners_clean.csv",
+  "corner_training_rows": 165,
+  "corner_recent_official_rows": 19,
+  "player_rows_raw": 365,
+  "player_feature_rows": 284,
+  "upcoming_matches": 3,
+  "upcoming_corner_feature_complete": 3,
+  "warnings": [],
+  "outputs": {
+    "team_training": "matchiq-ml/data_processed/team_match_training.csv",
+    "corner_training": "matchiq-ml/data_processed/corner_training.csv",
+    "player_features": "matchiq-ml/data_processed/player_form_features.csv",
+    "upcoming_features": "matchiq-ml/data_processed/upcoming_precision_features.csv"
+  }
+}

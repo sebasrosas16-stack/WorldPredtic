@@ -1,4 +1,335 @@
 date,team,opponent,player,position,started,minutes,goals_90,goals_full,shots_90,shots_full,shots_on_target_90,shots_on_target_full,xg,xa,penalties_taken,set_piece_role,injury_status,source_url,report_file
+2026-06-28,Canada,South Africa,Derek CORNELIUS,,,,0,0,1,1,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M73-RSA-V-CAN.pdf,PMSR-M73-RSA-V-CAN.pdf
+2026-06-28,Canada,South Africa,Jonathan DAVID,,,,0,0,2,2,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M73-RSA-V-CAN.pdf,PMSR-M73-RSA-V-CAN.pdf
+2026-06-28,Canada,South Africa,Luc DE FOUGEROLLES,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M73-RSA-V-CAN.pdf,PMSR-M73-RSA-V-CAN.pdf
+2026-06-28,Canada,South Africa,Moise BOMBITO,,,,1,1,1,1,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M73-RSA-V-CAN.pdf,PMSR-M73-RSA-V-CAN.pdf
+2026-06-28,Canada,South Africa,Promise DAVID,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M73-RSA-V-CAN.pdf,PMSR-M73-RSA-V-CAN.pdf
+2026-06-28,Canada,South Africa,Stephen EUSTAQUIO,,,,1,1,2,2,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M73-RSA-V-CAN.pdf,PMSR-M73-RSA-V-CAN.pdf
+2026-06-28,Canada,South Africa,Tajon BUCHANAN,,,,0,0,1,1,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M73-RSA-V-CAN.pdf,PMSR-M73-RSA-V-CAN.pdf
+2026-06-28,Canada,South Africa,Tani OLUWASEYI,,,,0,0,2,2,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M73-RSA-V-CAN.pdf,PMSR-M73-RSA-V-CAN.pdf
+2026-06-28,Canada,South Africa,Tani OLUWASEYI Deflected,,,,0,0,1,1,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M73-RSA-V-CAN.pdf,PMSR-M73-RSA-V-CAN.pdf
+2026-06-28,South Africa,Canada,Ime OKON,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M73-RSA-V-CAN.pdf,PMSR-M73-RSA-V-CAN.pdf
+2026-06-28,South Africa,Canada,Oswin APPOLLIS,,,,0,0,2,2,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M73-RSA-V-CAN.pdf,PMSR-M73-RSA-V-CAN.pdf
+2026-06-28,South Africa,Canada,Teboho MOKOENA,,,,0,0,2,2,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M73-RSA-V-CAN.pdf,PMSR-M73-RSA-V-CAN.pdf
+2026-06-28,South Africa,Canada,Thalente MBATHA,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M73-RSA-V-CAN.pdf,PMSR-M73-RSA-V-CAN.pdf
+2026-06-29,Brazil,Japan,BRUNO GUIMARAES,,,,0,0,4,4,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M76-BRA-V-JPN.pdf,PMSR-M76-BRA-V-JPN.pdf
+2026-06-29,Brazil,Japan,CASEMIRO,,,,2,2,2,2,2,2,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M76-BRA-V-JPN.pdf,PMSR-M76-BRA-V-JPN.pdf
+2026-06-29,Brazil,Japan,ENDRICK,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M76-BRA-V-JPN.pdf,PMSR-M76-BRA-V-JPN.pdf
+2026-06-29,Brazil,Japan,FABINHO,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M76-BRA-V-JPN.pdf,PMSR-M76-BRA-V-JPN.pdf
+2026-06-29,Brazil,Japan,GABRIEL MARTINELLI,,,,1,1,2,2,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M76-BRA-V-JPN.pdf,PMSR-M76-BRA-V-JPN.pdf
+2026-06-29,Brazil,Japan,LUCAS PAQUETA,,,,0,0,2,2,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M76-BRA-V-JPN.pdf,PMSR-M76-BRA-V-JPN.pdf
+2026-06-29,Brazil,Japan,MATHEUS CUNHA,,,,0,0,3,3,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M76-BRA-V-JPN.pdf,PMSR-M76-BRA-V-JPN.pdf
+2026-06-29,Brazil,Japan,RAYAN,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M76-BRA-V-JPN.pdf,PMSR-M76-BRA-V-JPN.pdf
+2026-06-29,Brazil,Japan,VINICIUS JUNIOR,,,,0,0,3,3,2,2,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M76-BRA-V-JPN.pdf,PMSR-M76-BRA-V-JPN.pdf
+2026-06-29,Germany,Paraguay,Aleksandar PAVLOVIC,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M74-GER-V-PAR-V2.pdf,PMSR-M74-GER-V-PAR-V2.pdf
+2026-06-29,Germany,Paraguay,Deniz UNDAV,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M74-GER-V-PAR-V2.pdf,PMSR-M74-GER-V-PAR-V2.pdf
+2026-06-29,Germany,Paraguay,Florian WIRTZ,,,,0,0,2,2,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M74-GER-V-PAR-V2.pdf,PMSR-M74-GER-V-PAR-V2.pdf
+2026-06-29,Germany,Paraguay,Jonathan TAH,,,,0,0,0,1,0,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M74-GER-V-PAR-V2.pdf,PMSR-M74-GER-V-PAR-V2.pdf
+2026-06-29,Germany,Paraguay,Joshua KIMMICH,,,,0,0,3,5,0,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M74-GER-V-PAR-V2.pdf,PMSR-M74-GER-V-PAR-V2.pdf
+2026-06-29,Germany,Paraguay,Kai HAVERTZ,,,,1,1,3,4,2,3,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M74-GER-V-PAR-V2.pdf,PMSR-M74-GER-V-PAR-V2.pdf
+2026-06-29,Germany,Paraguay,Leon GORETZKA,,,,0,0,2,2,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M74-GER-V-PAR-V2.pdf,PMSR-M74-GER-V-PAR-V2.pdf
+2026-06-29,Germany,Paraguay,Leroy SANE,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M74-GER-V-PAR-V2.pdf,PMSR-M74-GER-V-PAR-V2.pdf
+2026-06-29,Germany,Paraguay,Nadiem AMIRI,,,,0,0,0,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M74-GER-V-PAR-V2.pdf,PMSR-M74-GER-V-PAR-V2.pdf
+2026-06-29,Germany,Paraguay,Nick WOLTEMADE,,,,0,0,0,2,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M74-GER-V-PAR-V2.pdf,PMSR-M74-GER-V-PAR-V2.pdf
+2026-06-29,Germany,Paraguay,Waldemar ANTON,,,,0,0,0,1,0,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M74-GER-V-PAR-V2.pdf,PMSR-M74-GER-V-PAR-V2.pdf
+2026-06-29,Japan,Brazil,Ayase UEDA,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M76-BRA-V-JPN.pdf,PMSR-M76-BRA-V-JPN.pdf
+2026-06-29,Japan,Brazil,Ayase UEDA Deflected,,,,0,0,1,1,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M76-BRA-V-JPN.pdf,PMSR-M76-BRA-V-JPN.pdf
+2026-06-29,Japan,Brazil,Daichi KAMADA,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M76-BRA-V-JPN.pdf,PMSR-M76-BRA-V-JPN.pdf
+2026-06-29,Japan,Brazil,Junya ITO,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M76-BRA-V-JPN.pdf,PMSR-M76-BRA-V-JPN.pdf
+2026-06-29,Japan,Brazil,Kaishu SANO,,,,1,1,1,1,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M76-BRA-V-JPN.pdf,PMSR-M76-BRA-V-JPN.pdf
+2026-06-29,Morocco,Netherlands,Achraf HAKIMI,,,,0,0,3,3,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M75-NED-V-MAR.pdf,PMSR-M75-NED-V-MAR.pdf
+2026-06-29,Morocco,Netherlands,Anass SALAH EDDINE,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M75-NED-V-MAR.pdf,PMSR-M75-NED-V-MAR.pdf
+2026-06-29,Morocco,Netherlands,Ayyoub BOUADDI,,,,0,0,2,2,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M75-NED-V-MAR.pdf,PMSR-M75-NED-V-MAR.pdf
+2026-06-29,Morocco,Netherlands,Azzedine OUNAHI,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M75-NED-V-MAR.pdf,PMSR-M75-NED-V-MAR.pdf
+2026-06-29,Morocco,Netherlands,Bilal EL KHANNOUSS Deflected,,,,0,0,1,1,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M75-NED-V-MAR.pdf,PMSR-M75-NED-V-MAR.pdf
+2026-06-29,Morocco,Netherlands,Issa DIOP,,,,1,1,1,1,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M75-NED-V-MAR.pdf,PMSR-M75-NED-V-MAR.pdf
+2026-06-29,Morocco,Netherlands,Neil EL AYNAOUI,,,,0,0,1,1,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M75-NED-V-MAR.pdf,PMSR-M75-NED-V-MAR.pdf
+2026-06-29,Morocco,Netherlands,Soufiane RAHIMI,,,,0,0,0,1,0,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M75-NED-V-MAR.pdf,PMSR-M75-NED-V-MAR.pdf
+2026-06-29,Netherlands,Morocco,Cody GAKPO,,,,1,1,1,1,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M75-NED-V-MAR.pdf,PMSR-M75-NED-V-MAR.pdf
+2026-06-29,Netherlands,Morocco,Denzel DUMFRIES,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M75-NED-V-MAR.pdf,PMSR-M75-NED-V-MAR.pdf
+2026-06-29,Netherlands,Morocco,Micky VAN DE VEN,,,,0,0,2,2,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M75-NED-V-MAR.pdf,PMSR-M75-NED-V-MAR.pdf
+2026-06-29,Netherlands,Morocco,Ryan GRAVENBERCH,,,,0,0,2,2,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M75-NED-V-MAR.pdf,PMSR-M75-NED-V-MAR.pdf
+2026-06-29,Paraguay,Germany,Gustavo CABALLERO,,,,0,0,1,1,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M74-GER-V-PAR-V2.pdf,PMSR-M74-GER-V-PAR-V2.pdf
+2026-06-29,Paraguay,Germany,Gustavo GOMEZ,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M74-GER-V-PAR-V2.pdf,PMSR-M74-GER-V-PAR-V2.pdf
+2026-06-29,Paraguay,Germany,Julio ENCISO,,,,1,1,3,3,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M74-GER-V-PAR-V2.pdf,PMSR-M74-GER-V-PAR-V2.pdf
+2026-06-29,Paraguay,Germany,Junior ALONSO,,,,0,0,1,1,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M74-GER-V-PAR-V2.pdf,PMSR-M74-GER-V-PAR-V2.pdf
+2026-06-29,Paraguay,Germany,Miguel ALMIRON,,,,0,0,0,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M74-GER-V-PAR-V2.pdf,PMSR-M74-GER-V-PAR-V2.pdf
+2026-06-30,Côte d'Ivoire,Norway,Amad DIALLO,,,,1,1,2,2,2,2,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M78-CIV-V-NOR.pdf,PMSR-M78-CIV-V-NOR.pdf
+2026-06-30,Côte d'Ivoire,Norway,Emmanuel AGBADOU,,,,0,0,3,3,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M78-CIV-V-NOR.pdf,PMSR-M78-CIV-V-NOR.pdf
+2026-06-30,Côte d'Ivoire,Norway,Evann GUESSAND,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M78-CIV-V-NOR.pdf,PMSR-M78-CIV-V-NOR.pdf
+2026-06-30,Côte d'Ivoire,Norway,Franck KESSIE Deflected,,,,0,0,1,1,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M78-CIV-V-NOR.pdf,PMSR-M78-CIV-V-NOR.pdf
+2026-06-30,Côte d'Ivoire,Norway,Ghislain KONAN,,,,0,0,2,2,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M78-CIV-V-NOR.pdf,PMSR-M78-CIV-V-NOR.pdf
+2026-06-30,Côte d'Ivoire,Norway,Guela DOUE,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M78-CIV-V-NOR.pdf,PMSR-M78-CIV-V-NOR.pdf
+2026-06-30,Côte d'Ivoire,Norway,Ibrahim SANGARE,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M78-CIV-V-NOR.pdf,PMSR-M78-CIV-V-NOR.pdf
+2026-06-30,Côte d'Ivoire,Norway,Nicolas PEPE,,,,0,0,2,2,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M78-CIV-V-NOR.pdf,PMSR-M78-CIV-V-NOR.pdf
+2026-06-30,Côte d'Ivoire,Norway,Yan DIOMANDE,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M78-CIV-V-NOR.pdf,PMSR-M78-CIV-V-NOR.pdf
+2026-06-30,Ecuador,Mexico,John YEBOAH,,,,0,0,2,2,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M79-MEX-V-ECU.pdf,PMSR-M79-MEX-V-ECU.pdf
+2026-06-30,Ecuador,Mexico,Jordy CAICEDO,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M79-MEX-V-ECU.pdf,PMSR-M79-MEX-V-ECU.pdf
+2026-06-30,Ecuador,Mexico,Kevin RODRIGUEZ,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M79-MEX-V-ECU.pdf,PMSR-M79-MEX-V-ECU.pdf
+2026-06-30,Ecuador,Mexico,Moises CAICEDO,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M79-MEX-V-ECU.pdf,PMSR-M79-MEX-V-ECU.pdf
+2026-06-30,Ecuador,Mexico,Pedro VITE,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M79-MEX-V-ECU.pdf,PMSR-M79-MEX-V-ECU.pdf
+2026-06-30,Ecuador,Mexico,Yaimar MEDINA,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M79-MEX-V-ECU.pdf,PMSR-M79-MEX-V-ECU.pdf
+2026-06-30,France,Sweden,Adrien RABIOT,,,,0,0,2,2,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M77-FRA-V-SWE.pdf,PMSR-M77-FRA-V-SWE.pdf
+2026-06-30,France,Sweden,Aurelien TCHOUAMENI,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M77-FRA-V-SWE.pdf,PMSR-M77-FRA-V-SWE.pdf
+2026-06-30,France,Sweden,Bradley BARCOLA,,,,1,1,3,3,2,2,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M77-FRA-V-SWE.pdf,PMSR-M77-FRA-V-SWE.pdf
+2026-06-30,France,Sweden,Dayot UPAMECANO,,,,0,0,2,2,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M77-FRA-V-SWE.pdf,PMSR-M77-FRA-V-SWE.pdf
+2026-06-30,France,Sweden,Desire DOUE,,,,0,0,1,1,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M77-FRA-V-SWE.pdf,PMSR-M77-FRA-V-SWE.pdf
+2026-06-30,France,Sweden,Jean-Philippe MATETA,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M77-FRA-V-SWE.pdf,PMSR-M77-FRA-V-SWE.pdf
+2026-06-30,France,Sweden,Jules KOUNDE,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M77-FRA-V-SWE.pdf,PMSR-M77-FRA-V-SWE.pdf
+2026-06-30,France,Sweden,Kylian MBAPPE,,,,2,2,5,5,4,4,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M77-FRA-V-SWE.pdf,PMSR-M77-FRA-V-SWE.pdf
+2026-06-30,France,Sweden,Lucas DIGNE,,,,0,0,1,1,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M77-FRA-V-SWE.pdf,PMSR-M77-FRA-V-SWE.pdf
+2026-06-30,France,Sweden,Michael OLISE,,,,0,0,6,6,3,3,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M77-FRA-V-SWE.pdf,PMSR-M77-FRA-V-SWE.pdf
+2026-06-30,France,Sweden,Ousmane DEMBELE,,,,0,0,2,2,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M77-FRA-V-SWE.pdf,PMSR-M77-FRA-V-SWE.pdf
+2026-06-30,Mexico,Ecuador,Cesar MONTES,,,,0,0,1,1,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M79-MEX-V-ECU.pdf,PMSR-M79-MEX-V-ECU.pdf
+2026-06-30,Mexico,Ecuador,Gilberto MORA,,,,0,0,3,3,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M79-MEX-V-ECU.pdf,PMSR-M79-MEX-V-ECU.pdf
+2026-06-30,Mexico,Ecuador,Johan VASQUEZ,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M79-MEX-V-ECU.pdf,PMSR-M79-MEX-V-ECU.pdf
+2026-06-30,Mexico,Ecuador,Julian QUINONES,,,,1,1,1,1,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M79-MEX-V-ECU.pdf,PMSR-M79-MEX-V-ECU.pdf
+2026-06-30,Mexico,Ecuador,Luis ROMO,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M79-MEX-V-ECU.pdf,PMSR-M79-MEX-V-ECU.pdf
+2026-06-30,Mexico,Ecuador,Orbelin PINEDA,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M79-MEX-V-ECU.pdf,PMSR-M79-MEX-V-ECU.pdf
+2026-06-30,Mexico,Ecuador,Raul JIMENEZ,,,,1,1,4,4,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M79-MEX-V-ECU.pdf,PMSR-M79-MEX-V-ECU.pdf
+2026-06-30,Mexico,Ecuador,Roberto ALVARADO,,,,0,0,3,3,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M79-MEX-V-ECU.pdf,PMSR-M79-MEX-V-ECU.pdf
+2026-06-30,Norway,Côte d'Ivoire,Alexander SORLOTH,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M78-CIV-V-NOR.pdf,PMSR-M78-CIV-V-NOR.pdf
+2026-06-30,Norway,Côte d'Ivoire,Andreas SCHJELDERUP,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M78-CIV-V-NOR.pdf,PMSR-M78-CIV-V-NOR.pdf
+2026-06-30,Norway,Côte d'Ivoire,Antonio NUSA,,,,1,1,1,1,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M78-CIV-V-NOR.pdf,PMSR-M78-CIV-V-NOR.pdf
+2026-06-30,Norway,Côte d'Ivoire,Erling HAALAND,,,,1,1,4,4,2,2,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M78-CIV-V-NOR.pdf,PMSR-M78-CIV-V-NOR.pdf
+2026-06-30,Norway,Côte d'Ivoire,Martin ODEGAARD,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M78-CIV-V-NOR.pdf,PMSR-M78-CIV-V-NOR.pdf
+2026-06-30,Norway,Côte d'Ivoire,Torbjorn HEGGEM,,,,1,1,1,1,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M78-CIV-V-NOR.pdf,PMSR-M78-CIV-V-NOR.pdf
+2026-06-30,Sweden,France,Alexander ISAK,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M77-FRA-V-SWE.pdf,PMSR-M77-FRA-V-SWE.pdf
+2026-06-30,Sweden,France,Alexander ISAK Deflected,,,,0,0,1,1,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M77-FRA-V-SWE.pdf,PMSR-M77-FRA-V-SWE.pdf
+2026-06-30,Sweden,France,Elliot STROUD,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M77-FRA-V-SWE.pdf,PMSR-M77-FRA-V-SWE.pdf
+2026-06-30,Sweden,France,Gustaf NILSSON,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M77-FRA-V-SWE.pdf,PMSR-M77-FRA-V-SWE.pdf
+2026-06-30,Sweden,France,Lucas BERGVALL,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M77-FRA-V-SWE.pdf,PMSR-M77-FRA-V-SWE.pdf
+2026-06-30,Sweden,France,Mattias SVANBERG,,,,0,0,2,2,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M77-FRA-V-SWE.pdf,PMSR-M77-FRA-V-SWE.pdf
+2026-06-30,Sweden,France,Viktor GYOKERES,,,,0,0,1,1,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M77-FRA-V-SWE.pdf,PMSR-M77-FRA-V-SWE.pdf
+2026-07-01,Belgium,Senegal,Arthur THEATE,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M82-BEL-V-SEN.pdf,PMSR-M82-BEL-V-SEN.pdf
+2026-07-01,Belgium,Senegal,Brandon MECHELE,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M82-BEL-V-SEN.pdf,PMSR-M82-BEL-V-SEN.pdf
+2026-07-01,Belgium,Senegal,Dodi LUKEBAKIO,,,,0,0,3,3,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M82-BEL-V-SEN.pdf,PMSR-M82-BEL-V-SEN.pdf
+2026-07-01,Belgium,Senegal,Kevin DE BRUYNE,,,,0,0,2,2,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M82-BEL-V-SEN.pdf,PMSR-M82-BEL-V-SEN.pdf
+2026-07-01,Belgium,Senegal,Leandro TROSSARD,,,,0,0,1,2,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M82-BEL-V-SEN.pdf,PMSR-M82-BEL-V-SEN.pdf
+2026-07-01,Belgium,Senegal,Maxim DE CUYPER,,,,0,0,2,2,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M82-BEL-V-SEN.pdf,PMSR-M82-BEL-V-SEN.pdf
+2026-07-01,Belgium,Senegal,Nicolas RASKIN,,,,0,0,0,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M82-BEL-V-SEN.pdf,PMSR-M82-BEL-V-SEN.pdf
+2026-07-01,Belgium,Senegal,Romelu LUKAKU,,,,1,1,1,1,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M82-BEL-V-SEN.pdf,PMSR-M82-BEL-V-SEN.pdf
+2026-07-01,Belgium,Senegal,Thomas MEUNIER,,,,0,0,0,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M82-BEL-V-SEN.pdf,PMSR-M82-BEL-V-SEN.pdf
+2026-07-01,Belgium,Senegal,Timothy CASTAGNE,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M82-BEL-V-SEN.pdf,PMSR-M82-BEL-V-SEN.pdf
+2026-07-01,Belgium,Senegal,Youri TIELEMANS,,,,1,2,3,4,1,2,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M82-BEL-V-SEN.pdf,PMSR-M82-BEL-V-SEN.pdf
+2026-07-01,Bosnia and Herzegovina,United States,Amar DEDIC,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M81-USA-V-BIH.pdf,PMSR-M81-USA-V-BIH.pdf
+2026-07-01,Bosnia and Herzegovina,United States,Amar MEMIC,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M81-USA-V-BIH.pdf,PMSR-M81-USA-V-BIH.pdf
+2026-07-01,Bosnia and Herzegovina,United States,Ermedin DEMIROVIC,,,,0,0,1,1,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M81-USA-V-BIH.pdf,PMSR-M81-USA-V-BIH.pdf
+2026-07-01,Bosnia and Herzegovina,United States,Ermedin DEMIROVIC Deflected,,,,0,0,1,1,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M81-USA-V-BIH.pdf,PMSR-M81-USA-V-BIH.pdf
+2026-07-01,Bosnia and Herzegovina,United States,Ermin MAHMIC,,,,0,0,2,2,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M81-USA-V-BIH.pdf,PMSR-M81-USA-V-BIH.pdf
+2026-07-01,Bosnia and Herzegovina,United States,Esmir BAJRAKTAREVIC,,,,0,0,1,1,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M81-USA-V-BIH.pdf,PMSR-M81-USA-V-BIH.pdf
+2026-07-01,Bosnia and Herzegovina,United States,Kerim ALAJBEGOVIC,,,,0,0,2,2,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M81-USA-V-BIH.pdf,PMSR-M81-USA-V-BIH.pdf
+2026-07-01,Bosnia and Herzegovina,United States,Nikola KATIC,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M81-USA-V-BIH.pdf,PMSR-M81-USA-V-BIH.pdf
+2026-07-01,Congo DR,England,Brian CIPENGA,,,,1,1,3,3,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M80-ENG-V-COD.pdf,PMSR-M80-ENG-V-COD.pdf
+2026-07-01,Congo DR,England,Meschack ELIA,,,,0,0,1,1,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M80-ENG-V-COD.pdf,PMSR-M80-ENG-V-COD.pdf
+2026-07-01,Congo DR,England,Nathanael MBUKU,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M80-ENG-V-COD.pdf,PMSR-M80-ENG-V-COD.pdf
+2026-07-01,Congo DR,England,Yoane WISSA,,,,0,0,2,2,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M80-ENG-V-COD.pdf,PMSR-M80-ENG-V-COD.pdf
+2026-07-01,England,Congo DR,Anthony GORDON,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M80-ENG-V-COD.pdf,PMSR-M80-ENG-V-COD.pdf
+2026-07-01,England,Congo DR,Elliot ANDERSON,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M80-ENG-V-COD.pdf,PMSR-M80-ENG-V-COD.pdf
+2026-07-01,England,Congo DR,Harry KANE,,,,2,2,5,5,3,3,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M80-ENG-V-COD.pdf,PMSR-M80-ENG-V-COD.pdf
+2026-07-01,England,Congo DR,Jude BELLINGHAM,,,,0,0,3,3,3,3,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M80-ENG-V-COD.pdf,PMSR-M80-ENG-V-COD.pdf
+2026-07-01,England,Congo DR,Marcus RASHFORD,,,,1,1,3,3,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M80-ENG-V-COD.pdf,PMSR-M80-ENG-V-COD.pdf
+2026-07-01,England,Congo DR,Nico OREILLY,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M80-ENG-V-COD.pdf,PMSR-M80-ENG-V-COD.pdf
+2026-07-01,England,Congo DR,Noni MADUEKE,,,,0,0,2,2,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M80-ENG-V-COD.pdf,PMSR-M80-ENG-V-COD.pdf
+2026-07-01,Senegal,Belgium,Bara Sapoko NDIAYE,,,,0,0,0,1,0,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M82-BEL-V-SEN.pdf,PMSR-M82-BEL-V-SEN.pdf
+2026-07-01,Senegal,Belgium,Habib DIARRA,,,,1,1,2,2,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M82-BEL-V-SEN.pdf,PMSR-M82-BEL-V-SEN.pdf
+2026-07-01,Senegal,Belgium,Ibrahim MBAYE,,,,0,0,1,2,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M82-BEL-V-SEN.pdf,PMSR-M82-BEL-V-SEN.pdf
+2026-07-01,Senegal,Belgium,Idrissa Gana GUEYE,,,,0,0,1,2,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M82-BEL-V-SEN.pdf,PMSR-M82-BEL-V-SEN.pdf
+2026-07-01,Senegal,Belgium,Iliman NDIAYE,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M82-BEL-V-SEN.pdf,PMSR-M82-BEL-V-SEN.pdf
+2026-07-01,Senegal,Belgium,Ismaila SARR,,,,1,1,4,5,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M82-BEL-V-SEN.pdf,PMSR-M82-BEL-V-SEN.pdf
+2026-07-01,Senegal,Belgium,Pape GUEYE,,,,0,0,2,2,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M82-BEL-V-SEN.pdf,PMSR-M82-BEL-V-SEN.pdf
+2026-07-01,Senegal,Belgium,Pape Matar SARR,,,,0,0,0,2,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M82-BEL-V-SEN.pdf,PMSR-M82-BEL-V-SEN.pdf
+2026-07-01,Senegal,Belgium,Pathe CISS,,,,0,0,0,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M82-BEL-V-SEN.pdf,PMSR-M82-BEL-V-SEN.pdf
+2026-07-01,Senegal,Belgium,Sadio MANE,,,,0,0,1,1,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M82-BEL-V-SEN.pdf,PMSR-M82-BEL-V-SEN.pdf
+2026-07-01,United States,Bosnia and Herzegovina,Alex FREEMAN,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M81-USA-V-BIH.pdf,PMSR-M81-USA-V-BIH.pdf
+2026-07-01,United States,Bosnia and Herzegovina,Christian PULISIC,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M81-USA-V-BIH.pdf,PMSR-M81-USA-V-BIH.pdf
+2026-07-01,United States,Bosnia and Herzegovina,Folarin BALOGUN,,,,1,1,4,4,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M81-USA-V-BIH.pdf,PMSR-M81-USA-V-BIH.pdf
+2026-07-01,United States,Bosnia and Herzegovina,Malik TILLMAN,,,,1,1,2,2,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M81-USA-V-BIH.pdf,PMSR-M81-USA-V-BIH.pdf
+2026-07-02,Algeria,Switzerland,Fares CHAIBI,,,,0,0,1,1,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M85-SUI-V-ALG.pdf,PMSR-M85-SUI-V-ALG.pdf
+2026-07-02,Algeria,Switzerland,Houssem AOUAR,,,,0,0,2,2,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M85-SUI-V-ALG.pdf,PMSR-M85-SUI-V-ALG.pdf
+2026-07-02,Algeria,Switzerland,Ibrahim MAZA,,,,0,0,3,3,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M85-SUI-V-ALG.pdf,PMSR-M85-SUI-V-ALG.pdf
+2026-07-02,Algeria,Switzerland,Jaouen HADJAM,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M85-SUI-V-ALG.pdf,PMSR-M85-SUI-V-ALG.pdf
+2026-07-02,Algeria,Switzerland,Riyad MAHREZ,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M85-SUI-V-ALG.pdf,PMSR-M85-SUI-V-ALG.pdf
+2026-07-02,Austria,Spain,Carney CHUKWUEMEKA,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M84-ESP-V-AUT.pdf,PMSR-M84-ESP-V-AUT.pdf
+2026-07-02,Austria,Spain,David ALABA,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M84-ESP-V-AUT.pdf,PMSR-M84-ESP-V-AUT.pdf
+2026-07-02,Austria,Spain,Nicolas SEIWALD,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M84-ESP-V-AUT.pdf,PMSR-M84-ESP-V-AUT.pdf
+2026-07-02,Austria,Spain,Sasa KALAJDZIC,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M84-ESP-V-AUT.pdf,PMSR-M84-ESP-V-AUT.pdf
+2026-07-02,Austria,Spain,Stefan POSCH,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M84-ESP-V-AUT.pdf,PMSR-M84-ESP-V-AUT.pdf
+2026-07-02,Croatia,Portugal,Ante BUDIMIR,,,,0,0,2,2,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M83-POR-V-CRO.pdf,PMSR-M83-POR-V-CRO.pdf
+2026-07-02,Croatia,Portugal,Igor MATANOVIC,,,,0,0,3,3,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M83-POR-V-CRO.pdf,PMSR-M83-POR-V-CRO.pdf
+2026-07-02,Croatia,Portugal,Ivan PERISIC,,,,1,1,1,1,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M83-POR-V-CRO.pdf,PMSR-M83-POR-V-CRO.pdf
+2026-07-02,Croatia,Portugal,Mario PASALIC,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M83-POR-V-CRO.pdf,PMSR-M83-POR-V-CRO.pdf
+2026-07-02,Croatia,Portugal,Martin BATURINA,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M83-POR-V-CRO.pdf,PMSR-M83-POR-V-CRO.pdf
+2026-07-02,Croatia,Portugal,Mateo KOVACIC,,,,0,0,3,3,3,3,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M83-POR-V-CRO.pdf,PMSR-M83-POR-V-CRO.pdf
+2026-07-02,Croatia,Portugal,Nikola VLASIC,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M83-POR-V-CRO.pdf,PMSR-M83-POR-V-CRO.pdf
+2026-07-02,Croatia,Portugal,Petar SUCIC,,,,0,0,1,1,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M83-POR-V-CRO.pdf,PMSR-M83-POR-V-CRO.pdf
+2026-07-02,Portugal,Croatia,BRUNO FERNANDES,,,,0,0,2,2,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M83-POR-V-CRO.pdf,PMSR-M83-POR-V-CRO.pdf
+2026-07-02,Portugal,Croatia,CRISTIANO RONALDO,,,,1,1,2,2,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M83-POR-V-CRO.pdf,PMSR-M83-POR-V-CRO.pdf
+2026-07-02,Portugal,Croatia,FRANCISCO CONCEICAO,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M83-POR-V-CRO.pdf,PMSR-M83-POR-V-CRO.pdf
+2026-07-02,Portugal,Croatia,GONCALO RAMOS,,,,1,1,2,2,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M83-POR-V-CRO.pdf,PMSR-M83-POR-V-CRO.pdf
+2026-07-02,Portugal,Croatia,JOAO CANCELO,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M83-POR-V-CRO.pdf,PMSR-M83-POR-V-CRO.pdf
+2026-07-02,Portugal,Croatia,JOAO NEVES,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M83-POR-V-CRO.pdf,PMSR-M83-POR-V-CRO.pdf
+2026-07-02,Portugal,Croatia,NUNO MENDES,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M83-POR-V-CRO.pdf,PMSR-M83-POR-V-CRO.pdf
+2026-07-02,Portugal,Croatia,RAFAEL LEAO,,,,0,0,2,2,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M83-POR-V-CRO.pdf,PMSR-M83-POR-V-CRO.pdf
+2026-07-02,Portugal,Croatia,RENATO VEIGA,,,,0,0,2,2,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M83-POR-V-CRO.pdf,PMSR-M83-POR-V-CRO.pdf
+2026-07-02,Portugal,Croatia,VITINHA,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M83-POR-V-CRO.pdf,PMSR-M83-POR-V-CRO.pdf
+2026-07-02,Spain,Austria,Alex BAENA,,,,0,0,2,2,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M84-ESP-V-AUT.pdf,PMSR-M84-ESP-V-AUT.pdf
+2026-07-02,Spain,Austria,Aymeric LAPORTE,,,,0,0,2,2,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M84-ESP-V-AUT.pdf,PMSR-M84-ESP-V-AUT.pdf
+2026-07-02,Spain,Austria,Dani OLMO,,,,0,0,3,3,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M84-ESP-V-AUT.pdf,PMSR-M84-ESP-V-AUT.pdf
+2026-07-02,Spain,Austria,Ferran TORRES,,,,0,0,2,2,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M84-ESP-V-AUT.pdf,PMSR-M84-ESP-V-AUT.pdf
+2026-07-02,Spain,Austria,Lamine YAMAL,,,,1,1,6,6,4,4,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M84-ESP-V-AUT.pdf,PMSR-M84-ESP-V-AUT.pdf
+2026-07-02,Spain,Austria,Mikel OYARZABAL,,,,2,2,6,6,4,4,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M84-ESP-V-AUT.pdf,PMSR-M84-ESP-V-AUT.pdf
+2026-07-02,Spain,Austria,Pedro PORRO,,,,1,1,1,1,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M84-ESP-V-AUT.pdf,PMSR-M84-ESP-V-AUT.pdf
+2026-07-02,Spain,Austria,RODRI,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M84-ESP-V-AUT.pdf,PMSR-M84-ESP-V-AUT.pdf
+2026-07-02,Switzerland,Algeria,Breel EMBOLO,,,,1,1,2,2,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M85-SUI-V-ALG.pdf,PMSR-M85-SUI-V-ALG.pdf
+2026-07-02,Switzerland,Algeria,Dan NDOYE,,,,1,1,1,1,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M85-SUI-V-ALG.pdf,PMSR-M85-SUI-V-ALG.pdf
+2026-07-02,Switzerland,Algeria,Denis ZAKARIA,,,,0,0,2,2,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M85-SUI-V-ALG.pdf,PMSR-M85-SUI-V-ALG.pdf
+2026-07-02,Switzerland,Algeria,Fabian RIEDER,,,,1,1,2,2,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M85-SUI-V-ALG.pdf,PMSR-M85-SUI-V-ALG.pdf
+2026-07-02,Switzerland,Algeria,Nico ELVEDI,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M85-SUI-V-ALG.pdf,PMSR-M85-SUI-V-ALG.pdf
+2026-07-02,Switzerland,Algeria,Noah OKAFOR,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M85-SUI-V-ALG.pdf,PMSR-M85-SUI-V-ALG.pdf
+2026-07-02,Switzerland,Algeria,Remo FREULER,,,,0,0,1,1,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M85-SUI-V-ALG.pdf,PMSR-M85-SUI-V-ALG.pdf
+2026-07-02,Switzerland,Algeria,Ricardo RODRIGUEZ,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M85-SUI-V-ALG.pdf,PMSR-M85-SUI-V-ALG.pdf
+2026-07-03,Argentina,Cabo Verde,Alexis MAC ALLISTER,,,,0,0,2,2,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M86-ARG-V-CPV.pdf,PMSR-M86-ARG-V-CPV.pdf
+2026-07-03,Argentina,Cabo Verde,Cristian ROMERO Deflected,,,,0,0,0,1,0,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M86-ARG-V-CPV.pdf,PMSR-M86-ARG-V-CPV.pdf
+2026-07-03,Argentina,Cabo Verde,Enzo FERNANDEZ,,,,0,0,2,4,1,2,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M86-ARG-V-CPV.pdf,PMSR-M86-ARG-V-CPV.pdf
+2026-07-03,Argentina,Cabo Verde,Gonzalo MONTIEL,,,,0,0,0,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M86-ARG-V-CPV.pdf,PMSR-M86-ARG-V-CPV.pdf
+2026-07-03,Argentina,Cabo Verde,Julian ALVAREZ,,,,0,0,0,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M86-ARG-V-CPV.pdf,PMSR-M86-ARG-V-CPV.pdf
+2026-07-03,Argentina,Cabo Verde,Leandro PAREDES,,,,0,0,0,1,0,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M86-ARG-V-CPV.pdf,PMSR-M86-ARG-V-CPV.pdf
+2026-07-03,Argentina,Cabo Verde,Lionel MESSI,,,,1,1,6,8,5,6,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M86-ARG-V-CPV.pdf,PMSR-M86-ARG-V-CPV.pdf
+2026-07-03,Argentina,Cabo Verde,Lionel MESSI Deflected,,,,0,0,0,1,0,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M86-ARG-V-CPV.pdf,PMSR-M86-ARG-V-CPV.pdf
+2026-07-03,Argentina,Cabo Verde,Lisandro MARTINEZ,,,,0,1,0,1,0,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M86-ARG-V-CPV.pdf,PMSR-M86-ARG-V-CPV.pdf
+2026-07-03,Argentina,Cabo Verde,Nico GONZALEZ,,,,0,0,2,2,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M86-ARG-V-CPV.pdf,PMSR-M86-ARG-V-CPV.pdf
+2026-07-03,Australia,Egypt,Aiden ONEILL,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M88-AUS-V-EGY.pdf,PMSR-M88-AUS-V-EGY.pdf
+2026-07-03,Australia,Egypt,Ajdin HRUSTIC,,,,0,0,2,2,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M88-AUS-V-EGY.pdf,PMSR-M88-AUS-V-EGY.pdf
+2026-07-03,Australia,Egypt,Alessandro CIRCATI,,,,0,0,0,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M88-AUS-V-EGY.pdf,PMSR-M88-AUS-V-EGY.pdf
+2026-07-03,Australia,Egypt,Awer MABIL,,,,0,0,0,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M88-AUS-V-EGY.pdf,PMSR-M88-AUS-V-EGY.pdf
+2026-07-03,Australia,Egypt,Aziz BEHICH,,,,0,0,1,1,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M88-AUS-V-EGY.pdf,PMSR-M88-AUS-V-EGY.pdf
+2026-07-03,Australia,Egypt,Connor METCALFE,,,,0,0,2,2,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M88-AUS-V-EGY.pdf,PMSR-M88-AUS-V-EGY.pdf
+2026-07-03,Australia,Egypt,Cristian VOLPATO,,,,0,0,2,2,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M88-AUS-V-EGY.pdf,PMSR-M88-AUS-V-EGY.pdf
+2026-07-03,Australia,Egypt,Jackson IRVINE,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M88-AUS-V-EGY.pdf,PMSR-M88-AUS-V-EGY.pdf
+2026-07-03,Australia,Egypt,Kai TREWIN,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M88-AUS-V-EGY.pdf,PMSR-M88-AUS-V-EGY.pdf
+2026-07-03,Australia,Egypt,Mohamed TOURE,,,,0,0,0,2,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M88-AUS-V-EGY.pdf,PMSR-M88-AUS-V-EGY.pdf
+2026-07-03,Australia,Egypt,Nestory IRANKUNDA,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M88-AUS-V-EGY.pdf,PMSR-M88-AUS-V-EGY.pdf
+2026-07-03,Australia,Egypt,Nestory IRANKUNDA Deflected,,,,0,0,1,1,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M88-AUS-V-EGY.pdf,PMSR-M88-AUS-V-EGY.pdf
+2026-07-03,Cabo Verde,Argentina,DEROY DUARTE,,,,1,1,2,2,2,2,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M86-ARG-V-CPV.pdf,PMSR-M86-ARG-V-CPV.pdf
+2026-07-03,Cabo Verde,Argentina,DINEY BORGES,,,,0,0,0,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M86-ARG-V-CPV.pdf,PMSR-M86-ARG-V-CPV.pdf
+2026-07-03,Cabo Verde,Argentina,DINEY BORGES Deflected,,,,0,0,0,1,0,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M86-ARG-V-CPV.pdf,PMSR-M86-ARG-V-CPV.pdf
+2026-07-03,Cabo Verde,Argentina,HELIO VARELA,,,,0,0,0,2,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M86-ARG-V-CPV.pdf,PMSR-M86-ARG-V-CPV.pdf
+2026-07-03,Cabo Verde,Argentina,JAMIRO MONTEIRO,,,,0,0,0,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M86-ARG-V-CPV.pdf,PMSR-M86-ARG-V-CPV.pdf
+2026-07-03,Cabo Verde,Argentina,JOVANE CABRAL,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M86-ARG-V-CPV.pdf,PMSR-M86-ARG-V-CPV.pdf
+2026-07-03,Cabo Verde,Argentina,KEVIN PINA,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M86-ARG-V-CPV.pdf,PMSR-M86-ARG-V-CPV.pdf
+2026-07-03,Cabo Verde,Argentina,RYAN MENDES,,,,0,0,2,2,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M86-ARG-V-CPV.pdf,PMSR-M86-ARG-V-CPV.pdf
+2026-07-03,Cabo Verde,Argentina,SIDNY LOPES CABRAL,,,,0,1,0,2,0,2,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M86-ARG-V-CPV.pdf,PMSR-M86-ARG-V-CPV.pdf
+2026-07-03,Cabo Verde,Argentina,STEVEN MOREIRA,,,,0,0,0,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M86-ARG-V-CPV.pdf,PMSR-M86-ARG-V-CPV.pdf
+2026-07-03,Cabo Verde,Argentina,WILLY SEMEDO,,,,0,0,0,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M86-ARG-V-CPV.pdf,PMSR-M86-ARG-V-CPV.pdf
+2026-07-03,Cabo Verde,Argentina,YANNICK SEMEDO,,,,0,0,0,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M86-ARG-V-CPV.pdf,PMSR-M86-ARG-V-CPV.pdf
+2026-07-03,Colombia,Ghana,Davinson SANCHEZ,,,,0,0,2,2,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M87-COL-V-GHA.pdf,PMSR-M87-COL-V-GHA.pdf
+2026-07-03,Colombia,Ghana,Gustavo PUERTA,,,,0,0,2,2,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M87-COL-V-GHA.pdf,PMSR-M87-COL-V-GHA.pdf
+2026-07-03,Colombia,Ghana,Jaminton CAMPAZ,,,,0,0,2,2,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M87-COL-V-GHA.pdf,PMSR-M87-COL-V-GHA.pdf
+2026-07-03,Colombia,Ghana,Jhon ARIAS,,,,1,1,1,1,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M87-COL-V-GHA.pdf,PMSR-M87-COL-V-GHA.pdf
+2026-07-03,Colombia,Ghana,Johan MOJICA,,,,0,0,1,1,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M87-COL-V-GHA.pdf,PMSR-M87-COL-V-GHA.pdf
+2026-07-03,Colombia,Ghana,Juan QUINTERO,,,,0,0,2,2,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M87-COL-V-GHA.pdf,PMSR-M87-COL-V-GHA.pdf
+2026-07-03,Colombia,Ghana,Luis DIAZ,,,,0,0,5,5,2,2,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M87-COL-V-GHA.pdf,PMSR-M87-COL-V-GHA.pdf
+2026-07-03,Colombia,Ghana,Luis SUAREZ,,,,0,0,2,2,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M87-COL-V-GHA.pdf,PMSR-M87-COL-V-GHA.pdf
+2026-07-03,Colombia,Ghana,Richard RIOS,,,,0,0,3,3,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M87-COL-V-GHA.pdf,PMSR-M87-COL-V-GHA.pdf
+2026-07-03,Egypt,Australia,EMAM ASHOUR,,,,1,1,3,5,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M88-AUS-V-EGY.pdf,PMSR-M88-AUS-V-EGY.pdf
+2026-07-03,Egypt,Australia,HAISSEM HASSAN,,,,0,0,0,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M88-AUS-V-EGY.pdf,PMSR-M88-AUS-V-EGY.pdf
+2026-07-03,Egypt,Australia,MARAWAN ATTIA,,,,0,0,1,2,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M88-AUS-V-EGY.pdf,PMSR-M88-AUS-V-EGY.pdf
+2026-07-03,Egypt,Australia,MARAWAN ATTIA Deflected,,,,0,0,0,1,0,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M88-AUS-V-EGY.pdf,PMSR-M88-AUS-V-EGY.pdf
+2026-07-03,Egypt,Australia,MOHAMED SALAH,,,,0,0,0,2,0,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M88-AUS-V-EGY.pdf,PMSR-M88-AUS-V-EGY.pdf
+2026-07-03,Egypt,Australia,OMAR MARMOUSH,,,,0,0,2,2,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M88-AUS-V-EGY.pdf,PMSR-M88-AUS-V-EGY.pdf
+2026-07-03,Egypt,Australia,RAMY RABIA,,,,0,0,0,1,0,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M88-AUS-V-EGY.pdf,PMSR-M88-AUS-V-EGY.pdf
+2026-07-03,Ghana,Colombia,Antoine SEMENYO,,,,0,0,3,3,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M87-COL-V-GHA.pdf,PMSR-M87-COL-V-GHA.pdf
+2026-07-03,Ghana,Colombia,Inaki WILLIAMS,,,,0,0,3,3,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M87-COL-V-GHA.pdf,PMSR-M87-COL-V-GHA.pdf
+2026-07-03,Ghana,Colombia,Thomas PARTEY,,,,0,0,2,2,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M87-COL-V-GHA.pdf,PMSR-M87-COL-V-GHA.pdf
+2026-07-04,Canada,Morocco,Alistair JOHNSTON,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M90-CAN-V-MAR.pdf,PMSR-M90-CAN-V-MAR.pdf
+2026-07-04,Canada,Morocco,Jayden NELSON,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M90-CAN-V-MAR.pdf,PMSR-M90-CAN-V-MAR.pdf
+2026-07-04,Canada,Morocco,Jonathan DAVID,,,,0,0,3,3,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M90-CAN-V-MAR.pdf,PMSR-M90-CAN-V-MAR.pdf
+2026-07-04,Canada,Morocco,Jonathan OSORIO,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M90-CAN-V-MAR.pdf,PMSR-M90-CAN-V-MAR.pdf
+2026-07-04,Canada,Morocco,Luc DE FOUGEROLLES,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M90-CAN-V-MAR.pdf,PMSR-M90-CAN-V-MAR.pdf
+2026-07-04,Canada,Morocco,Tajon BUCHANAN,,,,0,0,1,1,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M90-CAN-V-MAR.pdf,PMSR-M90-CAN-V-MAR.pdf
+2026-07-04,Canada,Morocco,Tani OLUWASEYI,,,,0,0,2,2,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M90-CAN-V-MAR.pdf,PMSR-M90-CAN-V-MAR.pdf
+2026-07-04,France,Paraguay,Adrien RABIOT,,,,0,0,3,3,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M89-PAR-V-FRA.pdf,PMSR-M89-PAR-V-FRA.pdf
+2026-07-04,France,Paraguay,Bradley BARCOLA,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M89-PAR-V-FRA.pdf,PMSR-M89-PAR-V-FRA.pdf
+2026-07-04,France,Paraguay,Desire DOUE,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M89-PAR-V-FRA.pdf,PMSR-M89-PAR-V-FRA.pdf
+2026-07-04,France,Paraguay,Kylian MBAPPE,,,,1,1,5,5,4,4,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M89-PAR-V-FRA.pdf,PMSR-M89-PAR-V-FRA.pdf
+2026-07-04,France,Paraguay,Manu KONE,,,,0,0,3,3,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M89-PAR-V-FRA.pdf,PMSR-M89-PAR-V-FRA.pdf
+2026-07-04,France,Paraguay,Ousmane DEMBELE,,,,0,0,2,2,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M89-PAR-V-FRA.pdf,PMSR-M89-PAR-V-FRA.pdf
+2026-07-04,Morocco,Canada,Azzedine OUNAHI,,,,2,2,2,2,2,2,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M90-CAN-V-MAR.pdf,PMSR-M90-CAN-V-MAR.pdf
+2026-07-04,Morocco,Canada,Soufiane RAHIMI,,,,1,1,2,2,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M90-CAN-V-MAR.pdf,PMSR-M90-CAN-V-MAR.pdf
+2026-07-04,Morocco,Canada,Soufiane RAHIMI Deflected,,,,0,0,1,1,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M90-CAN-V-MAR.pdf,PMSR-M90-CAN-V-MAR.pdf
+2026-07-04,Paraguay,France,Diego GOMEZ,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M89-PAR-V-FRA.pdf,PMSR-M89-PAR-V-FRA.pdf
+2026-07-04,Paraguay,France,Junior ALONSO,,,,0,0,2,2,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M89-PAR-V-FRA.pdf,PMSR-M89-PAR-V-FRA.pdf
+2026-07-04,Paraguay,France,MAURICIO,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M89-PAR-V-FRA.pdf,PMSR-M89-PAR-V-FRA.pdf
+2026-07-04,Paraguay,France,Miguel ALMIRON,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M89-PAR-V-FRA.pdf,PMSR-M89-PAR-V-FRA.pdf
+2026-07-05,Brazil,Norway,BRUNO GUIMARAES,,,,0,0,2,2,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M91-BRA-V-NOR.pdf,PMSR-M91-BRA-V-NOR.pdf
+2026-07-05,Brazil,Norway,CASEMIRO,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M91-BRA-V-NOR.pdf,PMSR-M91-BRA-V-NOR.pdf
+2026-07-05,Brazil,Norway,DANILO,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M91-BRA-V-NOR.pdf,PMSR-M91-BRA-V-NOR.pdf
+2026-07-05,Brazil,Norway,EDERSON SILVA,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M91-BRA-V-NOR.pdf,PMSR-M91-BRA-V-NOR.pdf
+2026-07-05,Brazil,Norway,ENDRICK,,,,0,0,2,2,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M91-BRA-V-NOR.pdf,PMSR-M91-BRA-V-NOR.pdf
+2026-07-05,Brazil,Norway,MATHEUS CUNHA,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M91-BRA-V-NOR.pdf,PMSR-M91-BRA-V-NOR.pdf
+2026-07-05,Brazil,Norway,NEYMAR JR,,,,1,1,2,2,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M91-BRA-V-NOR.pdf,PMSR-M91-BRA-V-NOR.pdf
+2026-07-05,Brazil,Norway,RAYAN,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M91-BRA-V-NOR.pdf,PMSR-M91-BRA-V-NOR.pdf
+2026-07-05,Brazil,Norway,RAYAN Deflected,,,,0,0,1,1,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M91-BRA-V-NOR.pdf,PMSR-M91-BRA-V-NOR.pdf
+2026-07-05,Brazil,Norway,VINICIUS JUNIOR,,,,0,0,2,2,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M91-BRA-V-NOR.pdf,PMSR-M91-BRA-V-NOR.pdf
+2026-07-05,England,Mexico,Anthony GORDON,,,,0,0,1,1,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M92-MEX-V-ENG.pdf,PMSR-M92-MEX-V-ENG.pdf
+2026-07-05,England,Mexico,Harry KANE,,,,1,1,1,1,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M92-MEX-V-ENG.pdf,PMSR-M92-MEX-V-ENG.pdf
+2026-07-05,England,Mexico,Jude BELLINGHAM,,,,1,1,2,2,2,2,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M92-MEX-V-ENG.pdf,PMSR-M92-MEX-V-ENG.pdf
+2026-07-05,England,Mexico,Jude BELLINGHAM Deflected,,,,1,1,1,1,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M92-MEX-V-ENG.pdf,PMSR-M92-MEX-V-ENG.pdf
+2026-07-05,England,Mexico,Nico OREILLY,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M92-MEX-V-ENG.pdf,PMSR-M92-MEX-V-ENG.pdf
+2026-07-05,Mexico,England,Alvaro FIDALGO,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M92-MEX-V-ENG.pdf,PMSR-M92-MEX-V-ENG.pdf
+2026-07-05,Mexico,England,Alvaro FIDALGO Deflected,,,,0,0,1,1,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M92-MEX-V-ENG.pdf,PMSR-M92-MEX-V-ENG.pdf
+2026-07-05,Mexico,England,Brian GUTIERREZ,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M92-MEX-V-ENG.pdf,PMSR-M92-MEX-V-ENG.pdf
+2026-07-05,Mexico,England,Edson ALVAREZ,,,,0,0,2,2,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M92-MEX-V-ENG.pdf,PMSR-M92-MEX-V-ENG.pdf
+2026-07-05,Mexico,England,Gilberto MORA,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M92-MEX-V-ENG.pdf,PMSR-M92-MEX-V-ENG.pdf
+2026-07-05,Mexico,England,Jesus GALLARDO,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M92-MEX-V-ENG.pdf,PMSR-M92-MEX-V-ENG.pdf
+2026-07-05,Mexico,England,Julian QUINONES,,,,1,1,3,3,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M92-MEX-V-ENG.pdf,PMSR-M92-MEX-V-ENG.pdf
+2026-07-05,Mexico,England,Luis ROMO,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M92-MEX-V-ENG.pdf,PMSR-M92-MEX-V-ENG.pdf
+2026-07-05,Mexico,England,Raul JIMENEZ,,,,1,1,8,8,3,3,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M92-MEX-V-ENG.pdf,PMSR-M92-MEX-V-ENG.pdf
+2026-07-05,Mexico,England,Santiago GIMENEZ,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M92-MEX-V-ENG.pdf,PMSR-M92-MEX-V-ENG.pdf
+2026-07-05,Norway,Brazil,Andreas SCHJELDERUP,,,,0,0,1,1,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M91-BRA-V-NOR.pdf,PMSR-M91-BRA-V-NOR.pdf
+2026-07-05,Norway,Brazil,Erling HAALAND,,,,2,2,4,4,3,3,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M91-BRA-V-NOR.pdf,PMSR-M91-BRA-V-NOR.pdf
+2026-07-05,Norway,Brazil,Martin ODEGAARD,,,,0,0,3,3,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M91-BRA-V-NOR.pdf,PMSR-M91-BRA-V-NOR.pdf
+2026-07-05,Norway,Brazil,Patrick BERG,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M91-BRA-V-NOR.pdf,PMSR-M91-BRA-V-NOR.pdf
+2026-07-06,Belgium,United States,Charles DE KETELAERE,,,,1,1,2,2,2,2,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M94-USA-V-BEL.pdf,PMSR-M94-USA-V-BEL.pdf
+2026-07-06,Belgium,United States,Charles DE KETELAERE Deflected,,,,1,1,1,1,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M94-USA-V-BEL.pdf,PMSR-M94-USA-V-BEL.pdf
+2026-07-06,Belgium,United States,Dodi LUKEBAKIO,,,,0,0,2,2,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M94-USA-V-BEL.pdf,PMSR-M94-USA-V-BEL.pdf
+2026-07-06,Belgium,United States,Hans VANAKEN Deflected,,,,1,1,1,1,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M94-USA-V-BEL.pdf,PMSR-M94-USA-V-BEL.pdf
+2026-07-06,Belgium,United States,Leandro TROSSARD,,,,0,0,4,4,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M94-USA-V-BEL.pdf,PMSR-M94-USA-V-BEL.pdf
+2026-07-06,Belgium,United States,Nicolas RASKIN,,,,0,0,1,1,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M94-USA-V-BEL.pdf,PMSR-M94-USA-V-BEL.pdf
+2026-07-06,Belgium,United States,Romelu LUKAKU,,,,1,1,1,1,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M94-USA-V-BEL.pdf,PMSR-M94-USA-V-BEL.pdf
+2026-07-06,Belgium,United States,Timothy CASTAGNE,,,,0,0,1,1,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M94-USA-V-BEL.pdf,PMSR-M94-USA-V-BEL.pdf
+2026-07-06,Belgium,United States,Youri TIELEMANS,,,,0,0,2,2,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M94-USA-V-BEL.pdf,PMSR-M94-USA-V-BEL.pdf
+2026-07-06,Portugal,Spain,BERNARDO SILVA,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M93-POR-V-ESP.pdf,PMSR-M93-POR-V-ESP.pdf
+2026-07-06,Portugal,Spain,BRUNO FERNANDES,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M93-POR-V-ESP.pdf,PMSR-M93-POR-V-ESP.pdf
+2026-07-06,Portugal,Spain,CRISTIANO RONALDO,,,,0,0,3,3,2,2,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M93-POR-V-ESP.pdf,PMSR-M93-POR-V-ESP.pdf
+2026-07-06,Portugal,Spain,JOAO CANCELO,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M93-POR-V-ESP.pdf,PMSR-M93-POR-V-ESP.pdf
+2026-07-06,Portugal,Spain,JOAO NEVES,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M93-POR-V-ESP.pdf,PMSR-M93-POR-V-ESP.pdf
+2026-07-06,Portugal,Spain,NUNO MENDES,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M93-POR-V-ESP.pdf,PMSR-M93-POR-V-ESP.pdf
+2026-07-06,Portugal,Spain,PEDRO NETO,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M93-POR-V-ESP.pdf,PMSR-M93-POR-V-ESP.pdf
+2026-07-06,Portugal,Spain,VITINHA,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M93-POR-V-ESP.pdf,PMSR-M93-POR-V-ESP.pdf
+2026-07-06,Spain,Portugal,Alex BAENA,,,,0,0,3,3,2,2,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M93-POR-V-ESP.pdf,PMSR-M93-POR-V-ESP.pdf
+2026-07-06,Spain,Portugal,Dani OLMO,,,,0,0,2,2,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M93-POR-V-ESP.pdf,PMSR-M93-POR-V-ESP.pdf
+2026-07-06,Spain,Portugal,Ferran TORRES,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M93-POR-V-ESP.pdf,PMSR-M93-POR-V-ESP.pdf
+2026-07-06,Spain,Portugal,Lamine YAMAL,,,,0,0,3,3,2,2,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M93-POR-V-ESP.pdf,PMSR-M93-POR-V-ESP.pdf
+2026-07-06,Spain,Portugal,Mikel MERINO,,,,1,1,1,1,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M93-POR-V-ESP.pdf,PMSR-M93-POR-V-ESP.pdf
+2026-07-06,Spain,Portugal,Mikel OYARZABAL,,,,0,0,2,2,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M93-POR-V-ESP.pdf,PMSR-M93-POR-V-ESP.pdf
+2026-07-06,Spain,Portugal,PEDRI,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M93-POR-V-ESP.pdf,PMSR-M93-POR-V-ESP.pdf
+2026-07-06,Spain,Portugal,Pedro PORRO,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M93-POR-V-ESP.pdf,PMSR-M93-POR-V-ESP.pdf
+2026-07-06,Spain,Portugal,RODRI,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M93-POR-V-ESP.pdf,PMSR-M93-POR-V-ESP.pdf
+2026-07-06,United States,Belgium,Alex FREEMAN,,,,0,0,2,2,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M94-USA-V-BEL.pdf,PMSR-M94-USA-V-BEL.pdf
+2026-07-06,United States,Belgium,Folarin BALOGUN,,,,0,0,3,3,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M94-USA-V-BEL.pdf,PMSR-M94-USA-V-BEL.pdf
+2026-07-06,United States,Belgium,Malik TILLMAN Deflected,,,,1,1,1,1,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M94-USA-V-BEL.pdf,PMSR-M94-USA-V-BEL.pdf
+2026-07-06,United States,Belgium,Sebastian BERHALTER,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M94-USA-V-BEL.pdf,PMSR-M94-USA-V-BEL.pdf
+2026-07-07,Argentina,Egypt,Alexis MAC ALLISTER,,,,0,0,2,2,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M95-ARG-V-EGY.pdf,PMSR-M95-ARG-V-EGY.pdf
+2026-07-07,Argentina,Egypt,Cristian ROMERO,,,,1,1,1,1,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M95-ARG-V-EGY.pdf,PMSR-M95-ARG-V-EGY.pdf
+2026-07-07,Argentina,Egypt,Enzo FERNANDEZ,,,,1,1,2,2,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M95-ARG-V-EGY.pdf,PMSR-M95-ARG-V-EGY.pdf
+2026-07-07,Argentina,Egypt,Julian ALVAREZ,,,,0,0,2,2,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M95-ARG-V-EGY.pdf,PMSR-M95-ARG-V-EGY.pdf
+2026-07-07,Argentina,Egypt,Lautaro MARTINEZ,,,,0,0,3,3,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M95-ARG-V-EGY.pdf,PMSR-M95-ARG-V-EGY.pdf
+2026-07-07,Argentina,Egypt,Leandro PAREDES,,,,0,0,2,2,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M95-ARG-V-EGY.pdf,PMSR-M95-ARG-V-EGY.pdf
+2026-07-07,Argentina,Egypt,Lionel MESSI,,,,1,1,5,5,2,2,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M95-ARG-V-EGY.pdf,PMSR-M95-ARG-V-EGY.pdf
+2026-07-07,Argentina,Egypt,Lisandro MARTINEZ,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M95-ARG-V-EGY.pdf,PMSR-M95-ARG-V-EGY.pdf
+2026-07-07,Argentina,Egypt,Rodrigo DE PAUL,,,,0,0,1,1,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M95-ARG-V-EGY.pdf,PMSR-M95-ARG-V-EGY.pdf
 2026-07-07,Colombia,Switzerland,Cucho HERNANDEZ,,,,0,0,0,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M96-SUI-V-COL.pdf,PMSR-M96-SUI-V-COL.pdf
 2026-07-07,Colombia,Switzerland,Davinson SANCHEZ,,,,0,0,0,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M96-SUI-V-COL.pdf,PMSR-M96-SUI-V-COL.pdf
 2026-07-07,Colombia,Switzerland,Gustavo PUERTA,,,,0,0,2,2,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M96-SUI-V-COL.pdf,PMSR-M96-SUI-V-COL.pdf
@@ -9,6 +340,10 @@ date,team,opponent,player,position,started,minutes,goals_90,goals_full,shots_90,
 2026-07-07,Colombia,Switzerland,Luis DIAZ,,,,0,0,2,3,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M96-SUI-V-COL.pdf,PMSR-M96-SUI-V-COL.pdf
 2026-07-07,Colombia,Switzerland,Luis SUAREZ,,,,0,0,2,2,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M96-SUI-V-COL.pdf,PMSR-M96-SUI-V-COL.pdf
 2026-07-07,Colombia,Switzerland,Richard RIOS,,,,0,0,0,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M96-SUI-V-COL.pdf,PMSR-M96-SUI-V-COL.pdf
+2026-07-07,Egypt,Argentina,KARIM HAFEZ,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M95-ARG-V-EGY.pdf,PMSR-M95-ARG-V-EGY.pdf
+2026-07-07,Egypt,Argentina,MOSTAFA ZICO,,,,1,1,1,1,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M95-ARG-V-EGY.pdf,PMSR-M95-ARG-V-EGY.pdf
+2026-07-07,Egypt,Argentina,TREZEGUET,,,,0,0,2,2,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M95-ARG-V-EGY.pdf,PMSR-M95-ARG-V-EGY.pdf
+2026-07-07,Egypt,Argentina,YASSER IBRAHIM,,,,1,1,1,1,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M95-ARG-V-EGY.pdf,PMSR-M95-ARG-V-EGY.pdf
 2026-07-07,Switzerland,Colombia,Dan NDOYE,,,,0,0,2,2,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M96-SUI-V-COL.pdf,PMSR-M96-SUI-V-COL.pdf
 2026-07-07,Switzerland,Colombia,Djibril SOW,,,,0,0,1,1,0,0,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M96-SUI-V-COL.pdf,PMSR-M96-SUI-V-COL.pdf
 2026-07-07,Switzerland,Colombia,Fabian RIEDER,,,,0,0,3,3,1,1,,,,,,https://www.fifatrainingcentre.com/media/native/tournaments/fifa-world-cup/2026/PMSR-M96-SUI-V-COL.pdf,PMSR-M96-SUI-V-COL.pdf

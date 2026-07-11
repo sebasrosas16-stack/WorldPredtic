@@ -6,7 +6,7 @@ const STORAGE_KEYS = {
   activeTab: "matchiq_v23_active_tab"
 };
 
-const APP_BUILD_VERSION = "2.3.2";
+const APP_BUILD_VERSION = "precision-v3-20260711-ui2";
 
 const screens = {
   home: document.getElementById("homeScreen"),
@@ -495,24 +495,247 @@ function openMlMatch(matchId) {
   switchTab("ml");
 }
 
-function renderMl() {
-  const matches = state.mlPredictions.filter(match => match.date === state.selectedDate);
-  if (!state.selectedMlMatchId || !mlById(state.selectedMlMatchId)) {
-    state.selectedMlMatchId = matches[0]?.match_id || state.mlPredictions[0]?.match_id;
+function mlDateLabel(date) {
+  const months = ["ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC"];
+  const parsed = new Date(`${date}T12:00:00`);
+  if (Number.isNaN(parsed.getTime())) return String(date || "");
+  return `${String(parsed.getDate()).padStart(2, "0")} ${months[parsed.getMonth()]}`;
+}
+
+function mlReadableLevel(value, noBet = false) {
+  if (noBet) return "No apostar";
+  const raw = String(value || "").toLowerCase();
+  if (raw.includes("strong") || raw.includes("high") || raw.includes("alta")) return "Más sólido";
+  if (raw.includes("lean") || raw.includes("medium") || raw.includes("media") || raw.includes("cautious")) return "Con cautela";
+  if (raw.includes("thin") || raw.includes("low") || raw.includes("baja")) return "Solo referencia";
+  return "Candidato";
+}
+
+function mlReadableRisk(value) {
+  const raw = String(value || "medio").toLowerCase();
+  if (raw.includes("bajo-medio")) return "Bajo a moderado";
+  if (raw.includes("medio-alto")) return "Moderado a alto";
+  if (raw.includes("alto")) return "Alto";
+  if (raw.includes("bajo")) return "Bajo";
+  return "Moderado";
+}
+
+function mlRiskClass(value) {
+  const label = mlReadableRisk(value).toLowerCase();
+  if (label.includes("alto")) return "risk-high";
+  if (label === "bajo") return "risk-low";
+  return "risk-medium";
+}
+
+function mlReadableType(type) {
+  const raw = String(type || "").toLowerCase();
+  if (raw === "goals") return "Goles";
+  if (raw === "result") return "Resultado";
+  if (raw === "qualifies") return "Clasifica";
+  if (raw === "corners") return "Tiros de esquina";
+  if (raw === "unconventional") return "Pick creativo";
+  if (raw === "player" || raw === "players") return "Jugador";
+  return "Pick";
+}
+
+function mlFriendlyReason(pick, match, noBet = false) {
+  const type = String(pick?.type || "").toLowerCase();
+  if (noBet) {
+    const status = match?.corner_publication?.status;
+    if (status === "no_bet") {
+      const reason = String(match?.corner_publication?.reason || "").toLowerCase();
+      if (reason.includes("muestra")) return "Hay pocos datos comparables; el rango puede cambiar mucho.";
+      if (reason.includes("riesgo alto")) return "El rango es muy amplio y el guion del partido puede cambiarlo.";
+      if (reason.includes("desacuerdo")) return "Los modelos no coinciden lo suficiente para recomendarlo.";
+    }
+    return "Mercado muy variable; úsalo únicamente como referencia.";
   }
-  const selected = mlById(state.selectedMlMatchId);
+  if (type === "goals") return "Combina la forma reciente, los goles esperados y el historial de ambos equipos.";
+  if (type === "result") return "Compara la fuerza reciente y reduce el riesgo cuando el empate tiene peso.";
+  if (type === "qualifies") return "Incluye el posible empate en 90 minutos y estima quién tiene más opciones de avanzar.";
+  if (type === "corners") return "Considera corners recientes, volumen ofensivo y la variación esperada del encuentro.";
+  if (type === "unconventional") return "La combinación se calculó como un solo escenario del partido, no como picks separados.";
+  return String(pick?.reason || "Lectura generada por el modelo.");
+}
+
+function mlNormalizeMarket(text, match) {
+  return translateMarketText(text || "Pick", match)
+    .replace("under 4.5", "menos de 4.5")
+    .replace("over 7.5", "más de 7.5")
+    .replace("over 8.5", "más de 8.5")
+    .replace("over 9.5", "más de 9.5")
+    .replace("under 10.5", "menos de 10.5")
+    .replace("under 11.5", "menos de 11.5");
+}
+
+function mlCollectMatchPicks(match) {
+  const base = Array.isArray(match.all_model_picks) && match.all_model_picks.length
+    ? match.all_model_picks
+    : (match.top_picks || []);
+  const extra = Array.isArray(match.unconventional_picks) ? match.unconventional_picks : [];
+  const picks = [...base, ...extra];
+
+  const hasCorner = picks.some(pick => String(pick.type || "").toLowerCase() === "corners");
+  if (!hasCorner && match.corners?.main_pick) {
+    picks.push({
+      type: "corners",
+      market: match.corners.main_pick,
+      probability: match.corners.probability,
+      fair_odds: match.corners.fair_odds,
+      strength: match.corners.strength || match.corners.quality,
+      risk: match.corners.risk,
+      reason: match.corners.reason,
+      expected_total: match.corners.expected_total_corners,
+      expected_range: match.corners.expected_range
+    });
+  }
+
+  const seen = new Set();
+  return picks.filter(pick => {
+    const id = `${String(pick.type || "").toLowerCase()}|${String(pick.market || pick.pick || pick.label || "").toLowerCase()}`;
+    if (seen.has(id)) return false;
+    seen.add(id);
+    return true;
+  });
+}
+
+function mlPickPayload(match, pick) {
+  return {
+    ...pick,
+    source: "ML",
+    matchId: match.match_id,
+    date: match.date,
+    home: match.home,
+    away: match.away,
+    matchTitle: matchTitle(match),
+    market: mlNormalizeMarket(pick.market || pick.pick || pick.label || "Pick", match)
+  };
+}
+
+function renderMlPickCard(match, originalPick) {
+  const pick = mlPickPayload(match, originalPick);
+  const probability = clampPercent(Number(pick.probability || pick.prob || 0) <= 1
+    ? Number(pick.probability || pick.prob || 0) * 100
+    : Number(pick.probability || pick.prob || 0));
+  const isCorner = String(pick.type || "").toLowerCase() === "corners";
+  const cornerDecision = match.corner_publication || {};
+  const noBet = isCorner && cornerDecision.publish === false;
+  const level = mlReadableLevel(pick.strength || pick.quality || pick.publication_bucket, noBet);
+  const riskSource = noBet ? "alto" : (pick.risk || match.goals?.risk || match.corners?.risk || "medio");
+  const risk = mlReadableRisk(riskSource);
+  const market = pick.market;
+  const reason = mlFriendlyReason(pick, match, noBet);
+
+  return `
+    <article class="ml-pick-v3 ${noBet ? "is-no-bet" : ""}">
+      <div class="ml-pick-v3-head">
+        <div class="ml-pick-v3-copy">
+          <span class="ml-type-v3">${escapeHtml(mlReadableType(pick.type))}</span>
+          <h3>${escapeHtml(market)}</h3>
+        </div>
+        <strong class="ml-prob-v3">${probability}%</strong>
+      </div>
+
+      <div class="prob-track ml-prob-track-v3"><i style="width:${probability}%"></i></div>
+
+      <p class="ml-reason-v3">${escapeHtml(reason)}</p>
+
+      <div class="ml-meta-v3">
+        <span class="ml-level-v3">${escapeHtml(level)}</span>
+        <span class="ml-risk-v3 ${mlRiskClass(riskSource)}">Riesgo ${escapeHtml(risk)}</span>
+        ${pick.fair_odds ? `<span>Momio justo ${escapeHtml(String(pick.fair_odds))}</span>` : ""}
+      </div>
+
+      ${isCorner && match.corners?.expected_range ? `
+        <p class="ml-range-v3">Rango estimado: ${escapeHtml(match.corners.expected_range)}</p>
+      ` : ""}
+
+      ${reviewControls(pick)}
+
+      <div class="card-actions">
+        <button class="secondary-btn" type="button" ${noBet ? "disabled" : ""}
+          onclick="addPickToCartEncoded('${encodedPick(pick)}')">${noBet ? "Solo referencia" : "Agregar al ticket"}</button>
+      </div>
+    </article>
+  `;
+}
+
+function renderMlPlayerCard(match, player) {
+  const probability = clampPercent(player.probability || 0);
+  const level = mlReadableLevel(player.quality);
+  const pick = mlPickPayload(match, {
+    ...player,
+    type: "player",
+    market: player.market,
+    risk: player.quality === "medium" ? "medio" : "medio-alto"
+  });
+  return `
+    <article class="ml-player-v3">
+      <div class="ml-player-v3-head">
+        <div>
+          <span>${teamDisplay(player.team)}</span>
+          <h3>${escapeHtml(player.market || player.player || "Jugador")}</h3>
+        </div>
+        <strong>${probability}%</strong>
+      </div>
+      <p>${escapeHtml(player.condition || "Confirmar titularidad antes de considerarlo.")}</p>
+      <div class="ml-meta-v3">
+        <span>${escapeHtml(level)}</span>
+        <span>Confirmar alineación</span>
+        ${player.fair_odds ? `<span>Momio justo ${escapeHtml(String(player.fair_odds))}</span>` : ""}
+      </div>
+      ${reviewControls(pick)}
+      <div class="card-actions">
+        <button class="secondary-btn" type="button" onclick="addPickToCartEncoded('${encodedPick(pick)}')">Agregar al ticket</button>
+      </div>
+    </article>
+  `;
+}
+
+function renderMlMatchV3(match) {
+  const picks = mlCollectMatchPicks(match);
+  const players = Array.isArray(match.players) ? match.players : (match.player_watchlist || []);
+  return `
+    <section class="ml-match-v3">
+      <header class="ml-match-v3-header">
+        <span class="ml-date-v3">${escapeHtml(mlDateLabel(match.date))}</span>
+        <h2>${teamDisplay(match.home)} <span>vs</span> ${teamDisplay(match.away)}</h2>
+      </header>
+
+      <div class="ml-section-label-v3">
+        <strong>Picks del partido</strong>
+        <span>${picks.length}</span>
+      </div>
+      <div class="ml-picks-v3">
+        ${picks.length ? picks.map(pick => renderMlPickCard(match, pick)).join("") : renderEmpty("No hay picks para este partido.")}
+      </div>
+
+      ${players.length ? `
+        <div class="ml-section-label-v3 ml-player-label-v3">
+          <strong>Jugadores</strong>
+          <span>${players.length}</span>
+        </div>
+        <div class="ml-players-v3">
+          ${players.map(player => renderMlPlayerCard(match, player)).join("")}
+        </div>
+      ` : ""}
+
+      <p class="ml-value-note-v3">Sin cuotas cargadas, “momio justo” es la referencia del modelo y no confirma valor contra la casa.</p>
+    </section>
+  `;
+}
+
+function renderMl() {
+  const matches = [...(state.mlPredictions || [])].sort((a, b) => {
+    const byDate = String(a.date || "").localeCompare(String(b.date || ""));
+    if (byDate !== 0) return byDate;
+    return matchTitle(a).localeCompare(matchTitle(b));
+  });
 
   screens.ml.innerHTML = `
-    <section class="page-title">
-      <p class="eyebrow">Motor Python</p>
-      <h2>Predicciones ML</h2>
-      <p>Goles, ambos anotan y corners con datos procesados. Aquí vive lo robusto.</p>
-    </section>
-
-    ${renderDateChips("ml")}
-    ${renderMatchSelector(matches, selected?.match_id, "selectMlMatch")}
-
-    ${selected ? renderMlDetail(selected) : renderEmpty("No hay predicciones ML cargadas.")}
+    <div class="ml-list-v3">
+      ${matches.length ? matches.map(renderMlMatchV3).join("") : renderEmpty("No hay predicciones ML cargadas.")}
+    </div>
   `;
 }
 
@@ -1084,10 +1307,30 @@ function renderAll() {
 }
 
 async function loadMlPredictions() {
+  const fallback = `matchiq-predictions-final.json?v=${encodeURIComponent(APP_BUILD_VERSION)}`;
   try {
-    const response = await fetch(`matchiq-predictions-final.json?v=${APP_BUILD_VERSION}`, { cache: "no-store" });
+    const manifestResponse = await fetch(`predictions-manifest.json?t=${Date.now()}`, { cache: "no-store" });
+    if (manifestResponse.ok) {
+      const manifest = await manifestResponse.json();
+      const file = manifest?.predictions_file || manifest?.fallback_file;
+      if (file) {
+        const version = manifest?.version || APP_BUILD_VERSION;
+        const response = await fetch(`${file}?v=${encodeURIComponent(version)}`, { cache: "no-store" });
+        if (response.ok) {
+          const payload = await response.json();
+          return Array.isArray(payload) ? payload : (payload?.matches || []);
+        }
+      }
+    }
+  } catch (error) {
+    console.warn("No se pudo cargar el manifiesto; se usará el respaldo.", error);
+  }
+
+  try {
+    const response = await fetch(fallback, { cache: "no-store" });
     if (!response.ok) throw new Error("No se pudo cargar ML JSON");
-    return await response.json();
+    const payload = await response.json();
+    return Array.isArray(payload) ? payload : (payload?.matches || []);
   } catch (error) {
     console.warn(error);
     return [];

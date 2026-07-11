@@ -1,4 +1,9 @@
-pandas>=2.1
+pandas>=2.2
+numpy>=2.0
+scipy>=1.13
+scikit-learn>=1.5
+xgboost>=2.1
+joblib>=1.4
 requests>=2.31
 beautifulsoup4>=4.12
 pypdf>=5.0

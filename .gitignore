@@ -1,1 +1,3 @@
 matchiq-ml/data_raw/fifa_reports/
+matchiq-ml/src/__pycache__/
+matchiq-ml/data_raw/mart_results_latest.csv

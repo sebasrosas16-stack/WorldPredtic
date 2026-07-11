@@ -125,7 +125,10 @@ def standardize_recent_matches(df: pd.DataFrame) -> pd.DataFrame:
         if c.startswith(("score", "home_", "away_", "stats_scope")) and c not in {
             "home_team", "away_team"
         }:
-            out[c] = pd.to_numeric(out[c], errors="ignore")
+            try:
+                out[c] = pd.to_numeric(out[c])
+            except (ValueError, TypeError):
+                pass
     out["extra_time"] = out.get("extra_time", False).map(truthy)
     out["neutral"] = out.get("neutral", True).map(truthy)
     return out.dropna(subset=["date", "home_team", "away_team"])

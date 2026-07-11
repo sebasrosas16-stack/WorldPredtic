@@ -1,0 +1,13 @@
+date,home,away,bucket,type,market,probability,fair_odds,strength,risk,note
+2026-07-11,England,Norway,principal,goals,England anota +0.5,84,1.19,strong,bajo-medio,"Probabilidad calibrada con XGBoost, posterior Gamma-Poisson y matriz de marcadores."
+2026-07-11,England,Norway,principal,qualifies,England clasifica,62,1.61,lean,medio,Incluye el resultado en 90 minutos y reparte el empate según fuerza Elo reciente.
+2026-07-11,England,Norway,principal,result,England o empate,71,1.41,lean,medio,El 1X2 está cerrado; el modelo reduce riesgo con doble oportunidad.
+2026-07-11,England,Norway,soñador,unconventional,England anota + under 4.5 goles,62,1.6,lean,medio,Probabilidad conjunta obtenida de la matriz Dixon-Coles; no se multiplicaron probabilidades independientes.
+2026-07-11,Switzerland,Argentina,principal,goals,Argentina anota +0.5,86,1.17,strong,bajo-medio,"Probabilidad calibrada con XGBoost, posterior Gamma-Poisson y matriz de marcadores."
+2026-07-11,Switzerland,Argentina,principal,qualifies,Argentina clasifica,77,1.31,strong,medio-alto,Incluye el resultado en 90 minutos y reparte el empate según fuerza Elo reciente.
+2026-07-11,Switzerland,Argentina,principal,result,Argentina gana 90 min,62,1.61,lean,medio-alto,"Ensemble de XGBoost calibrado, simulación bayesiana y Dixon-Coles."
+2026-07-11,Switzerland,Argentina,soñador,unconventional,Argentina anota + under 4.5 goles,67,1.5,lean,medio,Probabilidad conjunta obtenida de la matriz Dixon-Coles; no se multiplicaron probabilidades independientes.
+2026-07-14,France,Spain,principal,goals,Spain anota +0.5,75,1.34,strong,bajo-medio,"Probabilidad calibrada con XGBoost, posterior Gamma-Poisson y matriz de marcadores."
+2026-07-14,France,Spain,principal,result,Spain o empate,69,1.44,lean,medio,El 1X2 está cerrado; el modelo reduce riesgo con doble oportunidad.
+2026-07-14,France,Spain,cautious,corners,Total corners over 7.5,72,1.39,lean,bajo-medio,"Corner publicable, pero limitado a lean por volatilidad del mercado."
+2026-07-14,France,Spain,soñador,unconventional,Spain anota + under 4.5 goles,62,1.61,lean,medio,Probabilidad conjunta obtenida de la matriz Dixon-Coles; no se multiplicaron probabilidades independientes.

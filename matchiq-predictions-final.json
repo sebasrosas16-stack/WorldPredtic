@@ -158,7 +158,20 @@
         "strength": "strong",
         "risk": "bajo-medio",
         "model_disagreement_pp": 1.6,
-        "reason": "Probabilidad calibrada con XGBoost, posterior Gamma-Poisson y matriz de marcadores."
+        "reason": "Probabilidad calibrada con XGBoost, posterior Gamma-Poisson y matriz de marcadores.",
+        "publication_bucket": "principal"
+      },
+      {
+        "type": "qualifies",
+        "market": "England clasifica",
+        "probability": 62,
+        "probability_raw": 0.6201,
+        "fair_odds": 1.61,
+        "strength": "lean",
+        "risk": "medio",
+        "model_disagreement_pp": 3.9,
+        "reason": "Incluye el resultado en 90 minutos y reparte el empate según fuerza Elo reciente.",
+        "publication_bucket": "principal"
       },
       {
         "type": "result",
@@ -169,7 +182,8 @@
         "strength": "lean",
         "risk": "medio",
         "model_disagreement_pp": 3.9,
-        "reason": "El 1X2 está cerrado; el modelo reduce riesgo con doble oportunidad."
+        "reason": "El 1X2 está cerrado; el modelo reduce riesgo con doble oportunidad.",
+        "publication_bucket": "principal"
       },
       {
         "type": "unconventional",
@@ -180,43 +194,11 @@
         "strength": "lean",
         "risk": "medio",
         "model_disagreement_pp": 6.0,
-        "reason": "Probabilidad conjunta obtenida de la matriz Dixon-Coles; no se multiplicaron probabilidades independientes."
-      },
-      {
-        "type": "qualifies",
-        "market": "England clasifica",
-        "probability": 62,
-        "probability_raw": 0.6201,
-        "fair_odds": 1.61,
-        "strength": "lean",
-        "risk": "medio",
-        "model_disagreement_pp": 3.9,
-        "reason": "Incluye el resultado en 90 minutos y reparte el empate según fuerza Elo reciente."
+        "reason": "Probabilidad conjunta obtenida de la matriz Dixon-Coles; no se multiplicaron probabilidades independientes.",
+        "publication_bucket": "soñador"
       }
     ],
     "all_model_picks": [
-      {
-        "type": "result",
-        "market": "England o empate",
-        "probability": 71,
-        "probability_raw": 0.7084,
-        "fair_odds": 1.41,
-        "strength": "lean",
-        "risk": "medio",
-        "model_disagreement_pp": 3.9,
-        "reason": "El 1X2 está cerrado; el modelo reduce riesgo con doble oportunidad."
-      },
-      {
-        "type": "qualifies",
-        "market": "England clasifica",
-        "probability": 62,
-        "probability_raw": 0.6201,
-        "fair_odds": 1.61,
-        "strength": "lean",
-        "risk": "medio",
-        "model_disagreement_pp": 3.9,
-        "reason": "Incluye el resultado en 90 minutos y reparte el empate según fuerza Elo reciente."
-      },
       {
         "type": "goals",
         "market": "England anota +0.5",
@@ -229,18 +211,15 @@
         "reason": "Probabilidad calibrada con XGBoost, posterior Gamma-Poisson y matriz de marcadores."
       },
       {
-        "type": "corners",
-        "market": "Total corners over 7.5",
-        "probability": 69,
-        "probability_raw": 0.6928,
-        "fair_odds": 1.44,
-        "strength": "thin",
-        "risk": "alto",
-        "model_disagreement_pp": 19.1,
-        "reason": "XGBoost Poisson regularizado + forma por equipo + incertidumbre binomial negativa.",
-        "expected_total": 9.59,
-        "expected_range": "5 a 14 corners",
-        "publication_status": "NO BET"
+        "type": "result",
+        "market": "England o empate",
+        "probability": 71,
+        "probability_raw": 0.7084,
+        "fair_odds": 1.41,
+        "strength": "lean",
+        "risk": "medio",
+        "model_disagreement_pp": 3.9,
+        "reason": "El 1X2 está cerrado; el modelo reduce riesgo con doble oportunidad."
       },
       {
         "type": "unconventional",
@@ -252,6 +231,17 @@
         "risk": "medio",
         "model_disagreement_pp": 6.0,
         "reason": "Probabilidad conjunta obtenida de la matriz Dixon-Coles; no se multiplicaron probabilidades independientes."
+      },
+      {
+        "type": "qualifies",
+        "market": "England clasifica",
+        "probability": 62,
+        "probability_raw": 0.6201,
+        "fair_odds": 1.61,
+        "strength": "lean",
+        "risk": "medio",
+        "model_disagreement_pp": 3.9,
+        "reason": "Incluye el resultado en 90 minutos y reparte el empate según fuerza Elo reciente."
       }
     ],
     "no_bet_notes": [
@@ -270,7 +260,52 @@
         "Corners: muestra reciente limitada para uno o ambos equipos.",
         "Corners: XGBoost y promedio de forma discrepan demasiado."
       ]
-    }
+    },
+    "publication_notes": [],
+    "corner_publication": {
+      "status": "no_bet",
+      "publish": false,
+      "reason": "Muestra delgada para corners."
+    },
+    "player_watchlist": [
+      {
+        "team": "England",
+        "player": "Jude BELLINGHAM",
+        "market": "Jude BELLINGHAM 1+ tiro a puerta",
+        "probability": 60,
+        "quality": "thin",
+        "status": "provisional",
+        "condition": "Válido solo si es titular o tiene minutos proyectados suficientes."
+      },
+      {
+        "team": "Norway",
+        "player": "Erling HAALAND",
+        "market": "Erling HAALAND 1+ tiro a puerta",
+        "probability": 60,
+        "quality": "thin",
+        "status": "provisional",
+        "condition": "Válido solo si es titular o tiene minutos proyectados suficientes."
+      },
+      {
+        "team": "England",
+        "player": "Harry KANE",
+        "market": "Harry KANE anota",
+        "probability": 40,
+        "quality": "thin",
+        "status": "solo_contexto",
+        "condition": "Válido solo si es titular o tiene minutos proyectados suficientes."
+      },
+      {
+        "team": "Norway",
+        "player": "Erling HAALAND",
+        "market": "Erling HAALAND anota",
+        "probability": 40,
+        "quality": "thin",
+        "status": "solo_contexto",
+        "condition": "Válido solo si es titular o tiene minutos proyectados suficientes."
+      }
+    ],
+    "value_disclaimer": "Sin market_odds.csv lleno, estos son picks destacados del modelo; no valor real verificado contra una casa."
   },
   {
     "match_id": 2032965419,
@@ -431,7 +466,8 @@
         "strength": "strong",
         "risk": "bajo-medio",
         "model_disagreement_pp": 0.4,
-        "reason": "Probabilidad calibrada con XGBoost, posterior Gamma-Poisson y matriz de marcadores."
+        "reason": "Probabilidad calibrada con XGBoost, posterior Gamma-Poisson y matriz de marcadores.",
+        "publication_bucket": "principal"
       },
       {
         "type": "qualifies",
@@ -442,7 +478,20 @@
         "strength": "strong",
         "risk": "medio-alto",
         "model_disagreement_pp": 9.1,
-        "reason": "Incluye el resultado en 90 minutos y reparte el empate según fuerza Elo reciente."
+        "reason": "Incluye el resultado en 90 minutos y reparte el empate según fuerza Elo reciente.",
+        "publication_bucket": "principal"
+      },
+      {
+        "type": "result",
+        "market": "Argentina gana 90 min",
+        "probability": 62,
+        "probability_raw": 0.6206,
+        "fair_odds": 1.61,
+        "strength": "lean",
+        "risk": "medio-alto",
+        "model_disagreement_pp": 9.1,
+        "reason": "Ensemble de XGBoost calibrado, simulación bayesiana y Dixon-Coles.",
+        "publication_bucket": "principal"
       },
       {
         "type": "unconventional",
@@ -453,43 +502,11 @@
         "strength": "lean",
         "risk": "medio",
         "model_disagreement_pp": 6.0,
-        "reason": "Probabilidad conjunta obtenida de la matriz Dixon-Coles; no se multiplicaron probabilidades independientes."
-      },
-      {
-        "type": "result",
-        "market": "Argentina gana 90 min",
-        "probability": 62,
-        "probability_raw": 0.6206,
-        "fair_odds": 1.61,
-        "strength": "lean",
-        "risk": "medio-alto",
-        "model_disagreement_pp": 9.1,
-        "reason": "Ensemble de XGBoost calibrado, simulación bayesiana y Dixon-Coles."
+        "reason": "Probabilidad conjunta obtenida de la matriz Dixon-Coles; no se multiplicaron probabilidades independientes.",
+        "publication_bucket": "soñador"
       }
     ],
     "all_model_picks": [
-      {
-        "type": "result",
-        "market": "Argentina gana 90 min",
-        "probability": 62,
-        "probability_raw": 0.6206,
-        "fair_odds": 1.61,
-        "strength": "lean",
-        "risk": "medio-alto",
-        "model_disagreement_pp": 9.1,
-        "reason": "Ensemble de XGBoost calibrado, simulación bayesiana y Dixon-Coles."
-      },
-      {
-        "type": "qualifies",
-        "market": "Argentina clasifica",
-        "probability": 77,
-        "probability_raw": 0.7651,
-        "fair_odds": 1.31,
-        "strength": "strong",
-        "risk": "medio-alto",
-        "model_disagreement_pp": 9.1,
-        "reason": "Incluye el resultado en 90 minutos y reparte el empate según fuerza Elo reciente."
-      },
       {
         "type": "goals",
         "market": "Argentina anota +0.5",
@@ -502,18 +519,15 @@
         "reason": "Probabilidad calibrada con XGBoost, posterior Gamma-Poisson y matriz de marcadores."
       },
       {
-        "type": "corners",
-        "market": "Total corners over 7.5",
+        "type": "qualifies",
+        "market": "Argentina clasifica",
         "probability": 77,
-        "probability_raw": 0.7724,
-        "fair_odds": 1.29,
-        "strength": "thin",
-        "risk": "alto",
-        "model_disagreement_pp": 31.7,
-        "reason": "XGBoost Poisson regularizado + forma por equipo + incertidumbre binomial negativa.",
-        "expected_total": 10.29,
-        "expected_range": "6 a 15 corners",
-        "publication_status": "NO BET"
+        "probability_raw": 0.7651,
+        "fair_odds": 1.31,
+        "strength": "strong",
+        "risk": "medio-alto",
+        "model_disagreement_pp": 9.1,
+        "reason": "Incluye el resultado en 90 minutos y reparte el empate según fuerza Elo reciente."
       },
       {
         "type": "unconventional",
@@ -525,6 +539,17 @@
         "risk": "medio",
         "model_disagreement_pp": 6.0,
         "reason": "Probabilidad conjunta obtenida de la matriz Dixon-Coles; no se multiplicaron probabilidades independientes."
+      },
+      {
+        "type": "result",
+        "market": "Argentina gana 90 min",
+        "probability": 62,
+        "probability_raw": 0.6206,
+        "fair_odds": 1.61,
+        "strength": "lean",
+        "risk": "medio-alto",
+        "model_disagreement_pp": 9.1,
+        "reason": "Ensemble de XGBoost calibrado, simulación bayesiana y Dixon-Coles."
       }
     ],
     "no_bet_notes": [
@@ -542,7 +567,52 @@
         "Corners: XGBoost y promedio de forma discrepan demasiado.",
         "Picks de jugador son condicionales: confirmar titularidad y minutos antes de apostar."
       ]
-    }
+    },
+    "publication_notes": [],
+    "corner_publication": {
+      "status": "no_bet",
+      "publish": false,
+      "reason": "Riesgo alto en corners."
+    },
+    "player_watchlist": [
+      {
+        "team": "Argentina",
+        "player": "Lionel MESSI",
+        "market": "Lionel MESSI 1+ tiro a puerta",
+        "probability": 70,
+        "quality": "thin",
+        "status": "provisional",
+        "condition": "Válido solo si es titular o tiene minutos proyectados suficientes."
+      },
+      {
+        "team": "Switzerland",
+        "player": "Fabian RIEDER",
+        "market": "Fabian RIEDER 1+ tiro a puerta",
+        "probability": 38,
+        "quality": "thin",
+        "status": "solo_contexto",
+        "condition": "Válido solo si es titular o tiene minutos proyectados suficientes."
+      },
+      {
+        "team": "Argentina",
+        "player": "Lionel MESSI",
+        "market": "Lionel MESSI anota",
+        "probability": 30,
+        "quality": "thin",
+        "status": "solo_contexto",
+        "condition": "Válido solo si es titular o tiene minutos proyectados suficientes."
+      },
+      {
+        "team": "Switzerland",
+        "player": "Breel EMBOLO",
+        "market": "Breel EMBOLO anota",
+        "probability": 24,
+        "quality": "thin",
+        "status": "solo_contexto",
+        "condition": "Válido solo si es titular o tiene minutos proyectados suficientes."
+      }
+    ],
+    "value_disclaimer": "Sin market_odds.csv lleno, estos son picks destacados del modelo; no valor real verificado contra una casa."
   },
   {
     "match_id": 3199233574,
@@ -703,20 +773,8 @@
         "strength": "strong",
         "risk": "bajo-medio",
         "model_disagreement_pp": 0.8,
-        "reason": "Probabilidad calibrada con XGBoost, posterior Gamma-Poisson y matriz de marcadores."
-      },
-      {
-        "type": "corners",
-        "market": "Total corners over 7.5",
-        "probability": 72,
-        "probability_raw": 0.7211,
-        "fair_odds": 1.39,
-        "strength": "strong",
-        "risk": "bajo-medio",
-        "model_disagreement_pp": 1.1,
-        "reason": "XGBoost Poisson regularizado + forma por equipo + incertidumbre binomial negativa.",
-        "expected_total": 9.69,
-        "expected_range": "5 a 14 corners"
+        "reason": "Probabilidad calibrada con XGBoost, posterior Gamma-Poisson y matriz de marcadores.",
+        "publication_bucket": "principal"
       },
       {
         "type": "result",
@@ -727,7 +785,23 @@
         "strength": "lean",
         "risk": "medio",
         "model_disagreement_pp": 8.3,
-        "reason": "El 1X2 está cerrado; el modelo reduce riesgo con doble oportunidad."
+        "reason": "El 1X2 está cerrado; el modelo reduce riesgo con doble oportunidad.",
+        "publication_bucket": "principal"
+      },
+      {
+        "type": "corners",
+        "market": "Total corners over 7.5",
+        "probability": 72,
+        "probability_raw": 0.7211,
+        "fair_odds": 1.39,
+        "strength": "lean",
+        "risk": "bajo-medio",
+        "model_disagreement_pp": 1.1,
+        "reason": "XGBoost Poisson regularizado + forma por equipo + incertidumbre binomial negativa.",
+        "expected_total": 9.69,
+        "expected_range": "5 a 14 corners",
+        "publication_bucket": "cautious",
+        "publication_note": "Corner publicable, pero limitado a lean por volatilidad del mercado."
       },
       {
         "type": "unconventional",
@@ -738,32 +812,11 @@
         "strength": "lean",
         "risk": "medio",
         "model_disagreement_pp": 6.0,
-        "reason": "Probabilidad conjunta obtenida de la matriz Dixon-Coles; no se multiplicaron probabilidades independientes."
+        "reason": "Probabilidad conjunta obtenida de la matriz Dixon-Coles; no se multiplicaron probabilidades independientes.",
+        "publication_bucket": "soñador"
       }
     ],
     "all_model_picks": [
-      {
-        "type": "result",
-        "market": "Spain o empate",
-        "probability": 69,
-        "probability_raw": 0.6941,
-        "fair_odds": 1.44,
-        "strength": "lean",
-        "risk": "medio",
-        "model_disagreement_pp": 8.3,
-        "reason": "El 1X2 está cerrado; el modelo reduce riesgo con doble oportunidad."
-      },
-      {
-        "type": "qualifies",
-        "market": "Spain clasifica",
-        "probability": 58,
-        "probability_raw": 0.5756,
-        "fair_odds": 1.74,
-        "strength": "thin",
-        "risk": "medio-alto",
-        "model_disagreement_pp": 8.3,
-        "reason": "Incluye el resultado en 90 minutos y reparte el empate según fuerza Elo reciente."
-      },
       {
         "type": "goals",
         "market": "Spain anota +0.5",
@@ -787,6 +840,17 @@
         "reason": "XGBoost Poisson regularizado + forma por equipo + incertidumbre binomial negativa.",
         "expected_total": 9.69,
         "expected_range": "5 a 14 corners"
+      },
+      {
+        "type": "result",
+        "market": "Spain o empate",
+        "probability": 69,
+        "probability_raw": 0.6941,
+        "fair_odds": 1.44,
+        "strength": "lean",
+        "risk": "medio",
+        "model_disagreement_pp": 8.3,
+        "reason": "El 1X2 está cerrado; el modelo reduce riesgo con doble oportunidad."
       },
       {
         "type": "unconventional",
@@ -813,6 +877,51 @@
       "what_can_break_it": [
         "Picks de jugador son condicionales: confirmar titularidad y minutos antes de apostar."
       ]
-    }
+    },
+    "publication_notes": [],
+    "corner_publication": {
+      "status": "published_cautious",
+      "publish": true,
+      "reason": "Corner publicable, pero limitado a lean por volatilidad del mercado."
+    },
+    "player_watchlist": [
+      {
+        "team": "France",
+        "player": "Kylian MBAPPE",
+        "market": "Kylian MBAPPE 1+ tiro a puerta",
+        "probability": 74,
+        "quality": "medium",
+        "status": "publicable_si_titular",
+        "condition": "Válido solo si es titular o tiene minutos proyectados suficientes."
+      },
+      {
+        "team": "Spain",
+        "player": "Lamine YAMAL",
+        "market": "Lamine YAMAL 1+ tiro a puerta",
+        "probability": 65,
+        "quality": "thin",
+        "status": "provisional",
+        "condition": "Válido solo si es titular o tiene minutos proyectados suficientes."
+      },
+      {
+        "team": "France",
+        "player": "Kylian MBAPPE",
+        "market": "Kylian MBAPPE anota",
+        "probability": 42,
+        "quality": "medium",
+        "status": "solo_contexto",
+        "condition": "Válido solo si es titular o tiene minutos proyectados suficientes."
+      },
+      {
+        "team": "Spain",
+        "player": "Mikel OYARZABAL",
+        "market": "Mikel OYARZABAL anota",
+        "probability": 30,
+        "quality": "thin",
+        "status": "solo_contexto",
+        "condition": "Válido solo si es titular o tiene minutos proyectados suficientes."
+      }
+    ],
+    "value_disclaimer": "Sin market_odds.csv lleno, estos son picks destacados del modelo; no valor real verificado contra una casa."
   }
 ]

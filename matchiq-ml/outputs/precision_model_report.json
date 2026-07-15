@@ -1,7 +1,7 @@
 {
   "status": "ok",
-  "build": "20260711T075531Z-precision-v3",
-  "generated_at": "2026-07-11T07:55:31.183381+00:00",
+  "build": "20260715T175112Z-precision-v3",
+  "generated_at": "2026-07-15T17:51:12.831034+00:00",
   "models": {
     "team_markets": "XGBoost calibrated with chronological holdout",
     "goals": "XGBoost Poisson + Dixon-Coles + Gamma-Poisson posterior + Monte Carlo",
@@ -9,11 +9,11 @@
     "players": "Bayesian Gamma-Poisson ranking; conditional on lineups"
   },
   "team_validation": {
-    "training_rows": 32378,
+    "training_rows": 32380,
     "training_from": "1990-01-12",
-    "training_to": "2026-07-09",
+    "training_to": "2026-07-14",
     "validation_from": "2023-01-01",
-    "validation_rows": 3689,
+    "validation_rows": 3691,
     "feature_count": 52,
     "features": [
       "elo_home",
@@ -72,148 +72,148 @@
     "binary": {
       "over_1_5": {
         "raw": {
-          "brier": 0.1893770843744278,
-          "log_loss": 0.5638104677200317,
-          "accuracy_0_5": 0.7373271889400922,
-          "roc_auc": 0.6051779806349784
+          "brier": 0.18941743671894073,
+          "log_loss": 0.5639019012451172,
+          "accuracy_0_5": 0.7371985911677053,
+          "roc_auc": 0.6046711464662433
         },
         "calibrated": {
-          "brier": 0.18886197368024962,
-          "log_loss": 0.5625733173044344,
-          "accuracy_0_5": 0.7373271889400922,
-          "roc_auc": 0.6051779806349784
+          "brier": 0.18879996132826599,
+          "log_loss": 0.5624367822628297,
+          "accuracy_0_5": 0.7374695204551612,
+          "roc_auc": 0.6046711464662433
         },
-        "positive_rate_validation": 0.7373271889400922
+        "positive_rate_validation": 0.7374695204551612
       },
       "over_2_5": {
         "raw": {
-          "brier": 0.2366439402103424,
-          "log_loss": 0.6653925776481628,
-          "accuracy_0_5": 0.5904039034968827,
-          "roc_auc": 0.6341508086067152
+          "brier": 0.2367362678050995,
+          "log_loss": 0.6655958890914917,
+          "accuracy_0_5": 0.5917095638038472,
+          "roc_auc": 0.6335332225230675
         },
         "calibrated": {
-          "brier": 0.23597342002407362,
-          "log_loss": 0.6640115978367958,
-          "accuracy_0_5": 0.600975874220656,
-          "roc_auc": 0.6341508086067152
+          "brier": 0.23597234101941186,
+          "log_loss": 0.6640177269533123,
+          "accuracy_0_5": 0.604443240314278,
+          "roc_auc": 0.6335332225230675
         },
-        "positive_rate_validation": 0.5069124423963134
+        "positive_rate_validation": 0.5069086968301273
       },
       "under_2_5": {
         "raw": {
-          "brier": 0.2366439402103424,
-          "log_loss": 0.6653925776481628,
-          "accuracy_0_5": 0.5904039034968827,
-          "roc_auc": 0.634150955599392
+          "brier": 0.2367362678050995,
+          "log_loss": 0.6655958890914917,
+          "accuracy_0_5": 0.5917095638038472,
+          "roc_auc": 0.6335332225230677
         },
         "calibrated": {
-          "brier": 0.2359734194747099,
-          "log_loss": 0.6640115967068888,
-          "accuracy_0_5": 0.600975874220656,
-          "roc_auc": 0.634150955599392
+          "brier": 0.23597234080915364,
+          "log_loss": 0.6640177267709625,
+          "accuracy_0_5": 0.604443240314278,
+          "roc_auc": 0.6335332225230677
         },
-        "positive_rate_validation": 0.4930875576036866
+        "positive_rate_validation": 0.49309130316987265
       },
       "under_3_5": {
         "raw": {
-          "brier": 0.20305313169956207,
-          "log_loss": 0.5945110321044922,
-          "accuracy_0_5": 0.6972079154242342,
-          "roc_auc": 0.6436533659922518
+          "brier": 0.20306289196014404,
+          "log_loss": 0.5944408178329468,
+          "accuracy_0_5": 0.697371985911677,
+          "roc_auc": 0.6433737335030923
         },
         "calibrated": {
-          "brier": 0.2017340895809378,
-          "log_loss": 0.5913100649960268,
-          "accuracy_0_5": 0.6977500677690431,
-          "roc_auc": 0.6436533659922518
+          "brier": 0.20176318003145466,
+          "log_loss": 0.5913113246634157,
+          "accuracy_0_5": 0.6957464101869412,
+          "roc_auc": 0.6433737335030923
         },
-        "positive_rate_validation": 0.6901599349417187
+        "positive_rate_validation": 0.6903278244378217
       },
       "btts_yes": {
         "raw": {
-          "brier": 0.24139125645160675,
-          "log_loss": 0.6751123070716858,
-          "accuracy_0_5": 0.571157495256167,
-          "roc_auc": 0.5819792337953675
+          "brier": 0.2412729114294052,
+          "log_loss": 0.6748442649841309,
+          "accuracy_0_5": 0.5692224329450013,
+          "roc_auc": 0.5823753842415985
         },
         "calibrated": {
-          "brier": 0.24033702633603288,
-          "log_loss": 0.6729683570818485,
-          "accuracy_0_5": 0.5673624288425048,
-          "roc_auc": 0.5819792337953675
+          "brier": 0.24031116896329827,
+          "log_loss": 0.6728978494333396,
+          "accuracy_0_5": 0.5692224329450013,
+          "roc_auc": 0.5823753842415985
         },
-        "positive_rate_validation": 0.4410409325020331
+        "positive_rate_validation": 0.44107287997832567
       },
       "home_scores_05": {
         "raw": {
-          "brier": 0.16441470384597778,
-          "log_loss": 0.49922868609428406,
-          "accuracy_0_5": 0.7598265112496612,
-          "roc_auc": 0.7442567449877392
+          "brier": 0.1645127832889557,
+          "log_loss": 0.4991998076438904,
+          "accuracy_0_5": 0.759685722026551,
+          "roc_auc": 0.7443337666668935
         },
         "calibrated": {
-          "brier": 0.16428308450561177,
-          "log_loss": 0.49897730835146453,
-          "accuracy_0_5": 0.7625372729737057,
-          "roc_auc": 0.7442567449877392
+          "brier": 0.16441004728586162,
+          "log_loss": 0.49901036010341626,
+          "accuracy_0_5": 0.7610403684638309,
+          "roc_auc": 0.7443337666668935
         },
-        "positive_rate_validation": 0.7365139604228789
+        "positive_rate_validation": 0.7363858033053373
       },
       "away_scores_05": {
         "raw": {
-          "brier": 0.20622308552265167,
-          "log_loss": 0.5967894792556763,
-          "accuracy_0_5": 0.6687449173217674,
-          "roc_auc": 0.7067070328656919
+          "brier": 0.20605333149433136,
+          "log_loss": 0.5964442491531372,
+          "accuracy_0_5": 0.6702790571660796,
+          "roc_auc": 0.7072803715564544
         },
         "calibrated": {
-          "brier": 0.20566986704053525,
-          "log_loss": 0.5957407407119806,
-          "accuracy_0_5": 0.6717267552182163,
-          "roc_auc": 0.7067070328656919
+          "brier": 0.2054286815178427,
+          "log_loss": 0.5952191747954844,
+          "accuracy_0_5": 0.6732592793280954,
+          "roc_auc": 0.7072803715564544
         },
-        "positive_rate_validation": 0.6215776633233939
+        "positive_rate_validation": 0.6217827147114603
       }
     },
     "result_1x2": {
-      "raw_log_loss": 0.8593844175338745,
-      "calibrated_log_loss": 0.857234413454756,
-      "accuracy": 0.6061263214963405
+      "raw_log_loss": 0.8593302965164185,
+      "calibrated_log_loss": 0.8572619037603991,
+      "accuracy": 0.6066106746139258
     },
     "count": {
       "home_goals": {
-        "mae": 1.0255956037010918,
-        "rmse": 1.3592564299024477,
-        "mean_actual": 1.6321496340471673,
-        "mean_predicted": 1.6366099119186401
+        "mae": 1.0256191774116754,
+        "rmse": 1.3592455853524241,
+        "mean_actual": 1.6318070983473314,
+        "mean_predicted": 1.6376323699951172
       },
       "away_goals": {
-        "mae": 0.8391086182343214,
-        "rmse": 1.1151988618295032,
-        "mean_actual": 1.144754676063974,
-        "mean_predicted": 1.080652117729187
+        "mae": 0.8386198074529889,
+        "rmse": 1.1140865614750353,
+        "mean_actual": 1.144947168788946,
+        "mean_predicted": 1.082680106163025
       }
     },
-    "dixon_coles_rho": -0.06987577054622768
+    "dixon_coles_rho": -0.06973056469427202
   },
   "corner_validation": {
-    "training_rows": 165,
+    "training_rows": 167,
     "training_from": "1958-06-24",
-    "training_to": "2026-07-09",
+    "training_to": "2026-07-14",
     "validation_rows": 42,
-    "validation_mae_xgboost": 2.7081096512930736,
-    "validation_mae_baseline": 2.771166666666667,
-    "validation_mae_ensemble": 2.6501567700982527,
-    "xgboost_weight": 0.5057541371993695,
-    "baseline_weight": 0.49424586280063054,
-    "negative_binomial_alpha": 29.683013126955952,
+    "validation_mae_xgboost": 2.5351791041237965,
+    "validation_mae_baseline": 2.599452380952381,
+    "validation_mae_ensemble": 2.4781645271414656,
+    "xgboost_weight": 0.506258801339044,
+    "baseline_weight": 0.493741198660956,
+    "negative_binomial_alpha": 99.99960292418923,
     "rows_missing_date_excluded": 0,
     "warning": "Muestra reducida: regularización fuerte y confianza limitada."
   },
   "player_model": {
     "status": "ok",
-    "candidate_rows": 60,
+    "candidate_rows": 27,
     "method": "Gamma-Poisson Bayesian shrinkage",
     "warning": "No se entrenó XGBoost de jugadores: el recolector no incluye de forma fiable a jugadores con cero tiros ni minutos completos, lo que sesgaría el clasificador."
   },
@@ -222,8 +222,8 @@
     "verified_value_rows": 0,
     "warning": "market_odds.csv está vacío; no se puede calcular valor real."
   },
-  "predicted_matches": 3,
-  "published_picks": 12,
+  "predicted_matches": 1,
+  "published_picks": 3,
   "warnings": [
     "Una buena validación histórica no garantiza el siguiente partido.",
     "No uses el porcentaje como certeza; revisa el intervalo y el desacuerdo entre modelos.",
@@ -231,7 +231,7 @@
   ],
   "outputs": {
     "app_json": "matchiq-predictions-final.json",
-    "versioned_json": "predictions-20260711T075531Z-precision-v3.json",
+    "versioned_json": "predictions-20260715T175112Z-precision-v3.json",
     "manifest": "predictions-manifest.json",
     "model_report": "matchiq-ml/outputs/precision_model_report.json"
   }

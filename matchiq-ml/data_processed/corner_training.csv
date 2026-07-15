@@ -18,129 +18,129 @@ date,home_team,away_team,home_corners,away_corners,source,total_corners,over_7_5
 1986-06-29,Argentina,Germany,8.0,6.0,historical:statsbomb_worldcup_corners_clean.csv,14.0,1,1,1,0
 1990-06-24,Brazil,Argentina,11.0,4.0,historical:statsbomb_worldcup_corners_clean.csv,15.0,1,1,1,0
 2018-06-14,Russia,Saudi Arabia,6.0,2.0,historical:statsbomb_worldcup_corners_clean.csv,8.0,1,0,0,1
-2018-06-15,Morocco,Iran,5.0,2.0,historical:statsbomb_worldcup_corners_clean.csv,7.0,0,0,0,1
 2018-06-15,Egypt,Uruguay,0.0,5.0,historical:statsbomb_worldcup_corners_clean.csv,5.0,0,0,0,1
 2018-06-15,Portugal,Spain,3.0,5.0,historical:statsbomb_worldcup_corners_clean.csv,8.0,1,0,0,1
-2018-06-16,Peru,Denmark,3.0,7.0,historical:statsbomb_worldcup_corners_clean.csv,10.0,1,1,1,1
+2018-06-15,Morocco,Iran,5.0,2.0,historical:statsbomb_worldcup_corners_clean.csv,7.0,0,0,0,1
 2018-06-16,Argentina,Iceland,10.0,2.0,historical:statsbomb_worldcup_corners_clean.csv,12.0,1,1,1,0
+2018-06-16,Peru,Denmark,3.0,7.0,historical:statsbomb_worldcup_corners_clean.csv,10.0,1,1,1,1
 2018-06-16,France,Australia,5.0,1.0,historical:statsbomb_worldcup_corners_clean.csv,6.0,0,0,0,1
 2018-06-16,Croatia,Nigeria,6.0,4.0,historical:statsbomb_worldcup_corners_clean.csv,10.0,1,1,1,1
+2018-06-17,Brazil,Switzerland,7.0,2.0,historical:statsbomb_worldcup_corners_clean.csv,9.0,1,1,0,1
 2018-06-17,Costa Rica,Serbia,5.0,4.0,historical:statsbomb_worldcup_corners_clean.csv,9.0,1,1,0,1
 2018-06-17,Germany,Mexico,6.0,1.0,historical:statsbomb_worldcup_corners_clean.csv,7.0,0,0,0,1
-2018-06-17,Brazil,Switzerland,7.0,2.0,historical:statsbomb_worldcup_corners_clean.csv,9.0,1,1,0,1
+2018-06-18,Tunisia,England,2.0,7.0,historical:statsbomb_worldcup_corners_clean.csv,9.0,1,1,0,1
 2018-06-18,Sweden,South Korea,6.0,5.0,historical:statsbomb_worldcup_corners_clean.csv,11.0,1,1,1,0
 2018-06-18,Belgium,Panama,9.0,3.0,historical:statsbomb_worldcup_corners_clean.csv,12.0,1,1,1,0
-2018-06-18,Tunisia,England,2.0,7.0,historical:statsbomb_worldcup_corners_clean.csv,9.0,1,1,0,1
-2018-06-19,Russia,Egypt,7.0,4.0,historical:statsbomb_worldcup_corners_clean.csv,11.0,1,1,1,0
 2018-06-19,Poland,Senegal,3.0,3.0,historical:statsbomb_worldcup_corners_clean.csv,6.0,0,0,0,1
 2018-06-19,Colombia,Japan,3.0,6.0,historical:statsbomb_worldcup_corners_clean.csv,9.0,1,1,0,1
+2018-06-19,Russia,Egypt,7.0,4.0,historical:statsbomb_worldcup_corners_clean.csv,11.0,1,1,1,0
 2018-06-20,Uruguay,Saudi Arabia,3.0,2.0,historical:statsbomb_worldcup_corners_clean.csv,5.0,0,0,0,1
 2018-06-20,Iran,Spain,2.0,6.0,historical:statsbomb_worldcup_corners_clean.csv,8.0,1,0,0,1
 2018-06-20,Portugal,Morocco,5.0,7.0,historical:statsbomb_worldcup_corners_clean.csv,12.0,1,1,1,0
-2018-06-21,France,Peru,5.0,2.0,historical:statsbomb_worldcup_corners_clean.csv,7.0,0,0,0,1
 2018-06-21,Argentina,Croatia,5.0,2.0,historical:statsbomb_worldcup_corners_clean.csv,7.0,0,0,0,1
+2018-06-21,France,Peru,5.0,2.0,historical:statsbomb_worldcup_corners_clean.csv,7.0,0,0,0,1
 2018-06-21,Denmark,Australia,3.0,5.0,historical:statsbomb_worldcup_corners_clean.csv,8.0,1,0,0,1
 2018-06-22,Serbia,Switzerland,3.0,7.0,historical:statsbomb_worldcup_corners_clean.csv,10.0,1,1,1,1
-2018-06-22,Nigeria,Iceland,6.0,5.0,historical:statsbomb_worldcup_corners_clean.csv,11.0,1,1,1,0
 2018-06-22,Brazil,Costa Rica,10.0,1.0,historical:statsbomb_worldcup_corners_clean.csv,11.0,1,1,1,0
-2018-06-23,Germany,Sweden,5.0,3.0,historical:statsbomb_worldcup_corners_clean.csv,8.0,1,0,0,1
-2018-06-23,South Korea,Mexico,7.0,4.0,historical:statsbomb_worldcup_corners_clean.csv,11.0,1,1,1,0
+2018-06-22,Nigeria,Iceland,6.0,5.0,historical:statsbomb_worldcup_corners_clean.csv,11.0,1,1,1,0
 2018-06-23,Belgium,Tunisia,3.0,2.0,historical:statsbomb_worldcup_corners_clean.csv,5.0,0,0,0,1
-2018-06-24,England,Panama,3.0,2.0,historical:statsbomb_worldcup_corners_clean.csv,5.0,0,0,0,1
-2018-06-24,Japan,Senegal,2.0,5.0,historical:statsbomb_worldcup_corners_clean.csv,7.0,0,0,0,1
+2018-06-23,South Korea,Mexico,7.0,4.0,historical:statsbomb_worldcup_corners_clean.csv,11.0,1,1,1,0
+2018-06-23,Germany,Sweden,5.0,3.0,historical:statsbomb_worldcup_corners_clean.csv,8.0,1,0,0,1
 2018-06-24,Poland,Colombia,7.0,5.0,historical:statsbomb_worldcup_corners_clean.csv,12.0,1,1,1,0
-2018-06-25,Iran,Portugal,0.0,5.0,historical:statsbomb_worldcup_corners_clean.csv,5.0,0,0,0,1
+2018-06-24,Japan,Senegal,2.0,5.0,historical:statsbomb_worldcup_corners_clean.csv,7.0,0,0,0,1
+2018-06-24,England,Panama,3.0,2.0,historical:statsbomb_worldcup_corners_clean.csv,5.0,0,0,0,1
 2018-06-25,Uruguay,Russia,4.0,2.0,historical:statsbomb_worldcup_corners_clean.csv,6.0,0,0,0,1
 2018-06-25,Spain,Morocco,7.0,1.0,historical:statsbomb_worldcup_corners_clean.csv,8.0,1,0,0,1
+2018-06-25,Iran,Portugal,0.0,5.0,historical:statsbomb_worldcup_corners_clean.csv,5.0,0,0,0,1
 2018-06-25,Saudi Arabia,Egypt,6.0,1.0,historical:statsbomb_worldcup_corners_clean.csv,7.0,0,0,0,1
-2018-06-26,Nigeria,Argentina,3.0,5.0,historical:statsbomb_worldcup_corners_clean.csv,8.0,1,0,0,1
-2018-06-26,Iceland,Croatia,10.0,5.0,historical:statsbomb_worldcup_corners_clean.csv,15.0,1,1,1,0
-2018-06-26,Denmark,France,4.0,2.0,historical:statsbomb_worldcup_corners_clean.csv,6.0,0,0,0,1
 2018-06-26,Australia,Peru,8.0,3.0,historical:statsbomb_worldcup_corners_clean.csv,11.0,1,1,1,0
-2018-06-27,Mexico,Sweden,7.0,3.0,historical:statsbomb_worldcup_corners_clean.csv,10.0,1,1,1,1
-2018-06-27,Serbia,Brazil,5.0,8.0,historical:statsbomb_worldcup_corners_clean.csv,13.0,1,1,1,0
+2018-06-26,Denmark,France,4.0,2.0,historical:statsbomb_worldcup_corners_clean.csv,6.0,0,0,0,1
+2018-06-26,Iceland,Croatia,10.0,5.0,historical:statsbomb_worldcup_corners_clean.csv,15.0,1,1,1,0
+2018-06-26,Nigeria,Argentina,3.0,5.0,historical:statsbomb_worldcup_corners_clean.csv,8.0,1,0,0,1
 2018-06-27,Switzerland,Costa Rica,6.0,3.0,historical:statsbomb_worldcup_corners_clean.csv,9.0,1,1,0,1
+2018-06-27,Serbia,Brazil,5.0,8.0,historical:statsbomb_worldcup_corners_clean.csv,13.0,1,1,1,0
+2018-06-27,Mexico,Sweden,7.0,3.0,historical:statsbomb_worldcup_corners_clean.csv,10.0,1,1,1,1
 2018-06-27,South Korea,Germany,3.0,8.0,historical:statsbomb_worldcup_corners_clean.csv,11.0,1,1,1,0
-2018-06-28,Senegal,Colombia,1.0,3.0,historical:statsbomb_worldcup_corners_clean.csv,4.0,0,0,0,1
 2018-06-28,Panama,Tunisia,0.0,6.0,historical:statsbomb_worldcup_corners_clean.csv,6.0,0,0,0,1
 2018-06-28,Japan,Poland,5.0,7.0,historical:statsbomb_worldcup_corners_clean.csv,12.0,1,1,1,0
 2018-06-28,England,Belgium,7.0,2.0,historical:statsbomb_worldcup_corners_clean.csv,9.0,1,1,0,1
+2018-06-28,Senegal,Colombia,1.0,3.0,historical:statsbomb_worldcup_corners_clean.csv,4.0,0,0,0,1
 2018-06-30,France,Argentina,0.0,4.0,historical:statsbomb_worldcup_corners_clean.csv,4.0,0,0,0,1
 2018-06-30,Uruguay,Portugal,2.0,9.0,historical:statsbomb_worldcup_corners_clean.csv,11.0,1,1,1,0
-2018-07-01,Croatia,Denmark,5.0,4.0,historical:statsbomb_worldcup_corners_clean.csv,9.0,1,1,0,1
 2018-07-01,Spain,Russia,6.0,5.0,historical:statsbomb_worldcup_corners_clean.csv,11.0,1,1,1,0
+2018-07-01,Croatia,Denmark,5.0,4.0,historical:statsbomb_worldcup_corners_clean.csv,9.0,1,1,0,1
 2018-07-02,Belgium,Japan,8.0,4.0,historical:statsbomb_worldcup_corners_clean.csv,12.0,1,1,1,0
 2018-07-02,Brazil,Mexico,8.0,7.0,historical:statsbomb_worldcup_corners_clean.csv,15.0,1,1,1,0
-2018-07-03,Colombia,England,2.0,7.0,historical:statsbomb_worldcup_corners_clean.csv,9.0,1,1,0,1
 2018-07-03,Sweden,Switzerland,3.0,11.0,historical:statsbomb_worldcup_corners_clean.csv,14.0,1,1,1,0
-2018-07-06,Brazil,Belgium,8.0,4.0,historical:statsbomb_worldcup_corners_clean.csv,12.0,1,1,1,0
+2018-07-03,Colombia,England,2.0,7.0,historical:statsbomb_worldcup_corners_clean.csv,9.0,1,1,0,1
 2018-07-06,Uruguay,France,4.0,3.0,historical:statsbomb_worldcup_corners_clean.csv,7.0,0,0,0,1
-2018-07-07,Russia,Croatia,6.0,8.0,historical:statsbomb_worldcup_corners_clean.csv,14.0,1,1,1,0
+2018-07-06,Brazil,Belgium,8.0,4.0,historical:statsbomb_worldcup_corners_clean.csv,12.0,1,1,1,0
 2018-07-07,Sweden,England,1.0,6.0,historical:statsbomb_worldcup_corners_clean.csv,7.0,0,0,0,1
+2018-07-07,Russia,Croatia,6.0,8.0,historical:statsbomb_worldcup_corners_clean.csv,14.0,1,1,1,0
 2018-07-10,France,Belgium,4.0,5.0,historical:statsbomb_worldcup_corners_clean.csv,9.0,1,1,0,1
 2018-07-11,Croatia,England,8.0,4.0,historical:statsbomb_worldcup_corners_clean.csv,12.0,1,1,1,0
 2018-07-14,Belgium,England,4.0,5.0,historical:statsbomb_worldcup_corners_clean.csv,9.0,1,1,0,1
 2018-07-15,France,Croatia,2.0,6.0,historical:statsbomb_worldcup_corners_clean.csv,8.0,1,0,0,1
 2022-11-20,Qatar,Ecuador,1.0,3.0,historical:statsbomb_worldcup_corners_clean.csv,4.0,0,0,0,1
-2022-11-21,Senegal,Netherlands,6.0,7.0,historical:statsbomb_worldcup_corners_clean.csv,13.0,1,1,1,0
 2022-11-21,United States,Wales,5.0,3.0,historical:statsbomb_worldcup_corners_clean.csv,8.0,1,0,0,1
+2022-11-21,Senegal,Netherlands,6.0,7.0,historical:statsbomb_worldcup_corners_clean.csv,13.0,1,1,1,0
 2022-11-21,England,Iran,8.0,0.0,historical:statsbomb_worldcup_corners_clean.csv,8.0,1,0,0,1
+2022-11-22,France,Australia,8.0,1.0,historical:statsbomb_worldcup_corners_clean.csv,9.0,1,1,0,1
 2022-11-22,Argentina,Saudi Arabia,9.0,2.0,historical:statsbomb_worldcup_corners_clean.csv,11.0,1,1,1,0
 2022-11-22,Mexico,Poland,6.0,5.0,historical:statsbomb_worldcup_corners_clean.csv,11.0,1,1,1,0
-2022-11-22,France,Australia,8.0,1.0,historical:statsbomb_worldcup_corners_clean.csv,9.0,1,1,0,1
 2022-11-22,Denmark,Tunisia,11.0,9.0,historical:statsbomb_worldcup_corners_clean.csv,20.0,1,1,1,0
-2022-11-23,Morocco,Croatia,0.0,5.0,historical:statsbomb_worldcup_corners_clean.csv,5.0,0,0,0,1
-2022-11-23,Germany,Japan,6.0,6.0,historical:statsbomb_worldcup_corners_clean.csv,12.0,1,1,1,0
 2022-11-23,Belgium,Canada,4.0,4.0,historical:statsbomb_worldcup_corners_clean.csv,8.0,1,0,0,1
 2022-11-23,Spain,Costa Rica,5.0,0.0,historical:statsbomb_worldcup_corners_clean.csv,5.0,0,0,0,1
+2022-11-23,Morocco,Croatia,0.0,5.0,historical:statsbomb_worldcup_corners_clean.csv,5.0,0,0,0,1
+2022-11-23,Germany,Japan,6.0,6.0,historical:statsbomb_worldcup_corners_clean.csv,12.0,1,1,1,0
 2022-11-24,Brazil,Serbia,5.0,4.0,historical:statsbomb_worldcup_corners_clean.csv,9.0,1,1,0,1
-2022-11-24,Uruguay,South Korea,4.0,3.0,historical:statsbomb_worldcup_corners_clean.csv,7.0,0,0,0,1
 2022-11-24,Switzerland,Cameroon,11.0,5.0,historical:statsbomb_worldcup_corners_clean.csv,16.0,1,1,1,0
 2022-11-24,Portugal,Ghana,3.0,3.0,historical:statsbomb_worldcup_corners_clean.csv,6.0,0,0,0,1
-2022-11-25,Netherlands,Ecuador,2.0,5.0,historical:statsbomb_worldcup_corners_clean.csv,7.0,0,0,0,1
-2022-11-25,England,United States,3.0,7.0,historical:statsbomb_worldcup_corners_clean.csv,10.0,1,1,1,1
+2022-11-24,Uruguay,South Korea,4.0,3.0,historical:statsbomb_worldcup_corners_clean.csv,7.0,0,0,0,1
 2022-11-25,Qatar,Senegal,6.0,6.0,historical:statsbomb_worldcup_corners_clean.csv,12.0,1,1,1,0
 2022-11-25,Wales,Iran,2.0,7.0,historical:statsbomb_worldcup_corners_clean.csv,9.0,1,1,0,1
+2022-11-25,Netherlands,Ecuador,2.0,5.0,historical:statsbomb_worldcup_corners_clean.csv,7.0,0,0,0,1
+2022-11-25,England,United States,3.0,7.0,historical:statsbomb_worldcup_corners_clean.csv,10.0,1,1,1,1
 2022-11-26,France,Denmark,6.0,4.0,historical:statsbomb_worldcup_corners_clean.csv,10.0,1,1,1,1
-2022-11-26,Poland,Saudi Arabia,4.0,5.0,historical:statsbomb_worldcup_corners_clean.csv,9.0,1,1,0,1
-2022-11-26,Argentina,Mexico,4.0,2.0,historical:statsbomb_worldcup_corners_clean.csv,6.0,0,0,0,1
 2022-11-26,Tunisia,Australia,5.0,2.0,historical:statsbomb_worldcup_corners_clean.csv,7.0,0,0,0,1
-2022-11-27,Belgium,Morocco,9.0,1.0,historical:statsbomb_worldcup_corners_clean.csv,10.0,1,1,1,1
+2022-11-26,Argentina,Mexico,4.0,2.0,historical:statsbomb_worldcup_corners_clean.csv,6.0,0,0,0,1
+2022-11-26,Poland,Saudi Arabia,4.0,5.0,historical:statsbomb_worldcup_corners_clean.csv,9.0,1,1,0,1
+2022-11-27,Croatia,Canada,5.0,2.0,historical:statsbomb_worldcup_corners_clean.csv,7.0,0,0,0,1
 2022-11-27,Spain,Germany,6.0,5.0,historical:statsbomb_worldcup_corners_clean.csv,11.0,1,1,1,0
 2022-11-27,Japan,Costa Rica,5.0,0.0,historical:statsbomb_worldcup_corners_clean.csv,5.0,0,0,0,1
-2022-11-27,Croatia,Canada,5.0,2.0,historical:statsbomb_worldcup_corners_clean.csv,7.0,0,0,0,1
-2022-11-28,Cameroon,Serbia,4.0,3.0,historical:statsbomb_worldcup_corners_clean.csv,7.0,0,0,0,1
+2022-11-27,Belgium,Morocco,9.0,1.0,historical:statsbomb_worldcup_corners_clean.csv,10.0,1,1,1,1
 2022-11-28,Brazil,Switzerland,8.0,3.0,historical:statsbomb_worldcup_corners_clean.csv,11.0,1,1,1,0
-2022-11-28,South Korea,Ghana,12.0,5.0,historical:statsbomb_worldcup_corners_clean.csv,17.0,1,1,1,0
 2022-11-28,Portugal,Uruguay,6.0,2.0,historical:statsbomb_worldcup_corners_clean.csv,8.0,1,0,0,1
-2022-11-29,Netherlands,Qatar,4.0,2.0,historical:statsbomb_worldcup_corners_clean.csv,6.0,0,0,0,1
+2022-11-28,South Korea,Ghana,12.0,5.0,historical:statsbomb_worldcup_corners_clean.csv,17.0,1,1,1,0
+2022-11-28,Cameroon,Serbia,4.0,3.0,historical:statsbomb_worldcup_corners_clean.csv,7.0,0,0,0,1
 2022-11-29,Wales,England,1.0,6.0,historical:statsbomb_worldcup_corners_clean.csv,7.0,0,0,0,1
-2022-11-29,Ecuador,Senegal,3.0,6.0,historical:statsbomb_worldcup_corners_clean.csv,9.0,1,1,0,1
+2022-11-29,Netherlands,Qatar,4.0,2.0,historical:statsbomb_worldcup_corners_clean.csv,6.0,0,0,0,1
 2022-11-29,Iran,United States,1.0,5.0,historical:statsbomb_worldcup_corners_clean.csv,6.0,0,0,0,1
+2022-11-29,Ecuador,Senegal,3.0,6.0,historical:statsbomb_worldcup_corners_clean.csv,9.0,1,1,0,1
+2022-11-30,Australia,Denmark,2.0,6.0,historical:statsbomb_worldcup_corners_clean.csv,8.0,1,0,0,1
+2022-11-30,Saudi Arabia,Mexico,1.0,8.0,historical:statsbomb_worldcup_corners_clean.csv,9.0,1,1,0,1
 2022-11-30,Poland,Argentina,1.0,8.0,historical:statsbomb_worldcup_corners_clean.csv,9.0,1,1,0,1
 2022-11-30,Tunisia,France,7.0,8.0,historical:statsbomb_worldcup_corners_clean.csv,15.0,1,1,1,0
-2022-11-30,Saudi Arabia,Mexico,1.0,8.0,historical:statsbomb_worldcup_corners_clean.csv,9.0,1,1,0,1
-2022-11-30,Australia,Denmark,2.0,6.0,historical:statsbomb_worldcup_corners_clean.csv,8.0,1,0,0,1
 2022-12-01,Canada,Morocco,6.0,2.0,historical:statsbomb_worldcup_corners_clean.csv,8.0,1,0,0,1
-2022-12-01,Croatia,Belgium,2.0,4.0,historical:statsbomb_worldcup_corners_clean.csv,6.0,0,0,0,1
 2022-12-01,Japan,Spain,0.0,2.0,historical:statsbomb_worldcup_corners_clean.csv,2.0,0,0,0,1
+2022-12-01,Croatia,Belgium,2.0,4.0,historical:statsbomb_worldcup_corners_clean.csv,6.0,0,0,0,1
 2022-12-01,Costa Rica,Germany,1.0,14.0,historical:statsbomb_worldcup_corners_clean.csv,15.0,1,1,1,0
-2022-12-02,South Korea,Portugal,5.0,4.0,historical:statsbomb_worldcup_corners_clean.csv,9.0,1,1,0,1
-2022-12-02,Cameroon,Brazil,3.0,11.0,historical:statsbomb_worldcup_corners_clean.csv,14.0,1,1,1,0
-2022-12-02,Ghana,Uruguay,5.0,2.0,historical:statsbomb_worldcup_corners_clean.csv,7.0,0,0,0,1
 2022-12-02,Serbia,Switzerland,2.0,0.0,historical:statsbomb_worldcup_corners_clean.csv,2.0,0,0,0,1
-2022-12-03,Netherlands,United States,4.0,5.0,historical:statsbomb_worldcup_corners_clean.csv,9.0,1,1,0,1
+2022-12-02,South Korea,Portugal,5.0,4.0,historical:statsbomb_worldcup_corners_clean.csv,9.0,1,1,0,1
+2022-12-02,Ghana,Uruguay,5.0,2.0,historical:statsbomb_worldcup_corners_clean.csv,7.0,0,0,0,1
+2022-12-02,Cameroon,Brazil,3.0,11.0,historical:statsbomb_worldcup_corners_clean.csv,14.0,1,1,1,0
 2022-12-03,Argentina,Australia,1.0,3.0,historical:statsbomb_worldcup_corners_clean.csv,4.0,0,0,0,1
+2022-12-03,Netherlands,United States,4.0,5.0,historical:statsbomb_worldcup_corners_clean.csv,9.0,1,1,0,1
 2022-12-04,France,Poland,7.0,1.0,historical:statsbomb_worldcup_corners_clean.csv,8.0,1,0,0,1
 2022-12-04,England,Senegal,3.0,3.0,historical:statsbomb_worldcup_corners_clean.csv,6.0,0,0,0,1
 2022-12-05,Brazil,South Korea,5.0,4.0,historical:statsbomb_worldcup_corners_clean.csv,9.0,1,1,0,1
 2022-12-05,Japan,Croatia,8.0,5.0,historical:statsbomb_worldcup_corners_clean.csv,13.0,1,1,1,0
 2022-12-06,Morocco,Spain,0.0,8.0,historical:statsbomb_worldcup_corners_clean.csv,8.0,1,0,0,1
 2022-12-06,Portugal,Switzerland,6.0,6.0,historical:statsbomb_worldcup_corners_clean.csv,12.0,1,1,1,0
-2022-12-09,Netherlands,Argentina,2.0,8.0,historical:statsbomb_worldcup_corners_clean.csv,10.0,1,1,1,1
 2022-12-09,Croatia,Brazil,3.0,7.0,historical:statsbomb_worldcup_corners_clean.csv,10.0,1,1,1,1
-2022-12-10,England,France,5.0,2.0,historical:statsbomb_worldcup_corners_clean.csv,7.0,0,0,0,1
+2022-12-09,Netherlands,Argentina,2.0,8.0,historical:statsbomb_worldcup_corners_clean.csv,10.0,1,1,1,1
 2022-12-10,Morocco,Portugal,3.0,9.0,historical:statsbomb_worldcup_corners_clean.csv,12.0,1,1,1,0
+2022-12-10,England,France,5.0,2.0,historical:statsbomb_worldcup_corners_clean.csv,7.0,0,0,0,1
 2022-12-13,Argentina,Croatia,2.0,4.0,historical:statsbomb_worldcup_corners_clean.csv,6.0,0,0,0,1
 2022-12-14,France,Morocco,2.0,3.0,historical:statsbomb_worldcup_corners_clean.csv,5.0,0,0,0,1
 2022-12-17,Croatia,Morocco,6.0,3.0,historical:statsbomb_worldcup_corners_clean.csv,9.0,1,1,0,1
@@ -150,17 +150,19 @@ date,home_team,away_team,home_corners,away_corners,source,total_corners,over_7_5
 2026-06-30,Côte d'Ivoire,Norway,14.0,3.0,FIFA_2026_official,17.0,1,1,1,0
 2026-06-30,France,Sweden,9.0,1.0,FIFA_2026_official,10.0,1,1,1,1
 2026-06-30,Mexico,Ecuador,3.0,8.0,FIFA_2026_official,11.0,1,1,1,0
-2026-07-01,United States,Bosnia and Herzegovina,4.0,3.0,FIFA_2026_official,7.0,0,0,0,1
 2026-07-01,England,Congo DR,5.0,3.0,FIFA_2026_official,8.0,1,0,0,1
+2026-07-01,United States,Bosnia and Herzegovina,4.0,3.0,FIFA_2026_official,7.0,0,0,0,1
 2026-07-02,Portugal,Croatia,9.0,5.0,FIFA_2026_official,14.0,1,1,1,0
 2026-07-02,Spain,Austria,9.0,0.0,FIFA_2026_official,9.0,1,1,0,1
 2026-07-02,Switzerland,Algeria,4.0,2.0,FIFA_2026_official,6.0,0,0,0,1
 2026-07-03,Colombia,Ghana,3.0,2.0,FIFA_2026_official,5.0,0,0,0,1
-2026-07-04,Canada,Morocco,11.0,1.0,FIFA_2026_official,12.0,1,1,1,0
 2026-07-04,Paraguay,France,2.0,12.0,FIFA_2026_official,14.0,1,1,1,0
+2026-07-04,Canada,Morocco,11.0,1.0,FIFA_2026_official,12.0,1,1,1,0
 2026-07-05,Brazil,Norway,5.0,5.0,FIFA_2026_official,10.0,1,1,1,1
 2026-07-05,Mexico,England,12.0,2.0,FIFA_2026_official,14.0,1,1,1,0
 2026-07-06,Portugal,Spain,3.0,7.0,FIFA_2026_official,10.0,1,1,1,1
 2026-07-06,United States,Belgium,3.0,5.0,FIFA_2026_official,8.0,1,0,0,1
 2026-07-07,Argentina,Egypt,6.0,1.0,FIFA_2026_official,7.0,0,0,0,1
 2026-07-09,France,Morocco,5.0,5.0,FIFA_2026_official,10.0,1,1,1,1
+2026-07-10,Spain,Belgium,5.0,1.0,FIFA_2026_official,6.0,0,0,0,1
+2026-07-14,France,Spain,7.0,1.0,FIFA_2026_official,8.0,1,0,0,1

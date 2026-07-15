@@ -4,19 +4,21 @@ Algeria,Fares CHAIBI,,1,,0.0,1.0,1.0,,,2026-07-02,thin
 Algeria,Ibrahim MAZA,,1,,0.0,3.0,0.0,,,2026-07-02,thin
 Algeria,Jaouen HADJAM,,1,,0.0,1.0,0.0,,,2026-07-02,thin
 Algeria,Riyad MAHREZ,,1,,0.0,1.0,0.0,,,2026-07-02,thin
-Argentina,Lionel MESSI,,2,,1.0,5.5,3.5,,,2026-07-07,medium
+Argentina,Lionel MESSI,,3,,0.6666666666666666,3.6666666666666665,2.3333333333333335,,,2026-07-11,medium
 Argentina,Enzo FERNANDEZ,,2,,0.5,2.0,1.0,,,2026-07-07,medium
-Argentina,Cristian ROMERO,,1,,1.0,1.0,1.0,,,2026-07-07,thin
 Argentina,Rodrigo DE PAUL,,1,,0.0,1.0,1.0,,,2026-07-07,thin
-Argentina,Alexis MAC ALLISTER,,2,,0.0,2.0,0.5,,,2026-07-07,medium
-Argentina,Julian ALVAREZ,,2,,0.0,1.0,0.5,,,2026-07-07,medium
-Argentina,Lautaro MARTINEZ,,1,,0.0,3.0,0.0,,,2026-07-07,thin
-Argentina,Nico GONZALEZ,,1,,0.0,2.0,0.0,,,2026-07-03,thin
+Argentina,Alexis MAC ALLISTER,,3,,0.3333333333333333,2.6666666666666665,0.6666666666666666,,,2026-07-11,medium
+Argentina,Cristian ROMERO,,2,,0.5,0.5,0.5,,,2026-07-11,medium
+Argentina,Julian ALVAREZ,,3,,0.0,1.0,0.3333333333333333,,,2026-07-11,medium
+Argentina,Lautaro MARTINEZ,,2,,0.0,2.0,0.0,,,2026-07-11,medium
+Argentina,Nico GONZALEZ,,2,,0.0,1.5,0.0,,,2026-07-11,medium
 Argentina,Leandro PAREDES,,2,,0.0,1.0,0.0,,,2026-07-07,medium
-Argentina,Lisandro MARTINEZ,,2,,0.0,0.5,0.0,,,2026-07-07,medium
+Argentina,Nahuel MOLINA,,1,,0.0,1.0,0.0,,,2026-07-11,thin
+Argentina,Lisandro MARTINEZ,,3,,0.0,0.3333333333333333,0.0,,,2026-07-11,medium
 Argentina,Cristian ROMERO Deflected,,1,,0.0,0.0,0.0,,,2026-07-03,thin
 Argentina,Gonzalo MONTIEL,,1,,0.0,0.0,0.0,,,2026-07-03,thin
 Argentina,Lionel MESSI Deflected,,1,,0.0,0.0,0.0,,,2026-07-03,thin
+Argentina,Thiago ALMADA,,1,,0.0,0.0,0.0,,,2026-07-11,thin
 Australia,Aziz BEHICH,,1,,0.0,1.0,1.0,,,2026-07-03,thin
 Australia,Nestory IRANKUNDA Deflected,,1,,0.0,1.0,1.0,,,2026-07-03,thin
 Australia,Ajdin HRUSTIC,,1,,0.0,2.0,0.0,,,2026-07-03,thin
@@ -34,17 +36,17 @@ Austria,David ALABA,,1,,0.0,1.0,0.0,,,2026-07-02,thin
 Austria,Nicolas SEIWALD,,1,,0.0,1.0,0.0,,,2026-07-02,thin
 Austria,Sasa KALAJDZIC,,1,,0.0,1.0,0.0,,,2026-07-02,thin
 Austria,Stefan POSCH,,1,,0.0,1.0,0.0,,,2026-07-02,thin
-Belgium,Charles DE KETELAERE,,1,,1.0,2.0,2.0,,,2026-07-06,thin
-Belgium,Maxim DE CUYPER,,1,,0.0,2.0,1.0,,,2026-07-01,thin
+Belgium,Charles DE KETELAERE,,3,,1.0,2.0,1.3333333333333333,,,2026-07-10,medium
 Belgium,Charles DE KETELAERE Deflected,,1,,1.0,1.0,1.0,,,2026-07-06,thin
 Belgium,Hans VANAKEN Deflected,,1,,1.0,1.0,1.0,,,2026-07-06,thin
 Belgium,Romelu LUKAKU,,2,,1.0,1.0,1.0,,,2026-07-06,medium
+Belgium,Kevin DE BRUYNE,,3,,0.0,2.0,0.6666666666666666,,,2026-07-10,medium
 Belgium,Leandro TROSSARD,,2,,0.0,2.5,0.5,,,2026-07-06,medium
 Belgium,Youri TIELEMANS,,2,,0.5,2.5,0.5,,,2026-07-06,medium
 Belgium,Timothy CASTAGNE,,2,,0.0,1.0,0.5,,,2026-07-06,medium
 Belgium,Nicolas RASKIN,,2,,0.0,0.5,0.5,,,2026-07-06,medium
+Belgium,Maxim DE CUYPER,,3,,0.0,1.3333333333333333,0.3333333333333333,,,2026-07-10,medium
 Belgium,Dodi LUKEBAKIO,,2,,0.0,2.5,0.0,,,2026-07-06,medium
-Belgium,Kevin DE BRUYNE,,1,,0.0,2.0,0.0,,,2026-07-01,thin
 Belgium,Arthur THEATE,,1,,0.0,1.0,0.0,,,2026-07-01,thin
 Belgium,Brandon MECHELE,,1,,0.0,1.0,0.0,,,2026-07-01,thin
 Belgium,Thomas MEUNIER,,1,,0.0,0.0,0.0,,,2026-07-01,thin
@@ -142,25 +144,29 @@ Egypt,HAISSEM HASSAN,,1,,0.0,0.0,0.0,,,2026-07-03,thin
 Egypt,MARAWAN ATTIA Deflected,,1,,0.0,0.0,0.0,,,2026-07-03,thin
 Egypt,MOHAMED SALAH,,1,,0.0,0.0,0.0,,,2026-07-03,thin
 Egypt,RAMY RABIA,,1,,0.0,0.0,0.0,,,2026-07-03,thin
-England,Jude BELLINGHAM,,2,,0.5,2.5,2.5,,,2026-07-05,medium
-England,Harry KANE,,2,,1.5,3.0,2.0,,,2026-07-05,medium
+England,Jude BELLINGHAM,,3,,0.6666666666666666,2.3333333333333335,2.0,,,2026-07-11,medium
+England,Harry KANE,,3,,1.0,2.6666666666666665,1.3333333333333333,,,2026-07-11,medium
 England,Marcus RASHFORD,,1,,1.0,3.0,1.0,,,2026-07-01,thin
 England,Jude BELLINGHAM Deflected,,1,,1.0,1.0,1.0,,,2026-07-05,thin
 England,Anthony GORDON,,2,,0.0,1.0,0.5,,,2026-07-05,medium
 England,Noni MADUEKE,,1,,0.0,2.0,0.0,,,2026-07-01,thin
+England,Bukayo SAKA,,1,,0.0,1.0,0.0,,,2026-07-11,thin
+England,Eberechi EZE,,1,,0.0,1.0,0.0,,,2026-07-11,thin
 England,Elliot ANDERSON,,1,,0.0,1.0,0.0,,,2026-07-01,thin
 England,Nico OREILLY,,2,,0.0,1.0,0.0,,,2026-07-05,medium
-France,Kylian MBAPPE,,3,,1.3333333333333333,4.666666666666667,3.3333333333333335,,,2026-07-09,medium
+England,Djed SPENCE,,1,,0.0,0.0,0.0,,,2026-07-11,thin
+England,Morgan ROGERS,,1,,0.0,0.0,0.0,,,2026-07-11,thin
+France,Kylian MBAPPE,,4,,1.0,4.25,2.5,,,2026-07-14,medium
 France,Michael OLISE,,2,,0.0,4.5,1.5,,,2026-07-09,medium
-France,Bradley BARCOLA,,3,,0.3333333333333333,1.6666666666666667,1.0,,,2026-07-09,medium
-France,Desire DOUE,,3,,0.0,1.6666666666666667,1.0,,,2026-07-09,medium
+France,Desire DOUE,,4,,0.0,1.75,1.0,,,2026-07-14,medium
+France,Ousmane DEMBELE,,4,,0.25,2.5,0.75,,,2026-07-14,medium
+France,Bradley BARCOLA,,4,,0.25,1.5,0.75,,,2026-07-14,medium
 France,Manu KONE,,2,,0.0,2.0,0.5,,,2026-07-09,medium
 France,Dayot UPAMECANO,,2,,0.0,1.5,0.5,,,2026-07-09,medium
 France,Jean-Philippe MATETA,,2,,0.0,1.5,0.5,,,2026-07-09,medium
 France,Lucas DIGNE,,2,,0.0,1.0,0.5,,,2026-07-09,medium
-France,Ousmane DEMBELE,,3,,0.3333333333333333,2.6666666666666665,0.3333333333333333,,,2026-07-09,medium
-France,Adrien RABIOT,,3,,0.0,2.0,0.3333333333333333,,,2026-07-09,medium
-France,Aurelien TCHOUAMENI,,1,,0.0,1.0,0.0,,,2026-06-30,thin
+France,Adrien RABIOT,,4,,0.0,1.75,0.25,,,2026-07-14,medium
+France,Aurelien TCHOUAMENI,,2,,0.0,1.0,0.0,,,2026-07-14,medium
 France,Jules KOUNDE,,2,,0.0,1.0,0.0,,,2026-07-09,medium
 Germany,Kai HAVERTZ,,1,,1.0,3.0,2.0,,,2026-06-29,thin
 Germany,Joshua KIMMICH,,1,,0.0,3.0,0.0,,,2026-06-29,thin
@@ -210,13 +216,16 @@ Netherlands,Micky VAN DE VEN,,1,,0.0,2.0,1.0,,,2026-06-29,thin
 Netherlands,Cody GAKPO,,1,,1.0,1.0,1.0,,,2026-06-29,thin
 Netherlands,Ryan GRAVENBERCH,,1,,0.0,2.0,0.0,,,2026-06-29,thin
 Netherlands,Denzel DUMFRIES,,1,,0.0,1.0,0.0,,,2026-06-29,thin
-Norway,Erling HAALAND,,2,,1.5,4.0,2.5,,,2026-07-05,medium
-Norway,Antonio NUSA,,1,,1.0,1.0,1.0,,,2026-06-30,thin
+Norway,Erling HAALAND,,3,,1.0,3.3333333333333335,2.0,,,2026-07-11,medium
+Norway,Antonio NUSA,,2,,0.5,1.0,1.0,,,2026-07-11,medium
 Norway,Torbjorn HEGGEM,,1,,1.0,1.0,1.0,,,2026-06-30,thin
-Norway,Martin ODEGAARD,,2,,0.0,2.0,0.5,,,2026-07-05,medium
-Norway,Andreas SCHJELDERUP,,2,,0.0,1.0,0.5,,,2026-07-05,medium
-Norway,Alexander SORLOTH,,1,,0.0,1.0,0.0,,,2026-06-30,thin
-Norway,Patrick BERG,,1,,0.0,1.0,0.0,,,2026-07-05,thin
+Norway,Martin ODEGAARD,,3,,0.0,1.6666666666666667,0.6666666666666666,,,2026-07-11,medium
+Norway,Andreas SCHJELDERUP,,3,,0.3333333333333333,1.0,0.6666666666666666,,,2026-07-11,medium
+Norway,Alexander SORLOTH,,2,,0.0,1.5,0.0,,,2026-07-11,medium
+Norway,Fredrik AURSNES,,1,,0.0,1.0,0.0,,,2026-07-11,thin
+Norway,Kristoffer AJER,,1,,0.0,1.0,0.0,,,2026-07-11,thin
+Norway,Patrick BERG,,2,,0.0,0.5,0.0,,,2026-07-11,medium
+Norway,Oscar BOBB,,1,,0.0,0.0,0.0,,,2026-07-11,thin
 Paraguay,Julio ENCISO,,1,,1.0,3.0,1.0,,,2026-06-29,thin
 Paraguay,Gustavo CABALLERO,,1,,0.0,1.0,1.0,,,2026-06-29,thin
 Paraguay,Junior ALONSO,,2,,0.0,1.5,0.5,,,2026-07-04,medium
@@ -250,16 +259,22 @@ South Africa,Teboho MOKOENA,,1,,0.0,2.0,1.0,,,2026-06-28,thin
 South Africa,Oswin APPOLLIS,,1,,0.0,2.0,0.0,,,2026-06-28,thin
 South Africa,Ime OKON,,1,,0.0,1.0,0.0,,,2026-06-28,thin
 South Africa,Thalente MBATHA,,1,,0.0,1.0,0.0,,,2026-06-28,thin
-Spain,Lamine YAMAL,,2,,0.5,4.5,3.0,,,2026-07-06,medium
-Spain,Mikel OYARZABAL,,2,,1.0,4.0,2.5,,,2026-07-06,medium
-Spain,Alex BAENA,,2,,0.0,2.5,1.5,,,2026-07-06,medium
-Spain,Mikel MERINO,,1,,1.0,1.0,1.0,,,2026-07-06,thin
-Spain,Pedro PORRO,,2,,0.5,1.0,0.5,,,2026-07-06,medium
-Spain,Dani OLMO,,2,,0.0,2.5,0.0,,,2026-07-06,medium
+Spain,Lamine YAMAL,,4,,0.25,5.25,2.5,,,2026-07-10,medium
+Spain,Mikel OYARZABAL,,3,,1.0,3.3333333333333335,2.0,,,2026-07-14,medium
+Spain,Fabian RUIZ Deflected,,2,,1.0,1.0,1.0,,,2026-07-10,medium
+Spain,Marc CUCURELLA,,2,,0.0,1.0,1.0,,,2026-07-10,medium
+Spain,Mikel MERINO,,3,,1.0,1.0,1.0,,,2026-07-10,medium
+Spain,Mikel OYARZABAL Deflected,,2,,0.0,1.0,1.0,,,2026-07-10,medium
+Spain,Pau CUBARSI,,2,,0.0,1.0,1.0,,,2026-07-10,medium
+Spain,Alex BAENA,,5,,0.0,1.8,0.6,,,2026-07-14,medium
+Spain,Dani OLMO,,5,,0.0,2.0,0.4,,,2026-07-14,medium
+Spain,Pedro PORRO,,5,,0.4,1.2,0.4,,,2026-07-14,medium
 Spain,Aymeric LAPORTE,,1,,0.0,2.0,0.0,,,2026-07-02,thin
-Spain,Ferran TORRES,,2,,0.0,1.5,0.0,,,2026-07-06,medium
+Spain,Ferran TORRES,,3,,0.0,1.3333333333333333,0.0,,,2026-07-14,medium
+Spain,Fabian RUIZ,,3,,0.0,1.0,0.0,,,2026-07-14,medium
+Spain,Nico WILLIAMS,,1,,0.0,1.0,0.0,,,2026-07-14,thin
 Spain,PEDRI,,1,,0.0,1.0,0.0,,,2026-07-06,thin
-Spain,RODRI,,2,,0.0,1.0,0.0,,,2026-07-06,medium
+Spain,RODRI,,4,,0.0,1.0,0.0,,,2026-07-10,medium
 Sweden,Mattias SVANBERG,,1,,0.0,2.0,1.0,,,2026-06-30,thin
 Sweden,Alexander ISAK Deflected,,1,,0.0,1.0,1.0,,,2026-06-30,thin
 Sweden,Viktor GYOKERES,,1,,0.0,1.0,1.0,,,2026-06-30,thin
@@ -267,16 +282,17 @@ Sweden,Alexander ISAK,,1,,0.0,1.0,0.0,,,2026-06-30,thin
 Sweden,Elliot STROUD,,1,,0.0,1.0,0.0,,,2026-06-30,thin
 Sweden,Gustaf NILSSON,,1,,0.0,1.0,0.0,,,2026-06-30,thin
 Sweden,Lucas BERGVALL,,1,,0.0,1.0,0.0,,,2026-06-30,thin
-Switzerland,Fabian RIEDER,,2,,0.5,2.5,1.0,,,2026-07-07,medium
-Switzerland,Breel EMBOLO,,1,,1.0,2.0,1.0,,,2026-07-02,thin
-Switzerland,Denis ZAKARIA,,1,,0.0,2.0,1.0,,,2026-07-02,thin
-Switzerland,Dan NDOYE,,2,,0.5,1.5,1.0,,,2026-07-07,medium
+Switzerland,Dan NDOYE,,3,,0.6666666666666666,2.0,1.3333333333333333,,,2026-07-11,medium
+Switzerland,Breel EMBOLO,,2,,0.5,1.5,1.0,,,2026-07-11,medium
 Switzerland,Remo FREULER,,1,,0.0,1.0,1.0,,,2026-07-02,thin
-Switzerland,Djibril SOW,,1,,0.0,1.0,0.0,,,2026-07-07,thin
+Switzerland,Fabian RIEDER,,3,,0.3333333333333333,2.0,0.6666666666666666,,,2026-07-11,medium
+Switzerland,Denis ZAKARIA,,2,,0.0,1.5,0.5,,,2026-07-11,medium
+Switzerland,Djibril SOW,,2,,0.0,1.0,0.5,,,2026-07-11,medium
+Switzerland,Granit XHAKA,,2,,0.0,1.0,0.5,,,2026-07-11,medium
 Switzerland,Nico ELVEDI,,1,,0.0,1.0,0.0,,,2026-07-02,thin
 Switzerland,Noah OKAFOR,,1,,0.0,1.0,0.0,,,2026-07-02,thin
 Switzerland,Ricardo RODRIGUEZ,,1,,0.0,1.0,0.0,,,2026-07-02,thin
-Switzerland,Granit XHAKA,,1,,0.0,0.0,0.0,,,2026-07-07,thin
+Switzerland,Ardon JASHARI,,1,,0.0,0.0,0.0,,,2026-07-11,thin
 United States,Folarin BALOGUN,,2,,0.5,3.5,1.0,,,2026-07-06,medium
 United States,Malik TILLMAN,,1,,1.0,2.0,1.0,,,2026-07-01,thin
 United States,Malik TILLMAN Deflected,,1,,1.0,1.0,1.0,,,2026-07-06,thin

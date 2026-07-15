@@ -1,96 +1,96 @@
 [
   {
-    "match_id": 1538615520,
-    "date": "2026-07-11",
+    "match_id": 740461424,
+    "date": "2026-07-15",
     "home": "England",
-    "away": "Norway",
-    "stage": "Quarterfinal",
+    "away": "Argentina",
+    "stage": "Semifinal",
     "model_version": "precision-v3",
     "result": {
-      "home_win": 46,
+      "home_win": 24,
       "draw": 25,
-      "away_win": 29,
-      "home_or_draw": 71,
-      "away_or_draw": 54,
-      "qualifies_home": 62,
-      "qualifies_away": 38,
-      "favorite_90": "England",
-      "favorite_qualifies": "England",
-      "model_disagreement_pp": 3.9
+      "away_win": 51,
+      "home_or_draw": 49,
+      "away_or_draw": 76,
+      "qualifies_home": 33,
+      "qualifies_away": 67,
+      "favorite_90": "Argentina",
+      "favorite_qualifies": "Argentina",
+      "model_disagreement_pp": 4.3
     },
     "goals": {
       "quality": "high",
       "risk": "medio-alto",
-      "expected_home_goals": 1.82,
-      "expected_away_goals": 1.36,
-      "expected_total_goals": 3.18,
+      "expected_home_goals": 1.19,
+      "expected_away_goals": 1.75,
+      "expected_total_goals": 2.94,
       "home_lambda_interval_80": [
-        1.47,
-        2.19
+        0.91,
+        1.49
       ],
       "away_lambda_interval_80": [
-        1.06,
-        1.68
+        1.4,
+        2.11
       ],
-      "score_zone": "1-1 / 2-1 / 1-2",
+      "score_zone": "1-1 / 1-2 / 0-1",
       "score_probabilities": [
         {
           "score": "1-1",
-          "probability": 11
-        },
-        {
-          "score": "2-1",
-          "probability": 9
+          "probability": 12
         },
         {
           "score": "1-2",
-          "probability": 7
+          "probability": 10
+        },
+        {
+          "score": "0-1",
+          "probability": 8
         }
       ],
       "markets": {
-        "over_1_5": 82,
-        "over_2_5": 61,
-        "under_2_5": 39,
-        "under_3_5": 68,
-        "btts_yes": 63,
-        "home_scores_05": 84,
-        "away_scores_05": 73,
-        "btts_no": 37,
-        "home_or_draw": 71,
-        "away_or_draw": 54,
-        "qualifies_home": 62,
-        "qualifies_away": 38
+        "over_1_5": 80,
+        "over_2_5": 57,
+        "under_2_5": 43,
+        "under_3_5": 70,
+        "btts_yes": 61,
+        "home_scores_05": 65,
+        "away_scores_05": 83,
+        "btts_no": 39,
+        "home_or_draw": 49,
+        "away_or_draw": 76,
+        "qualifies_home": 33,
+        "qualifies_away": 67
       },
-      "main_pick": "England anota +0.5",
-      "main_pick_key": "home_scores_05",
-      "probability": 84,
-      "fair_odds": 1.19,
+      "main_pick": "Argentina anota +0.5",
+      "main_pick_key": "away_scores_05",
+      "probability": 83,
+      "fair_odds": 1.2,
       "strength": "strong",
       "reason": "Ensemble calibrado; la app debe mostrar el equipo explícitamente cuando el mercado sea lateral."
     },
     "corners": {
-      "expected_total_corners": 9.59,
-      "expected_home_corners": 6.46,
-      "expected_away_corners": 3.13,
-      "expected_range": "5 a 14 corners",
+      "expected_total_corners": 9.68,
+      "expected_home_corners": 5.13,
+      "expected_away_corners": 4.56,
+      "expected_range": "6 a 14 corners",
       "interval_80": [
-        5,
+        6,
         14
       ],
-      "quality": "thin",
+      "quality": "high",
       "risk": "alto",
       "markets": {
-        "over_7_5": 69,
-        "over_8_5": 58,
-        "over_9_5": 48,
-        "under_10_5": 63,
-        "under_11_5": 72
+        "over_7_5": 74,
+        "over_8_5": 62,
+        "over_9_5": 50,
+        "under_10_5": 62,
+        "under_11_5": 73
       },
       "main_pick": "Total corners over 7.5",
-      "probability": 69,
-      "fair_odds": 1.44,
-      "strength": "thin",
-      "model_disagreement_pp": 19.1,
+      "probability": 74,
+      "fair_odds": 1.35,
+      "strength": "lean",
+      "model_disagreement_pp": 31.7,
       "reason": "Modelo específico de corners; excluye los totales de 120 minutos sin desglose de 90."
     },
     "players": [
@@ -98,323 +98,50 @@
         "team": "England",
         "player": "Jude BELLINGHAM",
         "market": "Jude BELLINGHAM 1+ tiro a puerta",
-        "probability": 60,
-        "probability_raw": 0.6003,
-        "quality": "thin",
+        "probability": 58,
+        "probability_raw": 0.5825,
+        "quality": "medium",
         "condition": "Válido solo si es titular o tiene minutos proyectados suficientes.",
-        "fair_odds": 1.67
+        "fair_odds": 1.72
       },
       {
         "team": "England",
         "player": "Harry KANE",
         "market": "Harry KANE anota",
-        "probability": 40,
-        "probability_raw": 0.3967,
-        "quality": "thin",
+        "probability": 34,
+        "probability_raw": 0.34,
+        "quality": "medium",
         "condition": "Válido solo si es titular o tiene minutos proyectados suficientes.",
-        "fair_odds": 2.52
-      },
-      {
-        "team": "Norway",
-        "player": "Erling HAALAND",
-        "market": "Erling HAALAND 1+ tiro a puerta",
-        "probability": 60,
-        "probability_raw": 0.6003,
-        "quality": "thin",
-        "condition": "Válido solo si es titular o tiene minutos proyectados suficientes.",
-        "fair_odds": 1.67
-      },
-      {
-        "team": "Norway",
-        "player": "Erling HAALAND",
-        "market": "Erling HAALAND anota",
-        "probability": 40,
-        "probability_raw": 0.3967,
-        "quality": "thin",
-        "condition": "Válido solo si es titular o tiene minutos proyectados suficientes.",
-        "fair_odds": 2.52
-      }
-    ],
-    "unconventional_picks": [
-      {
-        "type": "unconventional",
-        "market": "England anota + under 4.5 goles",
-        "probability": 62,
-        "probability_raw": 0.6249,
-        "fair_odds": 1.6,
-        "strength": "lean",
-        "risk": "medio",
-        "model_disagreement_pp": 6.0,
-        "reason": "Probabilidad conjunta obtenida de la matriz Dixon-Coles; no se multiplicaron probabilidades independientes."
-      }
-    ],
-    "top_picks": [
-      {
-        "type": "goals",
-        "market": "England anota +0.5",
-        "probability": 84,
-        "probability_raw": 0.8432,
-        "fair_odds": 1.19,
-        "strength": "strong",
-        "risk": "bajo-medio",
-        "model_disagreement_pp": 1.6,
-        "reason": "Probabilidad calibrada con XGBoost, posterior Gamma-Poisson y matriz de marcadores."
-      },
-      {
-        "type": "result",
-        "market": "England o empate",
-        "probability": 71,
-        "probability_raw": 0.7084,
-        "fair_odds": 1.41,
-        "strength": "lean",
-        "risk": "medio",
-        "model_disagreement_pp": 3.9,
-        "reason": "El 1X2 está cerrado; el modelo reduce riesgo con doble oportunidad."
-      },
-      {
-        "type": "unconventional",
-        "market": "England anota + under 4.5 goles",
-        "probability": 62,
-        "probability_raw": 0.6249,
-        "fair_odds": 1.6,
-        "strength": "lean",
-        "risk": "medio",
-        "model_disagreement_pp": 6.0,
-        "reason": "Probabilidad conjunta obtenida de la matriz Dixon-Coles; no se multiplicaron probabilidades independientes."
-      },
-      {
-        "type": "qualifies",
-        "market": "England clasifica",
-        "probability": 62,
-        "probability_raw": 0.6201,
-        "fair_odds": 1.61,
-        "strength": "lean",
-        "risk": "medio",
-        "model_disagreement_pp": 3.9,
-        "reason": "Incluye el resultado en 90 minutos y reparte el empate según fuerza Elo reciente."
-      }
-    ],
-    "all_model_picks": [
-      {
-        "type": "result",
-        "market": "England o empate",
-        "probability": 71,
-        "probability_raw": 0.7084,
-        "fair_odds": 1.41,
-        "strength": "lean",
-        "risk": "medio",
-        "model_disagreement_pp": 3.9,
-        "reason": "El 1X2 está cerrado; el modelo reduce riesgo con doble oportunidad."
-      },
-      {
-        "type": "qualifies",
-        "market": "England clasifica",
-        "probability": 62,
-        "probability_raw": 0.6201,
-        "fair_odds": 1.61,
-        "strength": "lean",
-        "risk": "medio",
-        "model_disagreement_pp": 3.9,
-        "reason": "Incluye el resultado en 90 minutos y reparte el empate según fuerza Elo reciente."
-      },
-      {
-        "type": "goals",
-        "market": "England anota +0.5",
-        "probability": 84,
-        "probability_raw": 0.8432,
-        "fair_odds": 1.19,
-        "strength": "strong",
-        "risk": "bajo-medio",
-        "model_disagreement_pp": 1.6,
-        "reason": "Probabilidad calibrada con XGBoost, posterior Gamma-Poisson y matriz de marcadores."
-      },
-      {
-        "type": "corners",
-        "market": "Total corners over 7.5",
-        "probability": 69,
-        "probability_raw": 0.6928,
-        "fair_odds": 1.44,
-        "strength": "thin",
-        "risk": "alto",
-        "model_disagreement_pp": 19.1,
-        "reason": "XGBoost Poisson regularizado + forma por equipo + incertidumbre binomial negativa.",
-        "expected_total": 9.59,
-        "expected_range": "5 a 14 corners",
-        "publication_status": "NO BET"
-      },
-      {
-        "type": "unconventional",
-        "market": "England anota + under 4.5 goles",
-        "probability": 62,
-        "probability_raw": 0.6249,
-        "fair_odds": 1.6,
-        "strength": "lean",
-        "risk": "medio",
-        "model_disagreement_pp": 6.0,
-        "reason": "Probabilidad conjunta obtenida de la matriz Dixon-Coles; no se multiplicaron probabilidades independientes."
-      }
-    ],
-    "no_bet_notes": [
-      "Corners: muestra reciente limitada para uno o ambos equipos.",
-      "Corners: XGBoost y promedio de forma discrepan demasiado.",
-      "Picks de jugador son condicionales: confirmar titularidad y minutos antes de apostar."
-    ],
-    "explanation": {
-      "main_factors": [
-        "Diferencia Elo: 101.4",
-        "Goles esperados: England 1.82 – Norway 1.36",
-        "Corners esperados: 9.59 (rango 80% 5-14)",
-        "Acuerdo 1X2 entre modelos: alto"
-      ],
-      "what_can_break_it": [
-        "Corners: muestra reciente limitada para uno o ambos equipos.",
-        "Corners: XGBoost y promedio de forma discrepan demasiado."
-      ]
-    }
-  },
-  {
-    "match_id": 2032965419,
-    "date": "2026-07-11",
-    "home": "Switzerland",
-    "away": "Argentina",
-    "stage": "Quarterfinal",
-    "model_version": "precision-v3",
-    "result": {
-      "home_win": 17,
-      "draw": 21,
-      "away_win": 62,
-      "home_or_draw": 38,
-      "away_or_draw": 83,
-      "qualifies_home": 23,
-      "qualifies_away": 77,
-      "favorite_90": "Argentina",
-      "favorite_qualifies": "Argentina",
-      "model_disagreement_pp": 9.1
-    },
-    "goals": {
-      "quality": "high",
-      "risk": "medio-alto",
-      "expected_home_goals": 1.08,
-      "expected_away_goals": 1.97,
-      "expected_total_goals": 3.05,
-      "home_lambda_interval_80": [
-        0.81,
-        1.37
-      ],
-      "away_lambda_interval_80": [
-        1.6,
-        2.35
-      ],
-      "score_zone": "1-1 / 1-2 / 0-2",
-      "score_probabilities": [
-        {
-          "score": "1-1",
-          "probability": 11
-        },
-        {
-          "score": "1-2",
-          "probability": 10
-        },
-        {
-          "score": "0-2",
-          "probability": 9
-        }
-      ],
-      "markets": {
-        "over_1_5": 80,
-        "over_2_5": 59,
-        "under_2_5": 41,
-        "under_3_5": 60,
-        "btts_yes": 59,
-        "home_scores_05": 62,
-        "away_scores_05": 86,
-        "btts_no": 41,
-        "home_or_draw": 38,
-        "away_or_draw": 83,
-        "qualifies_home": 23,
-        "qualifies_away": 77
-      },
-      "main_pick": "Argentina anota +0.5",
-      "main_pick_key": "away_scores_05",
-      "probability": 86,
-      "fair_odds": 1.17,
-      "strength": "strong",
-      "reason": "Ensemble calibrado; la app debe mostrar el equipo explícitamente cuando el mercado sea lateral."
-    },
-    "corners": {
-      "expected_total_corners": 10.29,
-      "expected_home_corners": 5.56,
-      "expected_away_corners": 4.73,
-      "expected_range": "6 a 15 corners",
-      "interval_80": [
-        6,
-        15
-      ],
-      "quality": "high",
-      "risk": "alto",
-      "markets": {
-        "over_7_5": 77,
-        "over_8_5": 67,
-        "over_9_5": 56,
-        "under_10_5": 55,
-        "under_11_5": 65
-      },
-      "main_pick": "Total corners over 7.5",
-      "probability": 77,
-      "fair_odds": 1.29,
-      "strength": "lean",
-      "model_disagreement_pp": 31.7,
-      "reason": "Modelo específico de corners; excluye los totales de 120 minutos sin desglose de 90."
-    },
-    "players": [
-      {
-        "team": "Switzerland",
-        "player": "Fabian RIEDER",
-        "market": "Fabian RIEDER 1+ tiro a puerta",
-        "probability": 38,
-        "probability_raw": 0.3843,
-        "quality": "thin",
-        "condition": "Válido solo si es titular o tiene minutos proyectados suficientes.",
-        "fair_odds": 2.6
-      },
-      {
-        "team": "Switzerland",
-        "player": "Breel EMBOLO",
-        "market": "Breel EMBOLO anota",
-        "probability": 24,
-        "probability_raw": 0.2378,
-        "quality": "thin",
-        "condition": "Válido solo si es titular o tiene minutos proyectados suficientes.",
-        "fair_odds": 4.2
+        "fair_odds": 2.94
       },
       {
         "team": "Argentina",
         "player": "Lionel MESSI",
         "market": "Lionel MESSI 1+ tiro a puerta",
-        "probability": 70,
-        "probability_raw": 0.7003,
-        "quality": "thin",
+        "probability": 63,
+        "probability_raw": 0.6298,
+        "quality": "medium",
         "condition": "Válido solo si es titular o tiene minutos proyectados suficientes.",
-        "fair_odds": 1.43
+        "fair_odds": 1.59
       },
       {
         "team": "Argentina",
         "player": "Lionel MESSI",
         "market": "Lionel MESSI anota",
-        "probability": 30,
-        "probability_raw": 0.3032,
-        "quality": "thin",
+        "probability": 26,
+        "probability_raw": 0.2559,
+        "quality": "medium",
         "condition": "Válido solo si es titular o tiene minutos proyectados suficientes.",
-        "fair_odds": 3.3
+        "fair_odds": 3.91
       }
     ],
     "unconventional_picks": [
       {
         "type": "unconventional",
         "market": "Argentina anota + under 4.5 goles",
-        "probability": 67,
-        "probability_raw": 0.6682,
-        "fair_odds": 1.5,
+        "probability": 65,
+        "probability_raw": 0.6525,
+        "fair_odds": 1.53,
         "strength": "lean",
         "risk": "medio",
         "model_disagreement_pp": 6.0,
@@ -425,102 +152,91 @@
       {
         "type": "goals",
         "market": "Argentina anota +0.5",
-        "probability": 86,
-        "probability_raw": 0.8566,
-        "fair_odds": 1.17,
+        "probability": 83,
+        "probability_raw": 0.8304,
+        "fair_odds": 1.2,
         "strength": "strong",
         "risk": "bajo-medio",
-        "model_disagreement_pp": 0.4,
+        "model_disagreement_pp": 1.6,
         "reason": "Probabilidad calibrada con XGBoost, posterior Gamma-Poisson y matriz de marcadores."
       },
       {
         "type": "qualifies",
         "market": "Argentina clasifica",
-        "probability": 77,
-        "probability_raw": 0.7651,
-        "fair_odds": 1.31,
-        "strength": "strong",
-        "risk": "medio-alto",
-        "model_disagreement_pp": 9.1,
+        "probability": 67,
+        "probability_raw": 0.6709,
+        "fair_odds": 1.49,
+        "strength": "lean",
+        "risk": "medio",
+        "model_disagreement_pp": 4.3,
         "reason": "Incluye el resultado en 90 minutos y reparte el empate según fuerza Elo reciente."
       },
       {
         "type": "unconventional",
         "market": "Argentina anota + under 4.5 goles",
-        "probability": 67,
-        "probability_raw": 0.6682,
-        "fair_odds": 1.5,
+        "probability": 65,
+        "probability_raw": 0.6525,
+        "fair_odds": 1.53,
         "strength": "lean",
         "risk": "medio",
         "model_disagreement_pp": 6.0,
         "reason": "Probabilidad conjunta obtenida de la matriz Dixon-Coles; no se multiplicaron probabilidades independientes."
-      },
-      {
-        "type": "result",
-        "market": "Argentina gana 90 min",
-        "probability": 62,
-        "probability_raw": 0.6206,
-        "fair_odds": 1.61,
-        "strength": "lean",
-        "risk": "medio-alto",
-        "model_disagreement_pp": 9.1,
-        "reason": "Ensemble de XGBoost calibrado, simulación bayesiana y Dixon-Coles."
       }
     ],
     "all_model_picks": [
       {
         "type": "result",
         "market": "Argentina gana 90 min",
-        "probability": 62,
-        "probability_raw": 0.6206,
-        "fair_odds": 1.61,
-        "strength": "lean",
+        "probability": 51,
+        "probability_raw": 0.5127,
+        "fair_odds": 1.95,
+        "strength": "thin",
         "risk": "medio-alto",
-        "model_disagreement_pp": 9.1,
+        "model_disagreement_pp": 4.3,
         "reason": "Ensemble de XGBoost calibrado, simulación bayesiana y Dixon-Coles."
       },
       {
         "type": "qualifies",
         "market": "Argentina clasifica",
-        "probability": 77,
-        "probability_raw": 0.7651,
-        "fair_odds": 1.31,
-        "strength": "strong",
-        "risk": "medio-alto",
-        "model_disagreement_pp": 9.1,
+        "probability": 67,
+        "probability_raw": 0.6709,
+        "fair_odds": 1.49,
+        "strength": "lean",
+        "risk": "medio",
+        "model_disagreement_pp": 4.3,
         "reason": "Incluye el resultado en 90 minutos y reparte el empate según fuerza Elo reciente."
       },
       {
         "type": "goals",
         "market": "Argentina anota +0.5",
-        "probability": 86,
-        "probability_raw": 0.8566,
-        "fair_odds": 1.17,
+        "probability": 83,
+        "probability_raw": 0.8304,
+        "fair_odds": 1.2,
         "strength": "strong",
         "risk": "bajo-medio",
-        "model_disagreement_pp": 0.4,
+        "model_disagreement_pp": 1.6,
         "reason": "Probabilidad calibrada con XGBoost, posterior Gamma-Poisson y matriz de marcadores."
       },
       {
         "type": "corners",
         "market": "Total corners over 7.5",
-        "probability": 77,
-        "probability_raw": 0.7724,
-        "fair_odds": 1.29,
+        "probability": 74,
+        "probability_raw": 0.7405,
+        "fair_odds": 1.35,
         "strength": "thin",
         "risk": "alto",
         "model_disagreement_pp": 31.7,
         "reason": "XGBoost Poisson regularizado + forma por equipo + incertidumbre binomial negativa.",
-        "expected_total": 10.29,
-        "expected_range": "6 a 15 corners",
+        "expected_total": 9.68,
+        "expected_range": "6 a 14 corners",
         "publication_status": "NO BET"
       },
       {
         "type": "unconventional",
         "market": "Argentina anota + under 4.5 goles",
-        "probability": 67,
-        "probability_raw": 0.6682,
-        "fair_odds": 1.5,
+        "probability": 65,
+        "probability_raw": 0.6525,
+        "fair_odds": 1.53,
         "strength": "lean",
         "risk": "medio",
         "model_disagreement_pp": 6.0,
@@ -533,284 +249,13 @@
     ],
     "explanation": {
       "main_factors": [
-        "Diferencia Elo: -197.9",
-        "Goles esperados: Switzerland 1.08 – Argentina 1.97",
-        "Corners esperados: 10.29 (rango 80% 6-15)",
-        "Acuerdo 1X2 entre modelos: medio"
+        "Diferencia Elo: -97.6",
+        "Goles esperados: England 1.19 – Argentina 1.75",
+        "Corners esperados: 9.68 (rango 80% 6-14)",
+        "Acuerdo 1X2 entre modelos: alto"
       ],
       "what_can_break_it": [
         "Corners: XGBoost y promedio de forma discrepan demasiado.",
-        "Picks de jugador son condicionales: confirmar titularidad y minutos antes de apostar."
-      ]
-    }
-  },
-  {
-    "match_id": 3199233574,
-    "date": "2026-07-14",
-    "home": "France",
-    "away": "Spain",
-    "stage": "Semifinal",
-    "model_version": "precision-v3",
-    "result": {
-      "home_win": 31,
-      "draw": 26,
-      "away_win": 43,
-      "home_or_draw": 57,
-      "away_or_draw": 69,
-      "qualifies_home": 42,
-      "qualifies_away": 58,
-      "favorite_90": "Spain",
-      "favorite_qualifies": "Spain",
-      "model_disagreement_pp": 8.3
-    },
-    "goals": {
-      "quality": "high",
-      "risk": "medio-alto",
-      "expected_home_goals": 1.28,
-      "expected_away_goals": 1.39,
-      "expected_total_goals": 2.67,
-      "home_lambda_interval_80": [
-        0.99,
-        1.59
-      ],
-      "away_lambda_interval_80": [
-        1.09,
-        1.71
-      ],
-      "score_zone": "1-1 / 0-1 / 1-2",
-      "score_probabilities": [
-        {
-          "score": "1-1",
-          "probability": 13
-        },
-        {
-          "score": "0-1",
-          "probability": 9
-        },
-        {
-          "score": "1-2",
-          "probability": 9
-        }
-      ],
-      "markets": {
-        "over_1_5": 73,
-        "over_2_5": 52,
-        "under_2_5": 48,
-        "under_3_5": 68,
-        "btts_yes": 56,
-        "home_scores_05": 72,
-        "away_scores_05": 75,
-        "btts_no": 44,
-        "home_or_draw": 57,
-        "away_or_draw": 69,
-        "qualifies_home": 42,
-        "qualifies_away": 58
-      },
-      "main_pick": "Spain anota +0.5",
-      "main_pick_key": "away_scores_05",
-      "probability": 75,
-      "fair_odds": 1.34,
-      "strength": "strong",
-      "reason": "Ensemble calibrado; la app debe mostrar el equipo explícitamente cuando el mercado sea lateral."
-    },
-    "corners": {
-      "expected_total_corners": 9.69,
-      "expected_home_corners": 4.55,
-      "expected_away_corners": 5.14,
-      "expected_range": "5 a 14 corners",
-      "interval_80": [
-        5,
-        14
-      ],
-      "quality": "high",
-      "risk": "bajo-medio",
-      "markets": {
-        "over_7_5": 72,
-        "over_8_5": 61,
-        "over_9_5": 49,
-        "under_10_5": 62,
-        "under_11_5": 72
-      },
-      "main_pick": "Total corners over 7.5",
-      "probability": 72,
-      "fair_odds": 1.39,
-      "strength": "strong",
-      "model_disagreement_pp": 1.1,
-      "reason": "Modelo específico de corners; excluye los totales de 120 minutos sin desglose de 90."
-    },
-    "players": [
-      {
-        "team": "France",
-        "player": "Kylian MBAPPE",
-        "market": "Kylian MBAPPE 1+ tiro a puerta",
-        "probability": 74,
-        "probability_raw": 0.7444,
-        "quality": "medium",
-        "condition": "Válido solo si es titular o tiene minutos proyectados suficientes.",
-        "fair_odds": 1.34
-      },
-      {
-        "team": "France",
-        "player": "Kylian MBAPPE",
-        "market": "Kylian MBAPPE anota",
-        "probability": 42,
-        "probability_raw": 0.4179,
-        "quality": "medium",
-        "condition": "Válido solo si es titular o tiene minutos proyectados suficientes.",
-        "fair_odds": 2.39
-      },
-      {
-        "team": "Spain",
-        "player": "Lamine YAMAL",
-        "market": "Lamine YAMAL 1+ tiro a puerta",
-        "probability": 65,
-        "probability_raw": 0.6539,
-        "quality": "thin",
-        "condition": "Válido solo si es titular o tiene minutos proyectados suficientes.",
-        "fair_odds": 1.53
-      },
-      {
-        "team": "Spain",
-        "player": "Mikel OYARZABAL",
-        "market": "Mikel OYARZABAL anota",
-        "probability": 30,
-        "probability_raw": 0.3032,
-        "quality": "thin",
-        "condition": "Válido solo si es titular o tiene minutos proyectados suficientes.",
-        "fair_odds": 3.3
-      }
-    ],
-    "unconventional_picks": [
-      {
-        "type": "unconventional",
-        "market": "Spain anota + under 4.5 goles",
-        "probability": 62,
-        "probability_raw": 0.6213,
-        "fair_odds": 1.61,
-        "strength": "lean",
-        "risk": "medio",
-        "model_disagreement_pp": 6.0,
-        "reason": "Probabilidad conjunta obtenida de la matriz Dixon-Coles; no se multiplicaron probabilidades independientes."
-      }
-    ],
-    "top_picks": [
-      {
-        "type": "goals",
-        "market": "Spain anota +0.5",
-        "probability": 75,
-        "probability_raw": 0.7488,
-        "fair_odds": 1.34,
-        "strength": "strong",
-        "risk": "bajo-medio",
-        "model_disagreement_pp": 0.8,
-        "reason": "Probabilidad calibrada con XGBoost, posterior Gamma-Poisson y matriz de marcadores."
-      },
-      {
-        "type": "corners",
-        "market": "Total corners over 7.5",
-        "probability": 72,
-        "probability_raw": 0.7211,
-        "fair_odds": 1.39,
-        "strength": "strong",
-        "risk": "bajo-medio",
-        "model_disagreement_pp": 1.1,
-        "reason": "XGBoost Poisson regularizado + forma por equipo + incertidumbre binomial negativa.",
-        "expected_total": 9.69,
-        "expected_range": "5 a 14 corners"
-      },
-      {
-        "type": "result",
-        "market": "Spain o empate",
-        "probability": 69,
-        "probability_raw": 0.6941,
-        "fair_odds": 1.44,
-        "strength": "lean",
-        "risk": "medio",
-        "model_disagreement_pp": 8.3,
-        "reason": "El 1X2 está cerrado; el modelo reduce riesgo con doble oportunidad."
-      },
-      {
-        "type": "unconventional",
-        "market": "Spain anota + under 4.5 goles",
-        "probability": 62,
-        "probability_raw": 0.6213,
-        "fair_odds": 1.61,
-        "strength": "lean",
-        "risk": "medio",
-        "model_disagreement_pp": 6.0,
-        "reason": "Probabilidad conjunta obtenida de la matriz Dixon-Coles; no se multiplicaron probabilidades independientes."
-      }
-    ],
-    "all_model_picks": [
-      {
-        "type": "result",
-        "market": "Spain o empate",
-        "probability": 69,
-        "probability_raw": 0.6941,
-        "fair_odds": 1.44,
-        "strength": "lean",
-        "risk": "medio",
-        "model_disagreement_pp": 8.3,
-        "reason": "El 1X2 está cerrado; el modelo reduce riesgo con doble oportunidad."
-      },
-      {
-        "type": "qualifies",
-        "market": "Spain clasifica",
-        "probability": 58,
-        "probability_raw": 0.5756,
-        "fair_odds": 1.74,
-        "strength": "thin",
-        "risk": "medio-alto",
-        "model_disagreement_pp": 8.3,
-        "reason": "Incluye el resultado en 90 minutos y reparte el empate según fuerza Elo reciente."
-      },
-      {
-        "type": "goals",
-        "market": "Spain anota +0.5",
-        "probability": 75,
-        "probability_raw": 0.7488,
-        "fair_odds": 1.34,
-        "strength": "strong",
-        "risk": "bajo-medio",
-        "model_disagreement_pp": 0.8,
-        "reason": "Probabilidad calibrada con XGBoost, posterior Gamma-Poisson y matriz de marcadores."
-      },
-      {
-        "type": "corners",
-        "market": "Total corners over 7.5",
-        "probability": 72,
-        "probability_raw": 0.7211,
-        "fair_odds": 1.39,
-        "strength": "strong",
-        "risk": "bajo-medio",
-        "model_disagreement_pp": 1.1,
-        "reason": "XGBoost Poisson regularizado + forma por equipo + incertidumbre binomial negativa.",
-        "expected_total": 9.69,
-        "expected_range": "5 a 14 corners"
-      },
-      {
-        "type": "unconventional",
-        "market": "Spain anota + under 4.5 goles",
-        "probability": 62,
-        "probability_raw": 0.6213,
-        "fair_odds": 1.61,
-        "strength": "lean",
-        "risk": "medio",
-        "model_disagreement_pp": 6.0,
-        "reason": "Probabilidad conjunta obtenida de la matriz Dixon-Coles; no se multiplicaron probabilidades independientes."
-      }
-    ],
-    "no_bet_notes": [
-      "Picks de jugador son condicionales: confirmar titularidad y minutos antes de apostar."
-    ],
-    "explanation": {
-      "main_factors": [
-        "Diferencia Elo: -30.8",
-        "Goles esperados: France 1.28 – Spain 1.39",
-        "Corners esperados: 9.69 (rango 80% 5-14)",
-        "Acuerdo 1X2 entre modelos: medio"
-      ],
-      "what_can_break_it": [
         "Picks de jugador son condicionales: confirmar titularidad y minutos antes de apostar."
       ]
     }
